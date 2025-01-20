@@ -2,7 +2,7 @@
 
 Here at Fetch, we love dogs, and hope you do too! Your task is to build a website to help a dog-lover like yourself search through a database of shelter dogs, with the hope of finding a lucky dog a new home!
 
-# General Requirements
+## General Requirements
 You first should have users enter their name and email on a login screen. Then, you should use this information to hit our login endpoint to authenticate with our service (see API Reference below).
 
 Once a user is successfully authenticated, they should be brought to a search page where they can browse available dogs. This page must meet the following requirements:
@@ -17,7 +17,7 @@ As for everything else, you have free rein, so get creative! We strongly encoura
 
 You may find it helpful to make use of a component library.
 
-# API Reference
+## API Reference
 We provide our own backend to facilitate searching/fetching dog info. The base URL is https://frontend-take-home-service.fetch.com.
 
 Data Model
@@ -46,28 +46,28 @@ interface Coordinates {
     lon: number;
 }
 
-# Authentication
+## Authentication
 You will need to hit the login endpoint in order to access other endpoints. A successful request to the login endpoint will return an auth cookie included in the set-cookie response header. It’s an HttpOnly cookie, so you will not be able to access this value from any Javascript code (nor should you need to). Your browser will automatically send this cookie with all successive credentialed requests to the API. Note that you will need to pass a config option in order to send credentials (cookies) with each request. Some documentation to help you with this:
 
 Including credentials with fetch (set credentials: 'include' in request config)
 Including credentials with axios (set withCredentials: true in request config)
 Postman will do this for you automatically.
 
-# POST /auth/login
+## POST /auth/login
 Body Parameters
 name - the user’s name
 email - the user’s email
 
 An auth cookie, fetch-access-token, will be included in the response headers. This will expire in 1 hour.
 
-# POST /auth/logout
+## POST /auth/logout
 Hit this endpoint to end a user’s session. This will invalidate the auth cookie.
 
-# GET /dogs/breeds
+## GET /dogs/breeds
 Return Value
 Returns an array of all possible breed names.
 
-# GET /dogs/search
+## GET /dogs/search
 Query Parameters
 The following query parameters can be supplied to filter the search results. All are optional; if none are provided, the search will match all dogs.
 
@@ -94,7 +94,7 @@ next - a query to request the next page of results (if one exists)
 prev - a query to request the previous page of results (if one exists)
 The maximum total number of dogs that will be matched by a single query is 10,000.
 
-# POST /dogs
+## POST /dogs
 Body Parameters
 The body should be an array of no more than 100 dog IDs to fetch (no pun intended).
 
@@ -105,11 +105,11 @@ body: string[]
 Return Value
 Returns an array of dog objects
 
-# POST /dogs/match
+## POST /dogs/match
 Body Parameters
 The body of this request should be an array of dog IDs.
 
-# Example
+## Example
 
 // API Request Function
 ...
@@ -125,7 +125,7 @@ POST /locations
 Body Parameters
 The body of this request should be an array of no more than 100 ZIP codes.
 
-# Example
+## Example
 
 // API Request Function
 ...
@@ -154,7 +154,7 @@ size - the number of results to return; defaults to 25 if omitted
 from - a cursor to be used when paginating results (optional)
 The maximum total number of ZIP codes that will be matched by a single query is 10,000.
 
-# Example
+## Example
 
 // API Request Function
 ...
