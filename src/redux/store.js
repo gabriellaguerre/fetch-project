@@ -1,10 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import itemsReducer from './sessionsSlice'
+import usersReducer from './usersSlice'
 
 
 export const store = configureStore({
     reducer: {
-        sessions: sessionsReducer,
-
+        users: usersReducer,
     }
 })
