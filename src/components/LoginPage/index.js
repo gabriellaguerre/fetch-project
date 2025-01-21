@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-// import { login } from "../../store/session";
+import { login } from "../../redux/usersSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { redirect } from "react-router-dom";
 import './LoginPage.css';
+import fetchin from '../../Assets/dog fetchin pic.png'
 
 
 function LoginPage() {
@@ -22,16 +23,16 @@ function LoginPage() {
       setErrors(data);
     }
   }
-  
+
 
 
   return (
     <>
 
  <form onSubmit={handleSubmit}>
-    
+
       <div>
-      <img src={} alt="ivy-pic" width="130" height="100"></img>
+      <img src={fetchin} alt="ivy-pic" width="130" height="100"></img>
       </div>
       <div>Log In</div>
         <div className='errorsLogin'>
@@ -63,7 +64,7 @@ function LoginPage() {
         <span className='submitLogin'><button id='submitLogin' type="submit">Log In</button></span>
     </div>
     </form>
-  
+
     </>
   );
 }
