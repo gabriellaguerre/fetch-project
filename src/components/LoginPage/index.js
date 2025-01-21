@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { login } from "../../store/session";
+// import { login } from "../../store/session";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { redirect } from "react-router-dom";
 import './LoginPage.css';
 
 
@@ -13,38 +13,27 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [errors, setErrors] = useState([]);
 
-  if (sessionUser) return <Redirect to="/" />;
+  if (sessionUser) return <redirect to="/" />;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = await dispatch(login(employeeID, password));
+    const data = await dispatch(login(name, email));
     if (data) {
       setErrors(data);
     }
-  };
-
-  const Admin = async (e) => {
-    e.preventDefault();
-    await dispatch(login("Demo", "password"))
-    .then(<Redirect to='/items' />)
   }
-
-  const Employee = async (e) => {
-    e.preventDefault();
-    await dispatch(login("marnie", "password"))
-    .then(<Redirect to='/items' />)
-  }
+  
 
 
   return (
     <>
-<div className='allbody'>
+
  <form onSubmit={handleSubmit}>
-    <div className='formBodylogin'>
-      <div className='imageLogin'>
-      <img src={ivy3} alt="ivy-pic" width="130" height="100"></img>
+    
+      <div>
+      <img src={} alt="ivy-pic" width="130" height="100"></img>
       </div>
-      <div className='titleLogin'>Log In</div>
+      <div>Log In</div>
         <div className='errorsLogin'>
         <ul>
           {errors.map((error, idx) => (
@@ -52,32 +41,29 @@ function LoginPage() {
           ))}
         </ul>
         </div>
-        <div className='employeeID-DIV'>
-          Employee ID:{' '}
+        <div className='name'>
+          name:{' '}
           <input
             type="text"
-            value={employeeID}
-            onChange={(e) => setEmail(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             required
           />
         </div>
-        <div className='passwordDiv'>
-          Password:{' '}
+        <div className='email'>
+          email:{' '}
           <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
         <div className='buttons'>
         <span className='submitLogin'><button id='submitLogin' type="submit">Log In</button></span>
-        <span className='adminLogin'><button id='adminLogin' onClick={Admin}>Demo Admin</button></span>
-        <span className='employeeLogin'><button id='employeeLogin'onClick={Employee}>Demo Employee</button></span>
-    </div>
     </div>
     </form>
-    </div>
+  
     </>
   );
 }
