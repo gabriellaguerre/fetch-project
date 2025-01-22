@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, redirect, Routes } from "react-router-dom";
+import { Route,Routes } from "react-router-dom";
 import LoginPage from "./components/LoginPage";
+import Main from "./components/Main";
 
 function App() {
 
@@ -20,9 +21,9 @@ function App() {
     <>
       {/* {isLoaded && ( */}
           <Routes>
-            <Route path="/login"> <LoginPage /> </Route>
-            <Route exact path="/"> (user) ? render={()=> <redirect to="/" />} : <LoginPage /> </Route>
-            <Route> <h1>404: Page not found</h1> </Route>
+            <Route path="/" element = {<LoginPage />}/>
+            <Route path="/main" element = {<Main /> }/>
+            <Route path="*" element={<h1>404: Page not found</h1>} />
           </Routes>
         {/* )}; */}
     </>

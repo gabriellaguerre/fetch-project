@@ -1,27 +1,29 @@
 import React, { useState } from "react";
 import { login } from "../../redux/usersSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { redirect } from "react-router-dom";
+import {useNavigate} from 'react-router';
 import './LoginPage.css';
 import fetchin from '../../Assets/dog fetchin pic.png'
 
 
 function LoginPage() {
   const dispatch = useDispatch();
-  const sessionUser = useSelector((state) => state.session.user);
+  const navigate = useNavigate();
+
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [errors, setErrors] = useState([]);
 
-  if (sessionUser) return <redirect to="/" />;
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = await dispatch(login(name, email));
-    if (data) {
-      setErrors(data);
+    const data = await dispatch(login({name, email}));
+    if (data.payload) {
+      navigate('/main', { state: { name } });
     }
+
   }
 
 
@@ -37,9 +39,9 @@ function LoginPage() {
       <div>Log In</div>
         <div className='errorsLogin'>
         <ul>
-          {errors.map((error, idx) => (
+          {/* {errors.map((error, idx) => (
             <li key={idx} style={{color:'red'}}>{error}</li>
-          ))}
+          ))} */}
         </ul>
         </div>
         <div className='name'>

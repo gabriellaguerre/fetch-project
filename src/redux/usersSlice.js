@@ -6,21 +6,24 @@ const logoutUserUrl = 'https://frontend-take-home-service.fetch.com/auth/logout'
 
 
 const initialState = {
-    users: [],
+    user: {},
     status: 'idle',
     error: null
   }
 
-  export const login = createAsyncThunk('session/SET_USER', async ({employeeID, password}) => {
+  export const login = createAsyncThunk('session/SET_USER', async ({name, email}) => {
 
     const response = await fetch(loginUsersURL, {
     method: 'POST',
     headers: {"Content-Type": "application/json",},
-    body: JSON.stringify({employeeID, password})
+    body: JSON.stringify({name: name, email: email}),
+    credentials: 'include',
     })
+    console.log(response);
     if(response.ok){
-        const data = await response.json()
-        return data
+       return  { name };
+        // dispatch(userAdded);
+        // console.log(data, "data in userslice");
      }  else {
         throw new Error('Login failed. Please check your credentials.');
      }
@@ -40,17 +43,17 @@ const usersSlice = createSlice({
     name: 'users',
     initialState,
     reducers: {
-        userAdded(state, action) {
-            state.users.push(action.payload)
-        },
-        clearError(state){
-            state.error = null;
-        }
+        // userAdded(state, action) {
+        //     state.users.push(action.payload)
+        // },
+        // clearError(state){
+        //     state.error = null;
+        // }
     },
     extraReducers(builder) {
         builder
             .addCase(login.fulfilled, (state, action)=> {
-                state.users = action.payload
+                state.user = { name: action.payload.name };
                 state.status = 'succeeded';
                 state.error = null;
 
@@ -63,7 +66,7 @@ const usersSlice = createSlice({
     }
 })
 
-export const selectAllUsers = (state) => state.users.users;
+export const selectUser = (state) => state.users.user;
 export const getUsersStatus = (state) => state.users.status;
 export const getUsersError = (state) => state.users.error;
 
