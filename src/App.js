@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Route,Routes } from "react-router-dom";
 import LoginPage from "./components/LoginPage";
 import Main from "./components/Main";
+import {selectUser} from '../src/redux/usersSlice';
 
 function App() {
 
@@ -14,7 +15,7 @@ function App() {
   //   dispatch(authenticate()).then(() => setIsLoaded(true));
   // }, [dispatch]);
 
-  // const user = useSelector(state => state.session.user);
+  const user = useSelector(selectUser);
 
 
   return (
@@ -22,7 +23,7 @@ function App() {
       {/* {isLoaded && ( */}
           <Routes>
             <Route path="/" element = {<LoginPage />}/>
-            <Route path="/main" element = {<Main /> }/>
+            <Route path="/main" element = {<Main user={user}/> }/>
             <Route path="*" element={<h1>404: Page not found</h1>} />
           </Routes>
         {/* )}; */}

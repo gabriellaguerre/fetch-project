@@ -11,7 +11,7 @@ const initialState = {
     error: null
   }
 
-  export const login = createAsyncThunk('session/SET_USER', async ({name, email}) => {
+  export const login = createAsyncThunk('user/LOGIN_USER', async ({name, email}) => {
 
     const response = await fetch(loginUsersURL, {
     method: 'POST',
@@ -30,10 +30,13 @@ const initialState = {
 
 })
 
-export const logoutUser = createAsyncThunk('users/logoutUser', async () => {
+export const logout = createAsyncThunk('user/LOGOUT_USER', async () => {
     const response = await fetch(logoutUserUrl, {
-        headers: {"Content-Type": "application/json"}
+        method: 'POST',
+        headers: {"Content-Type": "application/json"},
+        credentials: 'include',
     })
+    console.log(response);
     if(response.ok){
         return { users: null }
     }

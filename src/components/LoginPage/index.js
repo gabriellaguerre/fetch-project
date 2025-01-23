@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { login } from "../../redux/usersSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {useNavigate} from 'react-router';
 import './LoginPage.css';
 import fetchin from '../../Assets/dog_fetchin_pic.png'
