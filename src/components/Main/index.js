@@ -16,7 +16,6 @@ function Main() {
 
     const [selected, setSelected] = useState([]);
     const [breed, setBreed] = useState("");
-    const [name, setName] = useState("");
     const [minAge, setMinAge] = useState("");
     const [maxAge, setMaxAge] = useState("");
     
@@ -62,22 +61,35 @@ function Main() {
      <div>Welcome to Fetch!! We have {doggyBreeds.length} breeds of dogs in our system</div>
      <div>How would like to search?</div>
      <div>See our full list of breeds
-      <button onClick={getBreeds}>Get Breeds</button>
-     </div>
-     <label>Search by:</label>
-     <label><input 
+      <button onClick={getBreeds}>Get Breeds</button></div>
+     <div><label>Search by:</label></div>
+     
+      <div><label><input 
           type="checkbox"
-          value="name"
+          value="breed"
           onChange={handleSelection}
-          /> Name</label>
+          />Breed</label></div>
+     
+      <div><label><input 
+          type="checkbox"
+          value="zipCode"
+          onChange={handleSelection}
+          />Zip Code</label></div>
       
-          <option value="" disabled>Please choose an option</option>
-          <option value="name">Name</option>
-          <option value="min-age">Min Age</option>
-          <option value="max-age">Max Age</option>
-          <option value="zip-code">Zip Code</option>
-             
-      <button onClick={search(searchOption)}>Search</button>
+      <div><label><input 
+          type="checkbox"
+          value="ageMin"
+          onChange={handleSelection}
+          />Min Age</label></div>
+      
+      <div><label><input 
+          type="checkbox"
+          value="ageMax"
+          onChange={handleSelection}
+          />Max Age</label></div>
+  
+     
+     <div> <button >Search</button></div>
      
      <div><button onClick={logoutUser}>Logout</button></div>
 
