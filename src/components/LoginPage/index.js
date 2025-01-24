@@ -13,8 +13,8 @@ function LoginPage() {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [errors, setErrors] = useState([]);
-
+  const [NameError, setNameError] = useState("");
+  const [Eerror, setEError] = useState("");
 
 
   const handleSubmit = async (e) => {
@@ -23,6 +23,18 @@ function LoginPage() {
     if (data.payload) {
       navigate('/main', { state: { name } });
     }
+
+    if (!name) {
+      let error = "Please enter a name"
+      setNameError(error);
+    }
+
+    if (!email) {
+      let error = "Please enter an email"
+      setEError(error);
+    }
+
+
 
   }
 
@@ -33,37 +45,33 @@ function LoginPage() {
 
  <form onSubmit={handleSubmit}>
 
-      <div>
-      <img src={fetchin} alt="ivy-pic" width="130" height="100"></img>
+      <div className='loginPic'>
+      <img src={fetchin} className='dogpic' alt="dog-pic" ></img>
       </div>
-      <div>Log In</div>
+      <div className='loginText'>Welcome to Fetch! Please Log In</div>
         <div className='errorsLogin'>
-        <ul>
-          {/* {errors.map((error, idx) => (
-            <li key={idx} style={{color:'red'}}>{error}</li>
-          ))} */}
-        </ul>
+         {/* {error} */}
         </div>
-        <div className='name'>
-          name:{' '}
+        <div className='nameInput'>
+          Name:{' '}
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            required
           />
+          <span className='errorsLogin'>{NameError}</span>
         </div>
-        <div className='email'>
-          email:{' '}
+        <div className='emailInput'>
+          Email:{' '}
           <input
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
           />
+            <span className='errorsLogin'>{Eerror}</span>
         </div>
-        <div className='buttons'>
-        <span className='submitLogin'><button id='submitLogin' type="submit">Log In</button></span>
+        <div className='loginButton'>
+        <button id='submitLogin' type="submit">Log In</button>
     </div>
     </form>
 

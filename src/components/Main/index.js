@@ -12,14 +12,12 @@ function Main() {
     const navigate = useNavigate();
 
     const name = user.name;
-    console.log(name,'name')
-
-
+    
     const logoutUser = () => {
       dispatch(logout());
       navigate('/');
     }
-  
+
   return (
     <>
     {name ? (
