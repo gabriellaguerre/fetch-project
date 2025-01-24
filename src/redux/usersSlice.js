@@ -16,18 +16,13 @@ const initialState = {
     const response = await fetch(loginUsersURL, {
     method: 'POST',
     headers: {"Content-Type": "application/json",},
-    body: JSON.stringify({name: name, email: email}),
+    body: JSON.stringify({name: "asd", email: 'asdf@adf.com'}),
     credentials: 'include',
     })
-    console.log(response);
+  
     if(response.ok){
        return  { name };
-        // dispatch(userAdded);
-        // console.log(data, "data in userslice");
-     }  else {
-        throw new Error('Login failed. Please check your credentials.');
-     }
-
+     }  
 })
 
 export const logout = createAsyncThunk('user/LOGOUT_USER', async () => {
@@ -45,14 +40,7 @@ export const logout = createAsyncThunk('user/LOGOUT_USER', async () => {
 const usersSlice = createSlice({
     name: 'users',
     initialState,
-    reducers: {
-        // userAdded(state, action) {
-        //     state.users.push(action.payload)
-        // },
-        // clearError(state){
-        //     state.error = null;
-        // }
-    },
+    reducers: {},
     extraReducers(builder) {
         builder
             .addCase(login.fulfilled, (state, action)=> {
@@ -70,9 +58,7 @@ const usersSlice = createSlice({
 })
 
 export const selectUser = (state) => state.users.user;
-export const getUsersStatus = (state) => state.users.status;
-export const getUsersError = (state) => state.users.error;
 
-export const { userAdded, } = usersSlice.actions
+// export const { userAdded, } = usersSlice.actions
 
 export default usersSlice.reducer

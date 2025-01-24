@@ -22,17 +22,18 @@ function LoginPage() {
     const data = await dispatch(login({name, email}));
     if (data.payload) {
       navigate('/main', { state: { name } });
+      navigate('/main');
     }
 
-    if (!name) {
-      let error = "Please enter a name"
-      setNameError(error);
-    }
+    // if (!name) {
+    //   let error = "Please enter a name"
+    //   setNameError(error);
+    // }
 
-    if (!email) {
-      let error = "Please enter an email"
-      setEError(error);
-    }
+    // if (!email) {
+    //   let error = "Please enter an email"
+    //   setEError(error);
+    // }
 
 
 
