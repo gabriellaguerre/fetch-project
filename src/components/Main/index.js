@@ -9,41 +9,58 @@ import {breeds, getDogBreed, dogMatch, } from '../../redux/dogsSlice';
 
 function Main() {
     const dispatch = useDispatch();
-    
+
     // const user = useSelector(selectUser);
     const doggyBreeds = useSelector(getDogBreed)
     const navigate = useNavigate();
 
     const [selected, setSelected] = useState([]);
-    const [breed, setBreed] = useState("");
+    const [breed, setBreed] = useState(false);
+    const [breedName, setBreedName] = useState("")
+
+    const [minimumAge, setMinimumAge] = useState(false);
     const [minAge, setMinAge] = useState("");
+
+    const [maximumAge, setMaximumAge] = useState(false);
     const [maxAge, setMaxAge] = useState("");
-    
-    
+
+    const [location, setLocation] = useState(false);
+    const [zipCode, setZipCode] = useState("");
+
+
+
   useEffect(() => {
     dispatch(breeds());
   }, [dispatch]);
-    
+
     const getBreeds = () => {
       console.log('in GetBreeds')
       dispatch(breeds());
-      
+
+    }
+    console.log(selected, 'selected line 41')
+
+
+    const search = () => {
+      setSelected([]);
+      if(breed && breedName) setSelected((prev)=>[...prev,breedName]);
+      if(minimumAge && minAge) setSelected((prev)=>[...prev,minAge]);
+      if(maximumAge && maxAge) setSelected((prev)=>[...prev,maxAge]);
+      if(location && zipCode) setSelected((prev)=>[...prev,zipCode]);
+
+      console.log(selected, 'In Search function')
     }
 
-    const search = (searchOption) => {
-      console.log(searchOption, 'in search function')
-    }
-
-    const handleSelection = (e) => {
-      const {value, checked} = e.target
-    }
+    // const handleSelection = (e) => {
+    //   const {value, checked} = e.target
+    // }
 
     const logoutUser = () => {
       dispatch(logout());
       navigate('/');
     }
 
-    
+
 
   return (
     <>
@@ -63,34 +80,55 @@ function Main() {
      <div>See our full list of breeds
       <button onClick={getBreeds}>Get Breeds</button></div>
      <div><label>Search by:</label></div>
-     
-      <div><label><input 
+
+      <div><label><input
           type="checkbox"
-          value="breed"
-          onChange={handleSelection}
-          />Breed</label></div>
-     
-      <div><label><input 
+          value={breed}
+          onChange={()=>{setBreed(!breed)}}
+          />Breed</label><input
+            type="text"
+            value={breedName}
+            placeholder="Enter a breed name"
+            onChange={(e) => {setBreedName(e.target.value)}}/>
+            </div>
+
+       <div><label><input
           type="checkbox"
-          value="zipCode"
-          onChange={handleSelection}
-          />Zip Code</label></div>
-      
-      <div><label><input 
+          value={minimumAge}
+          onChange={()=>setMinimumAge(!minimumAge)}
+          />Min Age</label>
+          <input
+            type="number"
+            value={minAge}
+            placeholder="Enter a minimum age"
+            onChange={(e) => setMinAge(e.target.value)}/>
+            </div>
+
+      <div><label><input
           type="checkbox"
-          value="ageMin"
-          onChange={handleSelection}
-          />Min Age</label></div>
-      
-      <div><label><input 
+          value={maximumAge}
+          onChange={()=>setMaximumAge(!maximumAge)}
+          />Max Age</label>
+          <input
+            type="number"
+            value={maxAge}
+            placeholder="Enter a maximum age"
+            onChange={(e) => setMaxAge(e.target.value)}/></div>
+
+      <div><label><input
           type="checkbox"
-          value="ageMax"
-          onChange={handleSelection}
-          />Max Age</label></div>
-  
-     
-     <div> <button >Search</button></div>
-     
+          value={location}
+          onChange={()=>setLocation(!location)}
+          />Zip Code</label>
+          <input
+            type="number"
+            value={zipCode}
+            placeholder="Enter a zip code"
+            onChange={(e) => setZipCode(e.target.value)}/>
+          </div>
+
+     <div> <button onClick={search}>Search</button></div>
+
      <div><button onClick={logoutUser}>Logout</button></div>
 
     </>
