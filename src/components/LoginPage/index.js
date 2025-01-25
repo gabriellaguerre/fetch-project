@@ -48,7 +48,7 @@ function LoginPage() {
       <div className='loginPic'>
       <img src={fetchin} className='dogpic' alt="dog-pic" ></img>
       </div>
-      <div className='loginText'>Welcome to Fetch! Please Log In</div>
+      <div className='loginText'>Welcome to Fetch!</div>
         <div className='errorsLogin'>
          {/* {error} */}
         </div>
