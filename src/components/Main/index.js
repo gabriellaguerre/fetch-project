@@ -4,15 +4,17 @@ import {selectUser} from '../../redux/usersSlice';
 import {useNavigate} from 'react-router';
 import { logout } from "../../redux/usersSlice";
 import LoginPage from '../LoginPage';
-import {breeds, getDogBreed, dogMatch, } from '../../redux/dogsSlice';
+import {breeds, getDogBreed, getSearches, searchDog, dogMatch, } from '../../redux/dogsSlice';
 
 
 function Main() {
     const dispatch = useDispatch();
-
+    const navigate = useNavigate();
     // const user = useSelector(selectUser);
     const doggyBreeds = useSelector(getDogBreed)
-    const navigate = useNavigate();
+    const searchResult = useSelector(getSearches)
+
+    console.log(searchResult, 'search result')
 
     const [selected, setSelected] = useState([]);
     const [breed, setBreed] = useState(false);
@@ -34,21 +36,24 @@ function Main() {
   }, [dispatch]);
 
     const getBreeds = () => {
-      console.log('in GetBreeds')
-      dispatch(breeds());
-
+          dispatch(breeds());
     }
+
+
     console.log(selected, 'selected line 41')
 
+    const search = (selected) => {
+      // console.log(selected, 'selected')
+      let selectedParams = [];
 
-    const search = () => {
-      setSelected([]);
-      if(breed && breedName) setSelected((prev)=>[...prev,breedName]);
-      if(minimumAge && minAge) setSelected((prev)=>[...prev,minAge]);
-      if(maximumAge && maxAge) setSelected((prev)=>[...prev,maxAge]);
-      if(location && zipCode) setSelected((prev)=>[...prev,zipCode]);
+      if(breed && breedName) selectedParams = [...selectedParams,breedName];
+      // if(minimumAge && minAge) selectedParams = [...selectedParams,minAge];
+      // if(maximumAge && maxAge) selectedParams = [...selectedParams,maxAge];
+      // if(location && zipCode) selectedParams = [...selectedParams,zipCode];
 
-      console.log(selected, 'In Search function')
+      setSelected(selectedParams);
+      dispatch(searchDog(selectedParams));
+
     }
 
     // const handleSelection = (e) => {
@@ -75,7 +80,7 @@ function Main() {
       <LoginPage />
       </>
     )} */}
-     <div>Welcome to Fetch!! We have {doggyBreeds.length} breeds of dogs in our system</div>
+     <div>We have {doggyBreeds?.length || "0"} breeds of dogs in our system</div>
      <div>How would like to search?</div>
      <div>See our full list of breeds
       <button onClick={getBreeds}>Get Breeds</button></div>

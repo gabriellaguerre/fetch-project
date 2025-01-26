@@ -2,7 +2,7 @@ import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 
 // const usersURL = 'http://10.0.2.2:5000/api/users'
 const dogBreedsURL = 'https://frontend-take-home-service.fetch.com/dogs/breeds';
-const dogSearchrUrl = 'https://frontend-take-home-service.fetch.com/dogs/search';
+const dogSearchrUrl = 'https://frontend-take-home-service.fetch.com/dogs/search?';
 const dogMatchrUrl = 'https://frontend-take-home-service.fetch.com/dogs/match';
 
 
@@ -23,20 +23,23 @@ const initialState = {
        const data = response.json();
        console.log(data, 'data')
        return data;
-    }  
+    }
 
 })
 
-export const searchDog = createAsyncThunk('dogs/SEARCH', async () => {
-    const response = await fetch(dogSearchrUrl, {
+export const searchDog = createAsyncThunk('dogs/SEARCH', async (breed) => {
+    console.log(breed, 'breed in searchDog')
+
+    const response = await fetch(dogSearchrUrl+`size=5&breeds=${[breed]}`, {
         method: 'GET',
         headers: {"Content-Type": "application/json"},
         credentials: 'include',
     })
-    console.log(response);
+    // console.log(response);
     if(response.ok){
         const data = response.json()
-        return data; 
+        console.log(data, 'search data in redux')
+        return data;
     }
 })
 
@@ -47,10 +50,10 @@ export const dogMatch = createAsyncThunk('dogs/MATCH', async (match) => {
         body: JSON.stringify(match),
         credentials: 'include',
     })
-   
+
     if(response.ok){
         const data = response.json()
-        return data; 
+        return data;
     }
 })
 
@@ -75,16 +78,19 @@ const dogsSlice = createSlice({
                 state.error = null;
 
             })
-            // .addCase(login.rejected, (state, action) => {
-            //     state.status = 'failed'
-            //     state.error = action.error.message || 'Login failed. Please try again.'
-            // })
+            .addCase(searchDog.fulfilled, (state, action)=> {
+                state.search = action.payload;
+                console.log(action.payload)
+                state.status = 'succeeded';
+                state.error = null;
+            })
 
     }
-    
+
 })
 
 export const getDogBreed = (state) => state.dogs.breed;
+export const getSearches = (state) => state.dogs.search;
 
 export const { addBreeds, addSearch  } = dogsSlice.actions
 

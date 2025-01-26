@@ -17,20 +17,24 @@
 }
 
 .errorsLogin {
+     display: block;
+     height: 20px;
+     margin: 10px;
+     text-align: center;
      color: red;
      font-weight: bold;
-     margin-left: 10px;
+
 }
 
 .nameInput {
     margin: 10px;
-    display: flex;
-    justify-content: center;
+    display: block;
+    text-align: center;
 }
 
 .emailInput {
-    display: flex;
-    justify-content: center;
+    display: block;
+    text-align: center;
 }
 
 .loginButton {
@@ -39,6 +43,16 @@
     margin: 10px;
 }
 
+#submitLogin {
+    background-color: #ADD8E6;
+    border-radius: 10px;
+    width: 100px;
+    height: 25px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/************Remove the Increase and Decrease arrows on the input*******************/
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;

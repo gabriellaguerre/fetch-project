@@ -50,9 +50,7 @@ function LoginPage() {
       <img src={fetchin} className='dogpic' alt="dog-pic" ></img>
       </div>
       <div className='loginText'>Welcome to Fetch!</div>
-        <div className='errorsLogin'>
-         {/* {error} */}
-        </div>
+        <div className='errorsLogin'> </div>
         <div className='nameInput'>
           Name:{' '}
           <input
@@ -60,7 +58,7 @@ function LoginPage() {
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          <span className='errorsLogin'>{NameError}</span>
+
         </div>
         <div className='emailInput'>
           Email:{' '}
@@ -69,7 +67,7 @@ function LoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-            <span className='errorsLogin'>{Eerror}</span>
+
         </div>
         <div className='loginButton'>
         <button id='submitLogin' type="submit">Log In</button>
