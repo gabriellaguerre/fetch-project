@@ -4,6 +4,7 @@ import {selectUser} from '../../redux/usersSlice';
 import {useNavigate} from 'react-router';
 import { logout } from "../../redux/usersSlice";
 import LoginPage from '../LoginPage';
+import Profile from '../Profile';
 import {breeds, getDogBreed, getSearches, searchDog, dogMatch, } from '../../redux/dogsSlice';
 import './Main.css';
 
@@ -74,9 +75,11 @@ function Main() {
     <>
     {user ? (
       <>
-      <div>
-         <div> Hello {user}!</div>
-         <div><button onClick={logoutUser}>Logout</button></div></div>
+
+         {/* <div> Hello {user}!</div>
+         <div><button onClick={logoutUser}>Logout</button></div> */}
+         <Profile user={user}/>
+        
 
          <div>We have {doggyBreeds?.length || "0"} breeds of dogs in our system</div>
      <div>How would like to search?</div>
