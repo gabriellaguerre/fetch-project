@@ -13,25 +13,30 @@ function Profile({user}) {
 
     const [showMenu, setShowMenu] = useState(false);
 
-    const openMenu = () => {
-        if (showMenu) return;
-        setShowMenu(true);
+    const openMenu = (e) => {
+      e.stopPropagation(); // Prevent event bubbling to avoid triggering the `closeMenu` on document
+      setShowMenu((prev) => !prev); // Toggle menu visibility
+    };
+
+    useEffect(() => {
+      if (!showMenu) return;
+
+      const closeMenu = (e) => {
+        if (ulRef.current && !ulRef.current.contains(e.target)) {
+          setShowMenu(false);
+        }
       };
 
-      useEffect(() => {
-        if (!showMenu) return;
+      document.addEventListener("click", closeMenu);
+      return () => document.removeEventListener("click", closeMenu);
+    }, [showMenu]);
 
-        const closeMenu = (e) => {
-          if (!ulRef.current.contains(e.target)) {
-            setShowMenu(false);
-          }
-        };
-        document.addEventListener("click", closeMenu);
-        return () => document.removeEventListener("click", closeMenu);
-      }, [showMenu]);
 
       const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
-      const closeMenu = () => setShowMenu(false);
+
+
+      console.log(ulClassName, 'ulclassname')
+      console.log(showMenu, 'showmenu')
 
      const logoutUser = () => {
           dispatch(logout());
@@ -41,14 +46,14 @@ function Profile({user}) {
     return (
         <>
         <div className='profile'>
-        <button className='profileButton'><img src={profile} className='profilePic' alt="dog-pic-profile" ></img></button>
+        <button className='profileButton' onClick={openMenu}> <img src={profile} className='profilePic' alt="dog-pic-profile" ></img> </button>
         <ul className={ulClassName} ref={ulRef}>
-        {/* {user && (
+        {user && (
           <>
-         <div> Hello {user}!</div>
-         <div><button onClick={logoutUser}>Logout</button></div>
+         <div className='userName'> Hello {user}!</div>
+         <div className='buttonDiv'><button className='logoutButton' onClick={logoutUser}>Logout</button></div>
          </>
-           )} */}
+           )}
         </ul>
         </div>
        </>
