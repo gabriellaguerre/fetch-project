@@ -4,7 +4,9 @@ import {selectUser} from '../../redux/usersSlice';
 import {useNavigate} from 'react-router';
 import { logout } from "../../redux/usersSlice";
 import LoginPage from '../LoginPage';
+import Profile from '../Profile';
 import {breeds, getDogBreed, getSearches, searchDog, dogMatch, } from '../../redux/dogsSlice';
+import './Main.css';
 
 
 function Main() {
@@ -13,6 +15,8 @@ function Main() {
     // const user = useSelector(selectUser);
     const doggyBreeds = useSelector(getDogBreed)
     const searchResult = useSelector(getSearches)
+    const user = "asd";
+
 
     console.log(searchResult, 'search result')
 
@@ -69,18 +73,15 @@ function Main() {
 
   return (
     <>
-    {/* {name ? (
+    {user ? (
       <>
-         <h1> HEllo {name}</h1>
-         <div><button onClick={getBreeds}>Get Breeds</button></div>
-         <div><button onClick={logoutUser}>Logout</button></div>
-      </>
-    ): (
-      <>
-      <LoginPage />
-      </>
-    )} */}
-     <div>We have {doggyBreeds?.length || "0"} breeds of dogs in our system</div>
+
+         {/* <div> Hello {user}!</div>
+         <div><button onClick={logoutUser}>Logout</button></div> */}
+         <Profile user={user}/>
+        
+
+         <div>We have {doggyBreeds?.length || "0"} breeds of dogs in our system</div>
      <div>How would like to search?</div>
      <div>See our full list of breeds
       <button onClick={getBreeds}>Get Breeds</button></div>
@@ -134,7 +135,14 @@ function Main() {
 
      <div> <button onClick={search}>Search</button></div>
 
-     <div><button onClick={logoutUser}>Logout</button></div>
+
+      </>
+    ): (
+      <>
+      <LoginPage />
+      </>
+    )}
+
 
     </>
   );
