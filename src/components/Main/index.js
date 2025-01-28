@@ -5,6 +5,7 @@ import {useNavigate} from 'react-router';
 import { logout } from "../../redux/usersSlice";
 import LoginPage from '../LoginPage';
 import Profile from '../Profile';
+
 import {breeds, getDogBreed, getSearches, searchDog, dogMatch, } from '../../redux/dogsSlice';
 import './Main.css';
 
@@ -36,6 +37,8 @@ function Main() {
     const [location, setLocation] = useState(false);
     const [zipCode, setZipCode] = useState("");
 
+    const [searching, setSearching] = useState("")
+    console.log(searching, 'searching')
 
   useEffect(() => {
     dispatch(breeds());
@@ -58,6 +61,11 @@ function Main() {
      
 
     }
+
+    
+      let results = doggyBreeds.filter((word)=>word.includes(searching))
+      console.log(results, 'results array')
+   
     
    
    return (
@@ -69,7 +77,20 @@ function Main() {
         <div className="firstMessage">We have {doggyBreeds?.length || "0"} breeds of dogs ready to be matched!</div>
      
      <div>Search and pick your breed from our full list of breeds:
-     <select
+      <input  type="text"
+         value={searching}
+         onChange={(e) => setSearching(e.target.value)}
+         /> 
+      <div className="results">
+        {results.map((word, index)=>
+          <ul key={index}>{word}</ul>)}
+        
+        </div> 
+
+
+
+
+     {/* <select
           name='breeds'
           id='breed-select'
           value={breedName}
@@ -79,7 +100,7 @@ function Main() {
           {doggyBreeds.map((breedName, index)=>
             <option key={index} value={breedName}>{breedName}</option>)}
         
-      </select>   
+      </select>    */}
      </div>
 
 
