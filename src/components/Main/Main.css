@@ -2,3 +2,13 @@
     text-align: center;
     font-size: 30px;
 }
+
+.results {
+    
+    width: 250px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    max-height: 150px;
+    overflow: auto; 
+    background-color: #f9f9f9;
+}
