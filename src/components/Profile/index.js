@@ -35,10 +35,7 @@ function Profile({user}) {
       const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
 
 
-      console.log(ulClassName, 'ulclassname')
-      console.log(showMenu, 'showmenu')
-
-     const logoutUser = () => {
+      const logoutUser = () => {
           dispatch(logout());
           navigate('/');
         }
@@ -50,8 +47,10 @@ function Profile({user}) {
         <ul className={ulClassName} ref={ulRef}>
         {user && (
           <>
+         <div className='menu'>
          <div className='userName'> Hello {user}!</div>
          <div className='buttonDiv'><button className='logoutButton' onClick={logoutUser}>Logout</button></div>
+         </div>
          </>
            )}
         </ul>
