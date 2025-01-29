@@ -107,11 +107,10 @@ function Main() {
          ):null} */}
         </div>
 
-        
+        <div className='gridArea2-2'>
         {filters &&  ( 
         <>
-        <div className='gridArea2-2'>
-        <div className='filterSelections'>
+        
        <div>
         <label>
           <input
@@ -158,13 +157,11 @@ function Main() {
             placeholder="Enter a zip code"
             onChange={(e) => setZipCode(e.target.value)}/>
           )}
-       </div>
-       </div>
-       </div>
+       </div>       
         </>
         )}
+        </div>
       </div> 
-      
       </>
     ): (
       
