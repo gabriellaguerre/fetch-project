@@ -19,9 +19,6 @@ function Main() {
     const user = "asfd";
 
 
-    // console.log(searchResult, 'search result')
-    // console.log(doggyBreeds, 'doggybreeds')
-
     const [selected, setSelected] = useState([]);
     const [breed, setBreed] = useState(true);
     const [breedName, setBreedName] = useState("")
@@ -38,7 +35,13 @@ function Main() {
     const [zipCode, setZipCode] = useState("");
 
     const [searching, setSearching] = useState("")
-    console.log(searching, 'searching')
+    const [menu, setMenu] = useState(true);
+
+    // console.log(searching, 'searching')
+   
+    // let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
+    // console.log(capitalLetterWord,'word')
+    // console.log(menu, 'menu')
 
   useEffect(() => {
     dispatch(breeds());
@@ -63,8 +66,8 @@ function Main() {
     }
 
     
-      let results = doggyBreeds.filter((word)=>word.includes(searching))
-      console.log(results, 'results array')
+      // let results = doggyBreeds.filter((word)=>word.includes(capitalLetterWord))
+      // console.log(results, 'results array')
    
     
    
@@ -76,37 +79,38 @@ function Main() {
         
         <div className="firstMessage">We have {doggyBreeds?.length || "0"} breeds of dogs ready to be matched!</div>
      
-     <div>Search and pick your breed from our full list of breeds:
-      <input  type="text"
+     <div className='searchAndFilter'>
+      <div className='gridArea1-1'>
+        <div className='inputDiv'>
+      <input
+         className='inputBox'  
+         type="text"
          value={searching}
-         onChange={(e) => setSearching(e.target.value)}
-         /> 
-      <div className="results">
-        {results.map((word, index)=>
-          <ul key={index}>{word}</ul>)}
+         placeholder="Search breeds"
+         onChange={(e) => {setSearching(e.target.value);setMenu(!menu)}}
+         /> </div>
+         
+      
+      <div className='searchDiv'> <button className='searchButton' onClick={search}>Search</button></div></div>
+
+     <div className='gridArea1-2'><button className='filterButton' onClick={()=>setFilters(!filters)}>Filters</button></div>  
+           
+
+
+       <div className='gridArea2-1'>
+           {/* {searching && results.length>0 ? (
+          <div className="results">
+           {results.map((word, index)=> (
+          <ul key={index} onClick={()=>{setSearching(word);setMenu(!menu)}}>{word}</ul>
+               ))} 
+          </div>
+         ):null} */}
+        </div>
+
+        <div className='gridArea2-2'>
+        {filters &&  ( 
+        <>
         
-        </div> 
-
-
-
-
-     {/* <select
-          name='breeds'
-          id='breed-select'
-          value={breedName}
-          onChange={(e)=>setBreedName(e.target.value)}          
-      >
-          <option value="" disabled>select a breed</option>
-          {doggyBreeds.map((breedName, index)=>
-            <option key={index} value={breedName}>{breedName}</option>)}
-        
-      </select>    */}
-     </div>
-
-
-     <div><button onClick={()=>setFilters(!filters)}>Filters</button></div>
-       {filters &&  ( 
-        <>  
        <div>
         <label>
           <input
@@ -121,7 +125,7 @@ function Main() {
             placeholder="Enter a minimum age"
             onChange={(e) => setMinAge(e.target.value)}/>          
           )}
-          </div>
+        </div>
 
       <div>
         <label>
@@ -137,7 +141,7 @@ function Main() {
             placeholder="Enter a maximum age"
             onChange={(e) => setMaxAge(e.target.value)}/>
           )}
-          </div>
+       </div>
 
       <div>
         <label>
@@ -152,17 +156,17 @@ function Main() {
             value={zipCode}
             placeholder="Enter a zip code"
             onChange={(e) => setZipCode(e.target.value)}/>
-
           )}
-          
-          </div>
-           </>)} 
-     <div> <button onClick={search}>Search</button></div>
+       </div>       
+        </>
+        )}
+        </div>
+      </div> 
       </>
     ): (
-      <>
+      
       <LoginPage />
-      </>
+      
     )}
     </>
   );
