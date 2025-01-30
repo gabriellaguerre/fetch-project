@@ -39,9 +39,9 @@ function Main() {
 
     // console.log(searching, 'searching')
    
-    // let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
-    // console.log(capitalLetterWord,'word')
-    // console.log(menu, 'menu')
+    let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
+    console.log(capitalLetterWord,'word')
+    console.log(menu, 'menu')
 
   useEffect(() => {
     dispatch(breeds());
@@ -66,8 +66,8 @@ function Main() {
     }
 
     
-      // let results = doggyBreeds.filter((word)=>word.includes(capitalLetterWord))
-      // console.log(results, 'results array')
+      let results = doggyBreeds.filter((word)=>word.includes(capitalLetterWord))
+      console.log(results, 'results array')
    
     
    
@@ -98,21 +98,21 @@ function Main() {
 
 
        <div className='gridArea2-1'>
-           {/* {searching && results.length>0 ? (
+           {searching && results.length>0 ? (
           <div className="results">
            {results.map((word, index)=> (
-          <ul key={index} onClick={()=>{setSearching(word);setMenu(!menu)}}>{word}</ul>
+          <ul key={index} className='resultList' onClick={()=>{setSearching(word);setMenu(!menu)}}>{word}</ul>
                ))} 
           </div>
-         ):null} */}
+         ):null}
         </div>
 
         <div className='gridArea2-2'>
         {filters &&  ( 
         <>
-        
-       <div>
-        <label>
+        <div className='filters'>
+       <div className="filter-option">
+        <label className='checkbox'>
           <input
           type="checkbox"
           value={minimumAge}
@@ -120,14 +120,15 @@ function Main() {
           />Min Age</label>
           {minimumAge && (
         <input
+            className="filter-input"
             type="number"
             value={minAge}
-            placeholder="Enter a minimum age"
+            // placeholder="Enter a minimum age"
             onChange={(e) => setMinAge(e.target.value)}/>          
           )}
         </div>
 
-      <div>
+      <div className="filter-option">
         <label>
           <input
           type="checkbox"
@@ -136,14 +137,15 @@ function Main() {
           />Max Age</label>
           {maximumAge && (
         <input
+            className="filter-input"
             type="number"
             value={maxAge}
-            placeholder="Enter a maximum age"
+            // placeholder="Enter a maximum age"
             onChange={(e) => setMaxAge(e.target.value)}/>
           )}
        </div>
 
-      <div>
+      <div className="filter-option">
         <label>
           <input
           type="checkbox"
@@ -152,12 +154,14 @@ function Main() {
           />Zip Code</label>
           {location && (
           <input
+            className="filter-input"
             type="number"
             value={zipCode}
-            placeholder="Enter a zip code"
+            // placeholder="Enter a zip code"
             onChange={(e) => setZipCode(e.target.value)}/>
           )}
-       </div>       
+       </div>  
+       </div>     
         </>
         )}
         </div>
