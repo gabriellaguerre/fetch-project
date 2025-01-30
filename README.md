@@ -18,7 +18,7 @@ As for everything else, you have free rein, so get creative! We strongly encoura
 You may find it helpful to make use of a component library.
 
 ## API Reference
-We provide our own backend to facilitate searching/fetching dog info. The base URL is https://frontend-take-home-service.fetch.com.
+We provide our own backend to facilitate searching/fetching dog info. The base URL is https:
 
 Data Model
 Here is the Typescript interface for the Dog objects returned by our API:
