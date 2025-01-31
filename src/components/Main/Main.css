@@ -143,6 +143,10 @@
     width: 20px;
   }
 
+  .size {
+    margin-left: 50px;
+  }
+
   .table {
     position: relative;
     top: 150px;

@@ -2,8 +2,9 @@ import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 
 // const usersURL = 'http://10.0.2.2:5000/api/users'
 const dogBreedsURL = 'https://frontend-take-home-service.fetch.com/dogs/breeds';
-const dogSearchrUrl = 'https://frontend-take-home-service.fetch.com/dogs/search?';
+const dogSearchrUrl = 'https://frontend-take-home-service.fetch.com/dogs/search';
 const dogMatchrUrl = 'https://frontend-take-home-service.fetch.com/dogs/match';
+const postDog = 'https://frontend-take-home-service.fetch.com/dogs';
 
 
 const initialState = {
@@ -27,10 +28,14 @@ const initialState = {
 
 })
 
-export const searchDog = createAsyncThunk('dogs/SEARCH', async (breed) => {
-    console.log(breed, 'breed in searchDog')
+export const searchDog = createAsyncThunk('dogs/SEARCH', async (searchParams) => {
+    console.log(searchParams, 'breed in searchDog')
 
-    const response = await fetch(dogSearchrUrl+`size=5&breeds=${[breed]}`, {
+    const queryString = new URLSearchParams(searchParams).toString();
+    const url = `${dogSearchrUrl}?${queryString}`;
+
+
+    const response = await fetch(url, {
         method: 'GET',
         headers: {"Content-Type": "application/json"},
         credentials: 'include',

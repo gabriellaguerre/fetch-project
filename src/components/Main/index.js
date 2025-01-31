@@ -35,11 +35,11 @@ function Main() {
     const [location, setLocation] = useState(false);
     const [zipCode, setZipCode] = useState("");
 
+    const [size, setSize] = useState("")
+
     const [searching, setSearching] = useState("")
     const [menu, setMenu] = useState(false);
 
-    console.log(searching, 'searching')
-    console.log(menu, 'menu')
 
     let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
     
@@ -49,28 +49,22 @@ function Main() {
     dispatch(breeds());
   }, [dispatch]);
 
-  const search = () => {
-      setBreedName(searching)
-      console.log(breed, breedName, breed && breedName.length>0, 'breedName in search')
-      let selectedParams = [];
+  const search = (searching) => {
 
-      if(breed && breedName.length>0) selectedParams = [...selectedParams,breedName];
-      // if(minimumAge && minAge) selectedParams = [...selectedParams,minAge];
-      // if(maximumAge && maxAge) selectedParams = [...selectedParams,maxAge];
-      // if(location && zipCode) selectedParams = [...selectedParams,zipCode];
+    setBreedName(searching)
+    let searchParams = {};
+    searchParams.size = size ? size : '5';
 
-      if(selectedParams.length>0){
-        // console.log(selectedParams,'selectedparams')
-        setSelected(selectedParams);
-        dispatch(searchDog(selectedParams));
-      }
-
-
+    if(breed && breedName.length>0) searchParams.breed = searching;
+    // if(sortOrder) searchParams.sort = sortOrder;
+    
+    console.log(searchParams, 'searchParams')
+    dispatch(searchDog(searchParams));
     }
 
 
       let results = doggyBreeds.filter((word)=>word.includes(capitalLetterWord))
-      console.log(results, 'results array')
+      console.log(searchResult, 'results obj')
 
 
 
@@ -89,20 +83,27 @@ function Main() {
          type="text"
          value={searching}
          placeholder="Type to search our available breeds"
-         onFocus={() => setMenu(!menu)}
+         onFocus={() => setMenu(true)}
          onChange={(e) => setSearching(e.target.value)}
          /> </div>
 
 
-        <div className='searchDiv'> <button className='searchButton' onClick={()=>{search();setMenu(false)}}><img src={searchImg} className="searchPic"/></button></div></div>
+        <div className='searchDiv'> <button className='searchButton' onClick={()=>{search(searching);setMenu(false)}}><img src={searchImg} className="searchPic"/></button></div></div>
 
-        <div className='gridArea1-2'><button className='filterButton' onClick={()=>setFilters(!filters)}>Filters</button></div>
+        <div className='gridArea1-2'><button className='filterButton' onClick={()=>setFilters(!filters)}>Filters</button>
+        <div className='size'>Size
+          <input 
+              className='sizeInput'
+              type="number"
+              value={size}
+              // placeholder="Enter a maximum age"
+              onChange={(e) => setSize(e.target.value)}/></div></div>
 
        <div className='gridArea2-1'>
            {searching && results.length>0 && menu? (
           <div className="results">
            {results.map((word, index)=> (
-          <ul key={index} className='resultList' onClick={()=>{setSearching(word);setMenu(!menu)}}>{word}</ul>
+          <ul key={index} className='resultList' onClick={()=>{setSearching(word);setMenu(false)}}>{word}</ul>
                ))}
           </div>
          ):null}
@@ -168,7 +169,7 @@ function Main() {
         </div>
       </div>
      
-        <div className='table'><Table /></div>
+        {/* <div className='table'><Table searchResult={searchResult}/></div> */}
       </>
        
   );
