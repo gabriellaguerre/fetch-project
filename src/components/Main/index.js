@@ -5,9 +5,9 @@ import {useNavigate} from 'react-router';
 import { logout } from "../../redux/usersSlice";
 import LoginPage from '../LoginPage';
 import Profile from '../Profile';
-
 import {breeds, getDogBreed, getSearches, searchDog, dogMatch, } from '../../redux/dogsSlice';
 import './Main.css';
+import searchImg from '../../Assets/search.png'
 
 
 function Main() {
@@ -38,7 +38,7 @@ function Main() {
     const [menu, setMenu] = useState(true);
 
     // console.log(searching, 'searching')
-   
+
     let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
     console.log(capitalLetterWord,'word')
     console.log(menu, 'menu')
@@ -61,40 +61,40 @@ function Main() {
         setSelected(selectedParams);
         dispatch(searchDog(selectedParams));
       }
-     
+
 
     }
 
-    
+
       let results = doggyBreeds.filter((word)=>word.includes(capitalLetterWord))
       console.log(results, 'results array')
-   
-    
-   
+
+
+
    return (
     <>
     {user ? (
       <>
          <Profile user={user}/>
-        
+
         <div className="firstMessage">We have {doggyBreeds?.length || "0"} breeds of dogs ready to be matched!</div>
-     
+
      <div className='searchAndFilter'>
       <div className='gridArea1-1'>
         <div className='inputDiv'>
       <input
-         className='inputBox'  
+         className='inputBox'
          type="text"
          value={searching}
-         placeholder="Search breeds"
+         placeholder="Type to search our available breeds"
          onChange={(e) => {setSearching(e.target.value);setMenu(!menu)}}
          /> </div>
-         
-      
-      <div className='searchDiv'> <button className='searchButton' onClick={search}>Search</button></div></div>
 
-     <div className='gridArea1-2'><button className='filterButton' onClick={()=>setFilters(!filters)}>Filters</button></div>  
-           
+
+        <div className='searchDiv'> <button className='searchButton' onClick={search}><img src={searchImg} className="searchPic"/></button></div></div>
+
+        <div className='gridArea1-2'><button className='filterButton' onClick={()=>setFilters(!filters)}>Filters</button></div>
+
 
 
        <div className='gridArea2-1'>
@@ -102,13 +102,13 @@ function Main() {
           <div className="results">
            {results.map((word, index)=> (
           <ul key={index} className='resultList' onClick={()=>{setSearching(word);setMenu(!menu)}}>{word}</ul>
-               ))} 
+               ))}
           </div>
          ):null}
         </div>
 
         <div className='gridArea2-2'>
-        {filters &&  ( 
+        {filters &&  (
         <>
         <div className='filters'>
        <div className="filter-option">
@@ -117,14 +117,14 @@ function Main() {
           type="checkbox"
           value={minimumAge}
           onChange={()=>setMinimumAge(!minimumAge)}
-          />Min Age</label>
+          />Minimum Age</label>
           {minimumAge && (
         <input
             className="filter-input"
             type="number"
             value={minAge}
             // placeholder="Enter a minimum age"
-            onChange={(e) => setMinAge(e.target.value)}/>          
+            onChange={(e) => setMinAge(e.target.value)}/>
           )}
         </div>
 
@@ -134,7 +134,7 @@ function Main() {
           type="checkbox"
           value={maximumAge}
           onChange={()=>setMaximumAge(!maximumAge)}
-          />Max Age</label>
+          />Maximum Age</label>
           {maximumAge && (
         <input
             className="filter-input"
@@ -154,23 +154,23 @@ function Main() {
           />Zip Code</label>
           {location && (
           <input
-            className="filter-input"
+            className="location-input"
             type="number"
             value={zipCode}
             // placeholder="Enter a zip code"
             onChange={(e) => setZipCode(e.target.value)}/>
           )}
-       </div>  
-       </div>     
+       </div>
+       </div>
         </>
         )}
         </div>
-      </div> 
+      </div>
       </>
     ): (
-      
+
       <LoginPage />
-      
+
     )}
     </>
   );
