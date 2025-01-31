@@ -3,8 +3,9 @@ import {useSelector, useDispatch} from 'react-redux';
 import {selectUser} from '../../redux/usersSlice';
 import {useNavigate} from 'react-router';
 import { logout } from "../../redux/usersSlice";
-import LoginPage from '../LoginPage';
+// import LoginPage from '../LoginPage';
 import Profile from '../Profile';
+import Table from "../Table";
 import {breeds, getDogBreed, getSearches, searchDog, dogMatch, } from '../../redux/dogsSlice';
 import './Main.css';
 import searchImg from '../../Assets/search.png'
@@ -35,20 +36,22 @@ function Main() {
     const [zipCode, setZipCode] = useState("");
 
     const [searching, setSearching] = useState("")
-    const [menu, setMenu] = useState(true);
+    const [menu, setMenu] = useState(false);
 
-    // console.log(searching, 'searching')
+    console.log(searching, 'searching')
+    console.log(menu, 'menu')
 
     let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
-    console.log(capitalLetterWord,'word')
-    console.log(menu, 'menu')
+    
+   
 
   useEffect(() => {
     dispatch(breeds());
   }, [dispatch]);
 
   const search = () => {
-      // console.log(breed, breedName, breed && breedName.length>0, 'breedName in search')
+      setBreedName(searching)
+      console.log(breed, breedName, breed && breedName.length>0, 'breedName in search')
       let selectedParams = [];
 
       if(breed && breedName.length>0) selectedParams = [...selectedParams,breedName];
@@ -57,7 +60,7 @@ function Main() {
       // if(location && zipCode) selectedParams = [...selectedParams,zipCode];
 
       if(selectedParams.length>0){
-        // console.log('selectedparams')
+        // console.log(selectedParams,'selectedparams')
         setSelected(selectedParams);
         dispatch(searchDog(selectedParams));
       }
@@ -73,12 +76,11 @@ function Main() {
 
    return (
     <>
-    {user ? (
-      <>
+   
          <Profile user={user}/>
 
         <div className="firstMessage">We have {doggyBreeds?.length || "0"} breeds of dogs ready to be matched!</div>
-
+        
      <div className='searchAndFilter'>
       <div className='gridArea1-1'>
         <div className='inputDiv'>
@@ -87,18 +89,17 @@ function Main() {
          type="text"
          value={searching}
          placeholder="Type to search our available breeds"
-         onChange={(e) => {setSearching(e.target.value);setMenu(!menu)}}
+         onFocus={() => setMenu(!menu)}
+         onChange={(e) => setSearching(e.target.value)}
          /> </div>
 
 
-        <div className='searchDiv'> <button className='searchButton' onClick={search}><img src={searchImg} className="searchPic"/></button></div></div>
+        <div className='searchDiv'> <button className='searchButton' onClick={()=>{search();setMenu(false)}}><img src={searchImg} className="searchPic"/></button></div></div>
 
         <div className='gridArea1-2'><button className='filterButton' onClick={()=>setFilters(!filters)}>Filters</button></div>
 
-
-
        <div className='gridArea2-1'>
-           {searching && results.length>0 ? (
+           {searching && results.length>0 && menu? (
           <div className="results">
            {results.map((word, index)=> (
           <ul key={index} className='resultList' onClick={()=>{setSearching(word);setMenu(!menu)}}>{word}</ul>
@@ -166,14 +167,12 @@ function Main() {
         )}
         </div>
       </div>
+     
+        <div className='table'><Table /></div>
       </>
-    ): (
-
-      <LoginPage />
-
-    )}
-    </>
+       
   );
 }
 
 export default Main;
+
