@@ -42,39 +42,57 @@ function Main() {
 
 
     let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
-    
-   
+
+
 
   useEffect(() => {
     dispatch(breeds());
   }, [dispatch]);
 
-  const search = (searching) => {
-
-    setBreedName(searching)
+  const search = () => {
     let searchParams = {};
+
+    searchParams.breeds = [searching];
     searchParams.size = size ? size : '5';
 
-    if(breed && breedName.length>0) searchParams.breed = searching;
-    // if(sortOrder) searchParams.sort = sortOrder;
-    
+    if(location && zipCode) searchParams.zipCodes = [zipCode];
+    if(minimumAge && minAge) searchParams.ageMin = minAge;
+    if(maximumAge && maxAge) searchParams.ageMax = maxAge;
+
     console.log(searchParams, 'searchParams')
     dispatch(searchDog(searchParams));
-    }
+
+
+
+    // setBreedName(searching)
+    // console.log(breed, breedName, breed && breedName.length>0, 'breedName in search')
+    // let selectedParams = [];
+
+    // if(breed && breedName.length>0) selectedParams = [...selectedParams,breedName];
+    // // if(minimumAge && minAge) selectedParams = [...selectedParams,minAge];
+    // // if(maximumAge && maxAge) selectedParams = [...selectedParams,maxAge];
+    // // if(location && zipCode) selectedParams = [...selectedParams,zipCode];
+
+    // if(selectedParams.length>0){
+    //   // console.log(selectedParams,'selectedparams')
+    //   setSelected(selectedParams);
+    //   dispatch(searchDog(selectedParams));
+    // }
+  }
 
 
       let results = doggyBreeds.filter((word)=>word.includes(capitalLetterWord))
-      console.log(searchResult, 'results obj')
+      // console.log(searchResult, 'results obj')
 
 
 
    return (
     <>
-   
+
          <Profile user={user}/>
 
         <div className="firstMessage">We have {doggyBreeds?.length || "0"} breeds of dogs ready to be matched!</div>
-        
+
      <div className='searchAndFilter'>
       <div className='gridArea1-1'>
         <div className='inputDiv'>
@@ -92,7 +110,7 @@ function Main() {
 
         <div className='gridArea1-2'><button className='filterButton' onClick={()=>setFilters(!filters)}>Filters</button>
         <div className='size'>Size
-          <input 
+          <input
               className='sizeInput'
               type="number"
               value={size}
@@ -168,12 +186,11 @@ function Main() {
         )}
         </div>
       </div>
-     
+
         {/* <div className='table'><Table searchResult={searchResult}/></div> */}
       </>
-       
+
   );
 }
 
 export default Main;
-
