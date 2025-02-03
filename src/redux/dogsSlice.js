@@ -31,12 +31,14 @@ const initialState = {
 
 export const searchDog = createAsyncThunk('dogs/SEARCH', async (searchParams) => {
     console.log(searchParams, 'searchParams in Thunk')
-    const queryString = new URLSearchParams(searchParams).toString();
-    console.log(queryString, 'queryString in Thunk')
-    const url = `${dogSearchrUrl}${queryString}`;
-    console.log(url, 'url in Thunk')
 
-    // const response = await fetch(dogSearchrUrl+`size=5&breeds=${[breed]}`, {
+    const url = new URL(dogSearchrUrl)
+
+    searchParams.breeds.forEach(breed => url.searchParams.append('breeds', breed));
+    url.searchParams.append('size', searchParams.size)
+
+    console.log(url, 'url in dogs?SEARCH')
+   
     const response = await fetch(url, {
         method: 'GET',
         headers: {"Content-Type": "application/json"},

@@ -58,7 +58,7 @@ function Main() {
   const search = async () => {
     let searchParams = {};
 
-    searchParams.breeds = [searching];
+    searchParams.breeds = [searching, "Pekinese"];
     searchParams.size = size ? size : '5';
 
     if(location && zipCode) searchParams.zipCodes = [zipCode];
@@ -116,7 +116,10 @@ function Main() {
          /> </div>
 
 
-        <div className='searchDiv'> <button className='searchButton' onClick={()=>{search(searching);setMenu(false)}}><img src={searchImg} className="searchPic"/></button></div></div>
+        <div className='searchDiv'> 
+          <button className='addButton' onClick={()=>{search(searching);setMenu(false)}}><img src={searchImg} className="searchPic"/>Add</button>
+          <button className='searchButton' onClick={()=>{search(searching);setMenu(false)}}><img src={searchImg} className="searchPic"/></button>
+            </div></div>
 
         <div className='gridArea1-2'><button className='filterButton' onClick={()=>setFilters(!filters)}>Filters</button>
         <div className='size'>Size
@@ -125,7 +128,10 @@ function Main() {
               type="number"
               value={size}
               // placeholder="Enter a maximum age"
-              onChange={(e) => setSize(e.target.value)}/></div></div>
+              onChange={(e) => setSize(e.target.value)}/></div>
+          <div><button className='filterButton' onClick={()=>setFilters(!filters)}>Sort By</button></div>
+              
+              </div>
 
        <div className='gridArea2-1'>
            {searching && results.length>0 && menu? (
@@ -196,7 +202,7 @@ function Main() {
         )}
         </div>
       </div>
-
+        <div>Search for selected dogs</div>
         <div className='table'><Table details={details} searchResult={searchResult}/></div>
       </>
 
