@@ -6,7 +6,7 @@ import { logout } from "../../redux/usersSlice";
 // import LoginPage from '../LoginPage';
 import Profile from '../Profile';
 import Table from "../Table";
-import {breeds, getDogBreed, getSearches, searchDog, dogMatch, } from '../../redux/dogsSlice';
+import {breeds, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, dogMatch } from '../../redux/dogsSlice';
 import './Main.css';
 import searchImg from '../../Assets/search.png'
 
@@ -17,7 +17,13 @@ function Main() {
     // const user = useSelector(selectUser);
     const doggyBreeds = useSelector(getDogBreed)
     const searchResult = useSelector(getSearches)
+    const details = useSelector(getDogDetails);
     const user = "asfd";
+
+    
+
+    let searchArray = searchResult.resultIds;
+    console.log(searchArray, 'searchArray')
 
 
     const [selected, setSelected] = useState([]);
@@ -49,7 +55,7 @@ function Main() {
     dispatch(breeds());
   }, [dispatch]);
 
-  const search = () => {
+  const search = async () => {
     let searchParams = {};
 
     searchParams.breeds = [searching];
@@ -60,7 +66,11 @@ function Main() {
     if(maximumAge && maxAge) searchParams.ageMax = maxAge;
 
     console.log(searchParams, 'searchParams')
-    dispatch(searchDog(searchParams));
+    await dispatch(searchDog(searchParams));
+
+    console.log(searchArray, 'inside search for searchArray')
+    let dogs = await dispatch(postSearchDog(searchArray))
+    console.log(dogs, 'dogs')
 
 
 
@@ -187,7 +197,7 @@ function Main() {
         </div>
       </div>
 
-        {/* <div className='table'><Table searchResult={searchResult}/></div> */}
+        <div className='table'><Table details={details} searchResult={searchResult}/></div>
       </>
 
   );

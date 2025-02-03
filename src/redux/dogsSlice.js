@@ -4,12 +4,13 @@ import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 const dogBreedsURL = 'https://frontend-take-home-service.fetch.com/dogs/breeds';
 const dogSearchrUrl = 'https://frontend-take-home-service.fetch.com/dogs/search?';
 const dogMatchrUrl = 'https://frontend-take-home-service.fetch.com/dogs/match';
-const postDog = 'https://frontend-take-home-service.fetch.com/dogs';
+const postDogURL = 'https://frontend-take-home-service.fetch.com/dogs';
 
 
 const initialState = {
     breed: [],
     search: {},
+    dogsDetail: [],
 }
 
   export const breeds = createAsyncThunk('dogs/BREEDS', async () => {
@@ -43,11 +44,49 @@ export const searchDog = createAsyncThunk('dogs/SEARCH', async (searchParams) =>
     })
     // console.log(response);
     if(response.ok){
-        const data = response.json()
+        const data = await response.json()
         console.log(data, 'search data in redux')
         return data;
     }
 })
+
+export const nextList = createAsyncThunk('dogs/NEXT_SEARCH', async (nextUrl) => {
+    console.log(nextUrl, 'searchParams in NEXT_SEARCH')
+    
+   
+    const url = `https://frontend-take-home-service.fetch.com${nextUrl}`;
+    console.log(url, 'url in next search')
+    
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {"Content-Type": "application/json"},
+        credentials: 'include',
+    })
+    // console.log(response);
+    if(response.ok){
+        const data = await response.json()
+        console.log(data, 'search data in redux')
+        return data;
+    }
+})
+
+export const postSearchDog = createAsyncThunk('dogs/DOG_DETAILS', async (searchArray) => {
+    console.log(searchArray, 'in postSearchDog in dogSlice')
+    const response = await fetch(postDogURL, {
+        method: 'POST',
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(searchArray),
+        credentials: 'include',
+    })
+    
+    if(response.ok){
+        const data = await response.json()
+        console.log(data, 'dog details')
+        return data;
+    }
+})
+
 
 export const dogMatch = createAsyncThunk('dogs/MATCH', async (match) => {
     const response = await fetch(dogMatchrUrl, {
@@ -91,12 +130,27 @@ const dogsSlice = createSlice({
                 state.error = null;
             })
 
+            .addCase(postSearchDog.fulfilled, (state, action)=> {
+                state.dogsDetail = action.payload;
+                console.log(action.payload, 'in postSearchDog')
+                state.status = 'succeeded';
+                state.error = null;
+            })
+
+            .addCase(nextList.fulfilled, (state, action)=> {
+                state.search = action.payload;
+                console.log(action.payload)
+                state.status = 'succeeded';
+                state.error = null;
+            })
+
     }
 
 })
 
 export const getDogBreed = (state) => state.dogs.breed;
 export const getSearches = (state) => state.dogs.search;
+export const getDogDetails = (state) => state.dogs.dogsDetail;
 
 export const { addBreeds, addSearch  } = dogsSlice.actions
 
