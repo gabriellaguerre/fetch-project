@@ -13,14 +13,14 @@ import searchImg from '../../Assets/search.png'
 
 function Breeds() {
     const dispatch = useDispatch();
-    // const user = useSelector(selectUser);
+    const user = useSelector(selectUser);
     const doggyBreeds = useSelector(getDogBreed)
     const searchResult = useSelector(getSearches)
     const details = useSelector(getDogDetails);
-    const user = "asfd";
+    // const user = "asfd";
 
-    
-    
+
+
     let searchArray = searchResult.resultIds;
     console.log(searchArray, 'searchArray')
 
@@ -73,7 +73,7 @@ function Breeds() {
         let dogs = await dispatch(postSearchDog(searchArray))
         console.log(dogs, 'dogs')
     }
-   
+
 
 
 
@@ -101,7 +101,7 @@ function Breeds() {
 
    return (
     <>
-         <Profile user={user}/>
+     <Profile user={user}/>
 
      <div className='searchAndFilter'>
       <div className='gridArea1-1'>
@@ -116,7 +116,7 @@ function Breeds() {
          /> </div>
 
 
-        <div className='searchDiv'> 
+        <div className='searchDiv'>
           <button className='addButton' onClick={()=>{search(searching);setMenu(false)}}><img src={searchImg} className="searchPic"/>Add</button>
           <button className='searchButton' onClick={()=>{search(searching);setMenu(false)}}><img src={searchImg} className="searchPic"/></button>
             </div></div>
@@ -130,7 +130,7 @@ function Breeds() {
               // placeholder="Enter a maximum age"
               onChange={(e) => setSize(e.target.value)}/></div>
           <div><button className='filterButton' onClick={()=>setFilters(!filters)}>Sort By</button></div>
-              
+
               </div>
 
        <div className='gridArea2-1'>
