@@ -1,7 +1,10 @@
 import React, {useState} from "react";
 import {useSelector, useDispatch} from 'react-redux';
-import {useModal} from '../Context/Modal';
-
+import {selectUser} from '../../redux/usersSlice';
+import {useNavigate} from 'react-router';
+import { logout } from "../../redux/usersSlice";
+// import LoginPage from '../LoginPage';
+import Profile from '../Profile';
 import Table from "../Table";
 import {breeds, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, dogMatch } from '../../redux/dogsSlice';
 import './Breeds.css';
@@ -10,11 +13,11 @@ import searchImg from '../../Assets/search.png'
 
 function Breeds() {
     const dispatch = useDispatch();
-//     // const user = useSelector(selectUser);
+    // const user = useSelector(selectUser);
     const doggyBreeds = useSelector(getDogBreed)
     const searchResult = useSelector(getSearches)
     const details = useSelector(getDogDetails);
-//     const user = "asfd";
+    const user = "asfd";
 
     
     
@@ -22,34 +25,34 @@ function Breeds() {
     console.log(searchArray, 'searchArray')
 
 
-//     const [selected, setSelected] = useState([]);
-//     const [breed, setBreed] = useState(true);
-//     const [breedName, setBreedName] = useState("")
+    const [selected, setSelected] = useState([]);
+    const [breed, setBreed] = useState(true);
+    const [breedName, setBreedName] = useState("")
 
-//     const[filters, setFilters] = useState(false);
+    const[filters, setFilters] = useState(false);
 
-//     const [minimumAge, setMinimumAge] = useState(false);
-//     const [minAge, setMinAge] = useState("");
+    const [minimumAge, setMinimumAge] = useState(false);
+    const [minAge, setMinAge] = useState("");
 
-//     const [maximumAge, setMaximumAge] = useState(false);
-//     const [maxAge, setMaxAge] = useState("");
+    const [maximumAge, setMaximumAge] = useState(false);
+    const [maxAge, setMaxAge] = useState("");
 
-//     const [location, setLocation] = useState(false);
-//     const [zipCode, setZipCode] = useState("");
+    const [location, setLocation] = useState(false);
+    const [zipCode, setZipCode] = useState("");
 
-//     const [size, setSize] = useState("")
+    const [size, setSize] = useState("")
 
-//     const [searching, setSearching] = useState("")
-//     const [menu, setMenu] = useState(false);
-
-
-//     let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
+    const [searching, setSearching] = useState("")
+    const [menu, setMenu] = useState(false);
 
 
+    let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
 
-// //   useEffect(() => {
-// //     dispatch(breeds());
-// //   }, [dispatch]);
+
+
+//   useEffect(() => {
+//     dispatch(breeds());
+//   }, [dispatch]);
 
   const search = async () => {
     let searchParams = {};
@@ -92,16 +95,13 @@ function Breeds() {
 
 
       let results = doggyBreeds.filter((word)=>word.includes(capitalLetterWord))
-      console.log(searchResult, 'results obj')
+      // console.log(searchResult, 'results obj')
 
 
 
    return (
     <>
-   
-      {/* <Profile user={user}/>
-
-       
+         <Profile user={user}/>
 
      <div className='searchAndFilter'>
       <div className='gridArea1-1'>
@@ -204,8 +204,7 @@ function Breeds() {
       </div>
         <div>Search for selected dogs</div>
         <div className='table'><Table details={details} searchResult={searchResult}/></div>
-      </> */}
-</>
+      </>
   );
 }
 

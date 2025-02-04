@@ -23,9 +23,9 @@ function Main() {
    const user = useSelector(selectUser);
    const doggyBreeds = useSelector(getDogBreed)
 
-  //  const goToBreeds = () => {
-  //   navigate('/breeds');
-  //  }
+   const goToBreeds = () => {
+    navigate('/breeds');
+   }
 
 
    return (
@@ -35,7 +35,7 @@ function Main() {
 
         <div className="firstMessage">We have {doggyBreeds?.length || "0"}  breeds of dogs ready to be matched!</div>
         <div className='searchButtons'>
-        <div className='breedButtonDiv'><button className='breedButton'> <OpenModalButton buttonText="Search By Breed" modalComponent={Breeds} /></button></div>
+        <div className='breedButtonDiv'><button className='breedButton' onClick={goToBreeds}>Search By Breed </button></div>
         <div className='locationButtonDiv'><button className='breedButton'>Search By Location</button></div>
         </div>
     
