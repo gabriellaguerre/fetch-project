@@ -11,17 +11,18 @@ const initialState = {
     error: null
   }
 
-  export const login = createAsyncThunk('user/LOGIN_USER', async ({name, email}) => {
-
+  export const login = createAsyncThunk('user/LOGIN_USER', async ({name}) => {
+    console.log(name, "name")
     const response = await fetch(loginUsersURL, {
     method: 'POST',
     headers: {"Content-Type": "application/json",},
     body: JSON.stringify({name: "asd", email: 'asdf@adf.com'}),
     credentials: 'include',
     })
-  
+    console.log(response, 'response')
     if(response.ok){
-       return  { name };
+       return  { name: "asd" };
+      
      }  
 })
 
@@ -44,7 +45,8 @@ const usersSlice = createSlice({
     extraReducers(builder) {
         builder
             .addCase(login.fulfilled, (state, action)=> {
-                state.user = { name: action.payload.name };
+                // console.log('inside state',action.payload.name)
+                state.user = action.payload.name;
                 state.status = 'succeeded';
                 state.error = null;
 

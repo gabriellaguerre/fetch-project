@@ -13,8 +13,8 @@ function LoginPage() {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [NameError, setNameError] = useState("");
-  const [Eerror, setEError] = useState("");
+  // const [NameError, setNameError] = useState("");
+  // const [Eerror, setEError] = useState("");
 
 
   const handleSubmit = async (e) => {
@@ -22,7 +22,7 @@ function LoginPage() {
     const data = await dispatch(login({name, email}));
     if (data.payload) {
       navigate('/main', { state: { name } });
-      navigate('/main');
+      // navigate('/main');
     }
 
     // if (!name) {

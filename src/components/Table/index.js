@@ -6,33 +6,33 @@ import './Table.css'
 function Table() {
   const dispatch = useDispatch();
 
-  const details = useSelector(getDogDetails);
-  const searchResult = useSelector(getSearches)
+  // const details = useSelector(getDogDetails);
+  // const searchResult = useSelector(getSearches)
   
-  let total = searchResult.total;
-  let nextUrl = searchResult.next;
-  let previousUrl = searchResult.prev
-  let list = searchResult.resultIds
+  // let total = searchResult.total;
+  // let nextUrl = searchResult.next;
+  // let previousUrl = searchResult.prev
+  // let list = searchResult.resultIds
   
 
-    const handleNext = async () => {
-        console.log(nextUrl, 'next')
-        await dispatch(nextList(nextUrl));
-        let dogs2 = await dispatch(postSearchDog(list))
-        console.log(dogs2, 'dogs')
-    }
+  //   const handleNext = async () => {
+  //       console.log(nextUrl, 'next')
+  //       await dispatch(nextList(nextUrl));
+  //       let dogs2 = await dispatch(postSearchDog(list))
+  //       console.log(dogs2, 'dogs')
+  //   }
 
-    const handlePrevious = async () => {
-      console.log(previousUrl, 'next')
-      await dispatch(nextList(previousUrl));
-      let dogs2 = await dispatch(postSearchDog(list))
-      console.log(dogs2, 'dogs')
-  }
+  //   const handlePrevious = async () => {
+  //     console.log(previousUrl, 'next')
+  //     await dispatch(nextList(previousUrl));
+  //     let dogs2 = await dispatch(postSearchDog(list))
+  //     console.log(dogs2, 'dogs')
+  // }
 
 
   return (
     <>
-    <div>Total Finds: {total}</div>
+    {/* <div>Total Finds: {total}</div>
     <div><button onClick={handleNext}>Next</button></div>
     <div><button onClick={handlePrevious}>Previous</button></div>
    
@@ -59,7 +59,7 @@ function Table() {
         
         
       </tbody>
-    </table>
+    </table> */}
     </>
   )
 }
