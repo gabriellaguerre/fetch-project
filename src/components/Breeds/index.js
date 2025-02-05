@@ -11,6 +11,7 @@ import './Breeds.css';
 import searchImg from '../../Assets/search.png';
 import plusImg from '../../Assets/orange-plus.png'
 import filterImg from '../../Assets/filter-pic.png'
+import deleteImg from '../../Assets/trash-can.png';
 
 
 function Breeds() {
@@ -136,7 +137,7 @@ function Breeds() {
 
         <div className='searchDiv'>
           <button className='addButton' onClick={()=>{addBreed(searching);setMenu(false)}}><img src={plusImg} className="searchPic"/></button>
-          <button className='searchButton' onClick={()=>{search(searching);setMenu(false)}}><img src={searchImg} className="searchPic"/></button>
+          {/* <button className='searchButton' onClick={()=>{search(searching);setMenu(false)}}><img src={searchImg} className="searchPic"/></button> */}
             </div></div>
 
         <div className='gridArea1-2'><button className='filterButton' onClick={()=>setFilters(!filters)}><img src={filterImg} className="filterPic"/>Filters</button>
@@ -222,9 +223,12 @@ function Breeds() {
       </div>
         <div className='breedChoices'>Breeds selected: 
           {selected.map((breed, index) =>(
-            <div key={index} className='chosenBreeds'>{breed}</div>
+            <div key={index} className='chosenBreeds'>{breed}
+            <button className='removeButton'><img src={deleteImg} className="deletePic"/></button>
+            </div>
           ))}
         </div>
+        <div className='search2'><button className='search2Button' onClick={()=>{search(searching);setMenu(false)}}>SEARCH<img src={searchImg} className="searchPic"/></button></div>
         <div className='table'><Table details={details} searchResult={searchResult}/></div>
       </>
   );
