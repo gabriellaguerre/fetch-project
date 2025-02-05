@@ -99,7 +99,21 @@ function Breeds() {
       let results = doggyBreeds.filter((word)=>word.includes(capitalLetterWord))
       // console.log(searchResult, 'results obj')
 
+      let addBreed = (selectedBreed) => {
+        console.log(selectedBreed, 'selectedBreed')
+       
+        if(!selected.includes(selectedBreed)) {
+                            
+          setSelected(prevSelected => {const updatedSelection = [...prevSelected,selectedBreed];
+            return updatedSelection;
+          })
+          console.log(selected, 'after adding breed')
+    
+        }
+       
 
+      }
+      console.log(selected, 'after adding breed')
 
    return (
     <>
@@ -121,7 +135,7 @@ function Breeds() {
 
 
         <div className='searchDiv'>
-          <button className='addButton' onClick={()=>{search(searching);setMenu(false)}}><img src={plusImg} className="searchPic"/></button>
+          <button className='addButton' onClick={()=>{addBreed(searching);setMenu(false)}}><img src={plusImg} className="searchPic"/></button>
           <button className='searchButton' onClick={()=>{search(searching);setMenu(false)}}><img src={searchImg} className="searchPic"/></button>
             </div></div>
 
@@ -206,7 +220,11 @@ function Breeds() {
         )}
         </div>
       </div>
-        <div>Search for selected breeds</div>
+        <div className='breedChoices'>Breeds selected: 
+          {selected.map((breed, index) =>(
+            <div key={index} className='chosenBreeds'>{breed}</div>
+          ))}
+        </div>
         <div className='table'><Table details={details} searchResult={searchResult}/></div>
       </>
   );
