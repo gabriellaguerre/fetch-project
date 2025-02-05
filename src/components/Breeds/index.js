@@ -8,7 +8,9 @@ import Profile from '../Profile';
 import Table from "../Table";
 import {breeds, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, dogMatch } from '../../redux/dogsSlice';
 import './Breeds.css';
-import searchImg from '../../Assets/search.png'
+import searchImg from '../../Assets/search.png';
+import plusImg from '../../Assets/orange-plus.png'
+import filterImg from '../../Assets/filter-pic.png'
 
 
 function Breeds() {
@@ -102,9 +104,11 @@ function Breeds() {
    return (
     <>
      <Profile user={user}/>
-
+     {/* <div className='instruction'>Type to search our available breeds, then click the + to add that breed to your search list</div> */}
      <div className='searchAndFilter'>
+
       <div className='gridArea1-1'>
+
         <div className='inputDiv'>
       <input
          className='inputBox'
@@ -117,11 +121,11 @@ function Breeds() {
 
 
         <div className='searchDiv'>
-          <button className='addButton' onClick={()=>{search(searching);setMenu(false)}}><img src={searchImg} className="searchPic"/>Add</button>
+          <button className='addButton' onClick={()=>{search(searching);setMenu(false)}}><img src={plusImg} className="searchPic"/></button>
           <button className='searchButton' onClick={()=>{search(searching);setMenu(false)}}><img src={searchImg} className="searchPic"/></button>
             </div></div>
 
-        <div className='gridArea1-2'><button className='filterButton' onClick={()=>setFilters(!filters)}>Filters</button>
+        <div className='gridArea1-2'><button className='filterButton' onClick={()=>setFilters(!filters)}><img src={filterImg} className="filterPic"/>Filters</button>
         <div className='size'>Size
           <input
               className='sizeInput'
@@ -202,7 +206,7 @@ function Breeds() {
         )}
         </div>
       </div>
-        <div>Search for selected dogs</div>
+        <div>Search for selected breeds</div>
         <div className='table'><Table details={details} searchResult={searchResult}/></div>
       </>
   );

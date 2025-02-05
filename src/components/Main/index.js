@@ -9,17 +9,18 @@ import Breeds from '../Breeds';
 import Table from "../Table";
 import {breeds, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, dogMatch } from '../../redux/dogsSlice';
 import './Main.css';
-import searchImg from '../../Assets/search.png'
+import breedImg from '../../Assets/breed_pic-main.png'
+import locationImg from '../../Assets/location_pic-main.png'
 
 
 function Main() {
     const dispatch = useDispatch();
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
       dispatch(breeds());
     }, [dispatch]);
- 
+
    const user = useSelector(selectUser);
    const doggyBreeds = useSelector(getDogBreed)
 
@@ -35,10 +36,10 @@ function Main() {
 
         <div className="firstMessage">We have {doggyBreeds?.length || "0"}  breeds of dogs ready to be matched!</div>
         <div className='searchButtons'>
-        <div className='breedButtonDiv'><button className='breedButton' onClick={goToBreeds}>Search By Breed </button></div>
-        <div className='locationButtonDiv'><button className='breedButton'>Search By Location</button></div>
+        <div className='breedButtonDiv'><button className='breedButton' onClick={goToBreeds}><img src={breedImg} className="breedPic"/>Search By Breed </button></div>
+        <div className='locationButtonDiv'><button className='locationButton'><img src={locationImg} className="locationPic"/>Search By Location</button></div>
         </div>
-    
+
       </>
 
   );

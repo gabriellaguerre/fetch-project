@@ -7,15 +7,31 @@
   display: flex;
   justify-content: center;
   position: relative;
-  top: 100px;
+  top: 50px;
 }
 
 .breedButtonDiv, .locationButtonDiv {
-  margin: 20px;
+  margin: 10px;
 }
 
-.breedButton, .breedButton {
-  height: 400px;
+.breedButton, .locationButton {
+  height: 300px;
   width: 300px;
   border-radius: 20px;
+  background-color: white;
+}
+
+.breedPic, .locationPic {
+  height: 200px;
+  width: 200px;
+  margin-bottom: 10px;
+}
+
+.breedButton, .locationButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: bold;
 }

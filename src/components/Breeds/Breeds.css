@@ -1,4 +1,6 @@
-
+.instruction {
+  text-align: center;
+}
 
 .results {
     position: absolute;
@@ -12,7 +14,7 @@
     background-color: #f9f9f9;
     z-index: 10;
     /* left: 28%; */
-    transform: translateX(-6%); /* Moves it slightly to the left */
+    transform: translateX(-12%); /* Moves it slightly to the left */
     cursor: pointer;
 }
 
@@ -50,25 +52,39 @@
 .searchButton {
     height: 46px;
     width: 50px;
+    border-left: none;
     border-radius: 0px 10px 10px 0px;
     padding-left: 10px;
     background-color: rgb(128, 231, 134);
     text-align: left;
+    /* font-weight: bold; */
     cursor: pointer;
 }
 
+.addButton {
+  height: 46px;
+  width: 50px;
+  border-left: none;
+  /* border-radius: 0px 10px 10px 0px; */
+  /* padding-left: 10px; */
+  background-color: rgb(240, 240, 154);
+  text-align: center;
+  cursor: pointer;
+}
 
 .filterButton {
+  display: flex; /* Enables flexbox */
+    align-items: center; /* Centers items vertically */
+    justify-content: center; /* Centers items horizontally */
     height: 40px;
     width: 100px;
     border-radius: 10px;
-    padding-left: 10px;
     background-color: white;
-    text-align: left;
+    text-align: center;
     cursor: pointer;
+    border: 1px solid #ccc; /* Optional: Adds a subtle border */
+    gap: 5px; /* Space between image and text */
 }
-
-
 
 
 .gridArea1-1{
@@ -140,6 +156,12 @@
     width: 20px;
   }
 
+  .filterPic {
+    height: 20px;
+    width: 20px;
+    margin:5px;
+  }
+
   .size {
     margin-left: 50px;
   }
@@ -148,4 +170,3 @@
     position: relative;
     top: 150px;
   }
-
