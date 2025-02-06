@@ -2,7 +2,7 @@ import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 
 // const usersURL = 'http://10.0.2.2:5000/api/users'
 const dogBreedsURL = 'https://frontend-take-home-service.fetch.com/dogs/breeds';
-const dogSearchrUrl = 'https://frontend-take-home-service.fetch.com/dogs/search?';
+const dogSearchUrl = 'https://frontend-take-home-service.fetch.com/dogs/search?';
 const dogMatchrUrl = 'https://frontend-take-home-service.fetch.com/dogs/match';
 const postDogURL = 'https://frontend-take-home-service.fetch.com/dogs';
 
@@ -29,17 +29,17 @@ const initialState = {
 
 })
 
-export const searchDog = createAsyncThunk('dogs/SEARCH', async (searchParams) => {
-    console.log(searchParams, 'searchParams in Thunk')
+export const searchDog = createAsyncThunk('dogs/SEARCH', async (urlFrontend) => {
+    console.log(urlFrontend.href, 'searchParams in Thunk')
 
-    const url = new URL(dogSearchrUrl)
+    // const url = new URL(dogSearchUrl)
 
-    searchParams.breeds.forEach(breed => url.searchParams.append('breeds', breed));
-    url.searchParams.append('size', searchParams.size)
+    // searchParams.breeds.forEach(breed => url.searchParams.append('breeds', breed));
+    // url.searchParams.append('size', searchParams.size)
 
-    console.log(url, 'url in dogs?SEARCH')
+    // console.log(url, 'url in dogs?SEARCH')
    
-    const response = await fetch(url, {
+    const response = await fetch(urlFrontend.href, {
         method: 'GET',
         headers: {"Content-Type": "application/json"},
         credentials: 'include',
