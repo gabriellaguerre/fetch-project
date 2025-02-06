@@ -25,13 +25,22 @@
 .filters {
     position: absolute;
     margin-top: 1px;
-    width: 450px;
+    width: 250px;
     /* background: #f9f9f9; */
     padding: 10px;
     /* border: 1px solid #ccc; */
     /* border-radius: 10px; */
   }
 
+  .sort {
+    position: absolute;
+    margin-top: 1px;
+    width: 550px;
+    /* background: #f9f9f9; */
+    padding: 10px;
+    /* border: 1px solid #ccc; */
+    /* border-radius: 10px; */
+  }
 
 
 .inputBox {
@@ -73,17 +82,17 @@
 }
 
 .filterButton {
-  display: flex; 
-    align-items: center; 
-    justify-content: center; 
+  display: flex;
+    align-items: center;
+    justify-content: center;
     height: 40px;
     width: 100px;
     border-radius: 10px;
     background-color: white;
     text-align: center;
     cursor: pointer;
-    border: 1px solid #ccc; 
-    gap: 5px; 
+    border: 1px solid #ccc;
+    gap: 5px;
 }
 
 
@@ -93,8 +102,8 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    width: 100%; 
-    height: 50px; 
+    width: 100%;
+    height: 50px;
 }
 
 .gridArea1-2 {
@@ -103,16 +112,16 @@
     flex-direction: row;
     align-items: center;
     justify-content: left;
-    width: 100%; 
-    height: 50px; 
+    width: 100%;
+    height: 50px;
 
 }
 
 .gridArea2-1{
     grid-area: 2/1;
-    position: relative; 
-    width: 100%; 
-    height: 100px; 
+    position: relative;
+    width: 100%;
+    height: 100px;
     display: grid;
     place-items: center;
 
@@ -120,23 +129,28 @@
 
 .gridArea2-2{
     grid-area: 2/2;
-    position: relative; 
-    width: 100%; 
-    height: 100px; 
+    position: relative;
+    width: 100%;
+    height: 100px;
 }
 
 .filter-option {
-    position: relative; 
+    position: relative;
     margin: 5px;
     margin-left: 0px;
   }
 
- 
+  .sort-option {
+    position: relative;
+    margin: 5px;
+    margin-left: 350px;
+  }
+
   .filter-input {
     position: absolute;
     margin-left: 5px;
     border-radius: 5px;
-    width: 40px;
+    width: 25px;
   }
 
   .location-input {
@@ -146,7 +160,15 @@
     width: 100px;
   }
 
-  input.location-input::-webkit-inner-spin-button {
+  .sizeInput {
+    border-radius: 5px;
+    width: 30px;
+  }
+
+
+  input.location-input::-webkit-inner-spin-button,
+  input.filter-input::-webkit-inner-spin-button,
+  input.sizeInput::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
@@ -164,6 +186,7 @@
 
   .size {
     margin-left: 50px;
+    margin-right: 50px;
   }
 
   .table {
@@ -173,59 +196,59 @@
 
   .breedChoices {
     position:absolute;
-    top: 200px;
+    top: 250px;
     margin-left:230px;
     font-weight: bold;
     font-size: 20px;
+    transform: translateX(-50%);
   }
 
   .chosenBreeds {
     font-size: 16px;
     font-weight: normal;
-    display: flex;  
-    align-items: center; 
-  
+    display: flex;
+    align-items: center;
+
   }
 
   .removeButton {
     margin-left: 5px;
     border: none;
     background-color: white;
-    cursor: pointer; 
-    display: flex; 
-    align-items: center; 
+    cursor: pointer;
+    display: flex;
+    align-items: center;
   }
 
   .deletePic {
     height: 20px;
     width: 20px;
-  
+
   }
 
   .search2 {
     display: flex;
-    justify-content: center; 
-    align-items: center; 
+    justify-content: center;
+    align-items: center;
     font-weight: bold;
     font-size: 20px;
     margin-top: 100px;
     text-align: center;
-    
+
   }
 
-  .search2Button {               
+  .search2Button {
     width: 600px;
     height: 50px;
     background-color: rgb(128, 231, 134);
     cursor: pointer;
     border-radius: 10px;
 
-    display: flex;  
-    align-items: center; 
-    justify-content: center; 
-    gap: 10px; 
-    font-size: 18px; 
-    font-weight: bold; 
-    border: none; 
-
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
   }

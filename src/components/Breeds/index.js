@@ -12,6 +12,7 @@ import searchImg from '../../Assets/search.png';
 import plusImg from '../../Assets/orange-plus.png'
 import filterImg from '../../Assets/filter-pic.png'
 import deleteImg from '../../Assets/trash-can.png';
+import sortImg from '../../Assets/sort-by.png';
 
 
 function Breeds() {
@@ -30,9 +31,11 @@ function Breeds() {
 
     const [selected, setSelected] = useState([]);
     const [breed, setBreed] = useState(true);
-    const [breedName, setBreedName] = useState("")
+    const [name, setName] = useState(true);
+    const [age, setAge] = useState(true);
 
     const[filters, setFilters] = useState(false);
+    const [sort, setSort] = useState(false);
 
     const [minimumAge, setMinimumAge] = useState(false);
     const [minAge, setMinAge] = useState("");
@@ -102,19 +105,25 @@ function Breeds() {
 
       let addBreed = (selectedBreed) => {
         console.log(selectedBreed, 'selectedBreed')
-       
+
         if(!selected.includes(selectedBreed)) {
-                            
+
           setSelected(prevSelected => {const updatedSelection = [...prevSelected,selectedBreed];
             return updatedSelection;
           })
           console.log(selected, 'after adding breed')
-    
+
         }
-       
+
 
       }
       console.log(selected, 'after adding breed')
+
+      let removeBreed = (breed) => {
+        let newArray = selected.filter((dog) => dog != breed);
+        console.log(newArray, 'newArray')
+        setSelected(newArray)
+      }
 
    return (
     <>
@@ -136,19 +145,21 @@ function Breeds() {
 
 
         <div className='searchDiv'>
-          <button className='addButton' onClick={()=>{addBreed(searching);setMenu(false)}}><img src={plusImg} className="searchPic"/></button>
+          <button className='addButton' onClick={()=>{addBreed(searching);setMenu(false);setSearching("")}}><img src={plusImg} className="searchPic"/></button>
           {/* <button className='searchButton' onClick={()=>{search(searching);setMenu(false)}}><img src={searchImg} className="searchPic"/></button> */}
             </div></div>
 
         <div className='gridArea1-2'><button className='filterButton' onClick={()=>setFilters(!filters)}><img src={filterImg} className="filterPic"/>Filters</button>
-        <div className='size'>Size
+
+        <div className='size'>Dogs per page:
           <input
               className='sizeInput'
               type="number"
               value={size}
               // placeholder="Enter a maximum age"
               onChange={(e) => setSize(e.target.value)}/></div>
-          <div><button className='filterButton' onClick={()=>setFilters(!filters)}>Sort By</button></div>
+
+          <div><button className='filterButton' onClick={()=>setSort(!sort)}><img src={sortImg} className="filterPic"/>Sort By</button></div>
 
               </div>
 
@@ -172,7 +183,7 @@ function Breeds() {
           type="checkbox"
           value={minimumAge}
           onChange={()=>setMinimumAge(!minimumAge)}
-          />Minimum Age</label>
+          />Minimum Age: </label>
           {minimumAge && (
         <input
             className="filter-input"
@@ -189,7 +200,7 @@ function Breeds() {
           type="checkbox"
           value={maximumAge}
           onChange={()=>setMaximumAge(!maximumAge)}
-          />Maximum Age</label>
+          />Maximum Age: </label>
           {maximumAge && (
         <input
             className="filter-input"
@@ -206,7 +217,7 @@ function Breeds() {
           type="checkbox"
           value={location}
           onChange={()=>setLocation(!location)}
-          />Zip Code</label>
+          />Zip Code: </label>
           {location && (
           <input
             className="location-input"
@@ -219,12 +230,57 @@ function Breeds() {
        </div>
         </>
         )}
+
+         {sort &&  (
+        <>
+        <div className='sort'>
+       <div className="sort-option">
+        <label className='checkbox'>
+          <input
+          type="checkbox"
+          value={breed}
+          onChange={()=>setBreed(!breed)}
+          />Breed: </label>
+          {breed && (
+        <div><button>Asc</button>
+             <button>Desc</button></div>
+          )}
+        </div>
+
+      <div className="sort-option">
+        <label>
+          <input
+          type="checkbox"
+          value={name}
+          onChange={()=>setName(!name)}
+          />Name: </label>
+          {name && (
+         <div><button>Asc</button>
+             <button>Desc</button></div>
+          )}
+       </div>
+
+      <div className="sort-option">
+        <label>
+          <input
+          type="checkbox"
+          value={age}
+          onChange={()=>setAge(!age)}
+          />Age: </label>
+          {age && (
+           <div><button>Asc</button>
+             <button>Desc</button></div>
+          )}
+       </div>
+       </div>
+        </>
+        )}
         </div>
       </div>
-        <div className='breedChoices'>Breeds selected: 
+        <div className='breedChoices'>Breeds selected:
           {selected.map((breed, index) =>(
             <div key={index} className='chosenBreeds'>{breed}
-            <button className='removeButton'><img src={deleteImg} className="deletePic"/></button>
+            <button className='removeButton' onClick={()=>removeBreed(breed)}><img src={deleteImg} className="deletePic"/></button>
             </div>
           ))}
         </div>
