@@ -2,7 +2,7 @@ import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 
 // const usersURL = 'http://10.0.2.2:5000/api/users'
 const dogBreedsURL = 'https://frontend-take-home-service.fetch.com/dogs/breeds';
-const dogSearchUrl = 'https://frontend-take-home-service.fetch.com/dogs/search?';
+// const dogSearchUrl = 'https://frontend-take-home-service.fetch.com/dogs/search?';
 const dogMatchrUrl = 'https://frontend-take-home-service.fetch.com/dogs/match';
 const postDogURL = 'https://frontend-take-home-service.fetch.com/dogs';
 
@@ -11,6 +11,7 @@ const initialState = {
     breed: [],
     search: {},
     dogsDetail: [],
+    match: {},
 }
 
   export const breeds = createAsyncThunk('dogs/BREEDS', async () => {
@@ -100,6 +101,7 @@ export const dogMatch = createAsyncThunk('dogs/MATCH', async (match) => {
 
     if(response.ok){
         const data = response.json()
+        console.log(data, 'dog match data')
         return data;
     }
 })
@@ -141,6 +143,12 @@ const dogsSlice = createSlice({
 
             .addCase(nextList.fulfilled, (state, action)=> {
                 state.search = action.payload;
+                console.log(action.payload)
+                state.status = 'succeeded';
+                state.error = null;
+            })
+            .addCase(dogMatch.fulfilled, (state, action)=> {
+                state.match = action.payload;
                 console.log(action.payload)
                 state.status = 'succeeded';
                 state.error = null;

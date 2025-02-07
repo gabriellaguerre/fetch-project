@@ -133,12 +133,12 @@ function Breeds() {
     console.log(urlFrontend, 'urlFrontend')
     await dispatch(searchDog(urlFrontend));
 
-    // console.log(searchArray, 'inside search for searchArray')
+    console.log(searchArray, 'inside search for searchArray')
 
-    // if(searchArray.length > 0) {
-    //     let dogs = await dispatch(postSearchDog(searchArray))
-    //     console.log(dogs, 'dogs')
-    // }
+    if(searchArray.length > 0) {
+        let dogs = await dispatch(postSearchDog(searchArray))
+        console.log(dogs, 'dogs')
+    }
 
 
 
@@ -347,7 +347,7 @@ function Breeds() {
           ))}
         </div>
         <div className='search2'><button className='search2Button' onClick={()=>{search(searching);setMenu(false)}}>SEARCH<img src={searchImg} className="searchPic"/></button></div>
-        {/* <div className='table'><Table details={details} searchResult={searchResult}/></div> */}
+         <div className='table'><Table /></div> 
       </>
   );
 }
