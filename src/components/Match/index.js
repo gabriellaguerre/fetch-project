@@ -6,7 +6,7 @@ import { useModal } from '../Context/Modal';
 
 function MatchModal({match, onClose}) {
 
-    if(!match) return null;
+    // if(!match) return null;
 
     const dispatch = useDispatch();
     const { closeModal } = useModal();

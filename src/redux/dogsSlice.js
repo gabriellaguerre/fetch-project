@@ -39,7 +39,7 @@ export const searchDog = createAsyncThunk('dogs/SEARCH', async (urlFrontend) => 
     // url.searchParams.append('size', searchParams.size)
 
     // console.log(url, 'url in dogs?SEARCH')
-   
+
     const response = await fetch(urlFrontend.href, {
         method: 'GET',
         headers: {"Content-Type": "application/json"},
@@ -55,11 +55,11 @@ export const searchDog = createAsyncThunk('dogs/SEARCH', async (urlFrontend) => 
 
 export const nextList = createAsyncThunk('dogs/NEXT_SEARCH', async (nextUrl) => {
     console.log(nextUrl, 'searchParams in NEXT_SEARCH')
-    
-   
+
+
     const url = `https://frontend-take-home-service.fetch.com${nextUrl}`;
     console.log(url, 'url in next search')
-    
+
 
       const response = await fetch(url, {
         method: 'GET',
@@ -82,7 +82,7 @@ export const postSearchDog = createAsyncThunk('dogs/DOG_DETAILS', async (searchA
         body: JSON.stringify(searchArray),
         credentials: 'include',
     })
-    
+
     if(response.ok){
         const data = await response.json()
         console.log(data, 'dog details')
@@ -111,14 +111,7 @@ export const dogMatch = createAsyncThunk('dogs/MATCH', async (match) => {
 const dogsSlice = createSlice({
     name: 'dogs',
     initialState,
-    reducers: {
-        // addBreeds(state, action){
-        //     state.push(action.payload)
-        // },
-        // addSearch(state, action){
-        //     state.search = action.payload
-        // }
-    },
+    reducers: {},
     extraReducers(builder) {
         builder
             .addCase(breeds.fulfilled, (state, action)=> {

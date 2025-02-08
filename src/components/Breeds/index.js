@@ -3,7 +3,6 @@ import {useSelector, useDispatch} from 'react-redux';
 import {selectUser} from '../../redux/usersSlice';
 import {useNavigate} from 'react-router';
 import { logout } from "../../redux/usersSlice";
-// import LoginPage from '../LoginPage';
 import Profile from '../Profile';
 import Table from "../Table";
 import {breeds, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, dogMatch } from '../../redux/dogsSlice';
@@ -79,10 +78,10 @@ function Breeds() {
 
     searchParams.breeds = selected;
     searchParams.breeds.forEach(breed => urlFrontend.searchParams.append('breeds', breed));
-   
+
     searchParams.size = size ? size : '5';
     urlFrontend.searchParams.append('size', searchParams.size)
-  
+
 
     if(location && zipCode) {
       searchParams.zipCodes = [zipCode];
@@ -96,7 +95,7 @@ function Breeds() {
     if(maximumAge && maxAge) {
       searchParams.ageMax = maxAge;
       urlFrontend.searchParams.append('ageMax', searchParams.ageMax)
-    } 
+    }
 
     if(breed && breedAsc) {
       searchParams.sort = 'breed:asc'
@@ -126,7 +125,7 @@ function Breeds() {
      }
 
 
-     
+
 
 
     console.log(searchParams, 'searchParams')
@@ -303,10 +302,10 @@ function Breeds() {
           value={breed}
           onChange={()=>setBreed(!breed)}
           />Breed: </label>
-         
+
         <div className='sort-buttons'><button onClick={()=>{setBreedAsc(true);setBreedDesc(false)}}>Asc</button>
              <button onClick={()=>{setBreedAsc(false);setBreedDesc(true)}}>Desc</button></div>
-         
+
         </div>
 
       <div className="sort-option">
@@ -316,10 +315,10 @@ function Breeds() {
           value={name}
           onChange={()=>setName(!name)}
           />Name: </label>
-          
+
          <div><button onClick={()=>{setNameAsc(true);setNameDesc(false)}}>Asc</button>
              <button onClick={()=>{setNameAsc(false);setNameDesc(true)}}>Desc</button></div>
-         
+
        </div>
 
       <div className="sort-option">
@@ -329,10 +328,10 @@ function Breeds() {
           value={age}
           onChange={()=>setAge(!age)}
           />Age: </label>
-          
+
            <div><button onClick={()=>{setAgeAsc(true);setAgeDesc(false)}}>Asc</button>
              <button onClick={()=>{setAgeAsc(false);setAgeDesc(true)}}>Desc</button></div>
-         
+
        </div>
        </div>
         </>
@@ -347,7 +346,7 @@ function Breeds() {
           ))}
         </div>
         <div className='search2'><button className='search2Button' onClick={()=>{search(searching);setMenu(false)}}>SEARCH<img src={searchImg} className="searchPic"/></button></div>
-         <div className='table'><Table /></div> 
+         <div className='table'><Table /></div>
       </>
   );
 }
