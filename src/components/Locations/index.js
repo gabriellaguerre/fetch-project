@@ -23,32 +23,38 @@ function Locations() {
 
     const [selected, setSelected] = useState([]);
 
-    const [breed, setBreed] = useState(false);
-    const [breedAsc, setBreedAsc] = useState(false);
-    const [breedDesc, setBreedDesc] = useState(false);
-
-    const [name, setName] = useState(false);
-    const [nameAsc, setNameAsc] = useState(false);
-    const [nameDesc, setNameDesc] = useState(false);
-
-
-    const [age, setAge] = useState(false);
-    const [ageAsc, setAgeAsc] = useState(false);
-    const [ageDesc, setAgeDesc] = useState(false);
-
-
-
     const[filters, setFilters] = useState(false);
-    const [sort, setSort] = useState(false);
 
-    const [minimumAge, setMinimumAge] = useState(false);
-    const [minAge, setMinAge] = useState("");
+    const [chooseCity, setChooseCity] = useState(false);
+    const [city, setCity] = useState("");
 
-    const [maximumAge, setMaximumAge] = useState(false);
-    const [maxAge, setMaxAge] = useState("");
+    const [chooseState, setChooseState] = useState(false);
+    const [state, setState] = useState("");
 
-    const [locate, setLocate] = useState(false);
-    const [zipCode, setZipCode] = useState("");
+    const [chooseGeoBoundingBox, setChooseGeoBoundingBox] = useState(false);
+    const [topLat, setTopLat] = useState({});
+    const [topLon, setTopLon] = useState({});
+
+    const [leftLat, setLeftLat] = useState({});
+    const [leftLon, setLeftLon] = useState({});
+
+    const [bottomLat, setBottomLat] = useState({});
+    const [bottomLon, setBottomLon] = useState({});
+
+    const [rightLat, setRightLat] = useState({});
+    const [rightLon, setRightLon] = useState({});
+
+    const [bottomLeftLat, setBottomLeftLat] = useState({});
+    const [bottomLeftLon, setBottomLeftLon] = useState({});
+
+    const [bottomRightLat, setBottomRightLat] = useState({});
+    const [bottomRightLon, setBottomRightLon] = useState({});
+
+    const [topLeftLat, setTopLeftLat] = useState({});
+    const [topLeftLon, setTopLeftLon] = useState({});
+
+    const [topRightLat, setTopRightLat] = useState({});
+    const [topRightLon, setTopRightLon] = useState({});
 
     const [size, setSize] = useState("")
 
@@ -166,14 +172,14 @@ function Locations() {
         <label className='checkbox'>
           <input
           type="checkbox"
-          value={minimumAge}
-          onChange={()=>setMinimumAge(!minimumAge)}
-          />Minimum Age: </label>
-          {minimumAge && (
+          value={chooseCity}
+          onChange={()=>setChooseCity(!chooseCity)}
+          />City: </label>
+          {chooseCity && (
         <input
             className="filter-input"
-            type="number"
-            value={minAge}
+            type="text"
+            value={city}
             // placeholder="Enter a minimum age"
             onChange={(e) => setMinAge(e.target.value)}/>
           )}
@@ -183,16 +189,16 @@ function Locations() {
         <label>
           <input
           type="checkbox"
-          value={maximumAge}
-          onChange={()=>setMaximumAge(!maximumAge)}
-          />Maximum Age: </label>
-          {maximumAge && (
+          value={chooseState}
+          onChange={()=>setChooseState(!chooseState)}
+          />State: </label>
+          {chooseState && (
         <input
             className="filter-input"
-            type="number"
-            value={maxAge}
+            type="text"
+            value={state}
             // placeholder="Enter a maximum age"
-            onChange={(e) => setMaxAge(e.target.value)}/>
+            onChange={(e) => setState(e.target.value)}/>
           )}
        </div>
 
@@ -200,17 +206,132 @@ function Locations() {
         <label>
           <input
           type="checkbox"
-          value={locate}
-          onChange={()=>setLocate(!locate)}
-          />Zip Code: </label>
-          {locate && (
+          value={chooseGeoBoundingBox}
+          onChange={()=>setChooseGeoBoundingBox(!chooseGeoBoundingBox)}
+          />Geo-Bounding Box: </label>
+          {chooseGeoBoundingBox && (
+            <>
+            <div>top:
           <input
             className="location-input"
             type="number"
-            value={zipCode}
+            value={topLat}
             // placeholder="Enter a zip code"
-            onChange={(e) => setZipCode(e.target.value)}/>
-          )}
+            onChange={(e) => setTopLat(e.target.value)}/>
+        <input
+            className="location-input"
+            type="number"
+            value={topLon}
+            // placeholder="Enter a zip code"
+            onChange={(e) => setTopLon(e.target.value)}/>
+            </div>
+
+            <div>left:
+          <input
+            className="location-input"
+            type="number"
+            value={leftLat}
+            // placeholder="Enter a zip code"
+            onChange={(e) => setLeftLat(e.target.value)}/>
+        <input
+            className="location-input"
+            type="number"
+            value={leftLon}
+            // placeholder="Enter a zip code"
+            onChange={(e) => setLeftLon(e.target.value)}/>
+            </div>
+
+            <div>bottom:
+          <input
+            className="location-input"
+            type="number"
+            value={bottomLat}
+            // placeholder="Enter a zip code"
+            onChange={(e) => setBottomLat(e.target.value)}/>
+        <input
+            className="location-input"
+            type="number"
+            value={bottomLon}
+            // placeholder="Enter a zip code"
+            onChange={(e) => setBottomLon(e.target.value)}/>
+            </div>
+
+            <div>right:
+          <input
+            className="location-input"
+            type="number"
+            value={rightLat}
+            // placeholder="Enter a zip code"
+            onChange={(e) => setRightLat(e.target.value)}/>
+        <input
+            className="location-input"
+            type="number"
+            value={rightLon}
+            // placeholder="Enter a zip code"
+            onChange={(e) => setRightLon(e.target.value)}/>
+            </div>
+
+            <div>bottom_left:
+          <input
+            className="location-input"
+            type="number"
+            value={bottomLeftLat}
+            // placeholder="Enter a zip code"
+            onChange={(e) => setBottomLeftLat(e.target.value)}/>
+        <input
+            className="location-input"
+            type="number"
+            value={bottomLeftLon}
+            // placeholder="Enter a zip code"
+            onChange={(e) => setBottomLeftLon(e.target.value)}/>
+            </div>
+
+            <div>bottom_right:
+          <input
+            className="location-input"
+            type="number"
+            value={bottomRightLat}
+            // placeholder="Enter a zip code"
+            onChange={(e) => setBottomRightLat(e.target.value)}/>
+        <input
+            className="location-input"
+            type="number"
+            value={bottomRightLon}
+            // placeholder="Enter a zip code"
+            onChange={(e) => setBottomRightLon(e.target.value)}/>
+            </div>
+
+            <div>top_left:
+          <input
+            className="location-input"
+            type="number"
+            value={topLeftLat}
+            // placeholder="Enter a zip code"
+            onChange={(e) => setTopLeftLat(e.target.value)}/>
+        <input
+            className="location-input"
+            type="number"
+            value={topLeftLon}
+            // placeholder="Enter a zip code"
+            onChange={(e) => setTopLeftLon(e.target.value)}/>
+            </div>
+
+            <div>top_right:
+          <input
+            className="location-input"
+            type="number"
+            value={topRightLat}
+            // placeholder="Enter a zip code"
+            onChange={(e) => setTopRightLat(e.target.value)}/>
+        <input
+            className="location-input"
+            type="number"
+            value={topRightLon}
+            // placeholder="Enter a zip code"
+            onChange={(e) => setTopRightLon(e.target.value)}/>
+            </div>
+          </>
+        )}
        </div>
        </div>
 
