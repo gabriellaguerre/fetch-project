@@ -13,33 +13,38 @@ function LoginPage() {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  // const [NameError, setNameError] = useState("");
-  // const [Eerror, setEError] = useState("");
+  const [error, setError] = useState("");
 
+  let checkedEmail = email;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = await dispatch(login({name, email}));
-    if (data.payload) {
-      navigate('/main', { state: { name } });
-      // navigate('/main');
+
+
+    if (!name) {
+      setError("Please enter a name");
     }
 
-    // if (!name) {
-    //   let error = "Please enter a name"
-    //   setNameError(error);
-    // }
 
-    // if (!email) {
-    //   let error = "Please enter an email"
-    //   setEError(error);
-    // }
-
-
+    const emailVerification = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if(emailVerification.test(email)){
+      console.log('valid email')
+    } else{
+      setError("Enter a valid email")
+    }
 
   }
 
+  const demoLogin = async () => {
+     const data = await dispatch(login({name, email}));
 
+    if (data.payload) {
+      navigate('/main', { state: { name } });
+
+    }
+  }
+
+  const errorClassName = 'errorsLogin' + (error ? "": "hidden")
 
   return (
     <>
@@ -49,14 +54,16 @@ function LoginPage() {
       <div className='loginPic'>
       <img src={fetchin} className='dogpic' alt="dog-pic" ></img>
       </div>
+
       <div className='loginText'>Welcome to Fetch!</div>
-        <div className='errorsLogin'> </div>
+      <div className={errorClassName}>{error}</div>
+        {/* <div className='errorsLogin'> </div> */}
         <div className='nameInput'>
           Name:{' '}
           <input
             type="text"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {setName(e.target.value);setError("")}}
           />
 
         </div>
@@ -65,12 +72,13 @@ function LoginPage() {
           <input
             type="text"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {setEmail(e.target.value);setError("")}}
           />
 
         </div>
         <div className='loginButton'>
         <button id='submitLogin' type="submit">Log In</button>
+        <button id='submitLogin'onClick={demoLogin}>Demo</button>
     </div>
     </form>
 

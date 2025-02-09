@@ -1,0 +1,250 @@
+.instruction {
+    text-align: center;
+  }
+
+
+  .filters {
+      position: absolute;
+      margin-top: 1px;
+      width: 250px;
+      /* background: #f9f9f9; */
+      padding: 10px;
+      /* border: 1px solid #ccc; */
+      /* border-radius: 10px; */
+    }
+
+
+  .inputBoxLocation {
+      height: 40px;
+      width: 400px;
+      border-radius: 10px 0px 0px 10px;
+      padding-left: 10px;
+  }
+
+  .searchAndFilter {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    grid-template-rows: repeat(2,1fr);
+    height: 50px;
+    margin-top: 20px;
+  }
+
+  .searchButton {
+      height: 46px;
+      width: 50px;
+      border-left: none;
+      border-radius: 0px 10px 10px 0px;
+      padding-left: 10px;
+      background-color: rgb(128, 231, 134);
+      text-align: left;
+      /* font-weight: bold; */
+      cursor: pointer;
+  }
+
+  .addButton {
+    height: 46px;
+    width: 50px;
+    border-left: none;
+    border-radius: 0px 10px 10px 0px;
+    /* padding-left: 10px; */
+    background-color: rgb(240, 240, 154);
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .filterButton {
+    display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      width: 100px;
+      border-radius: 10px;
+      background-color: white;
+      text-align: center;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      gap: 5px;
+  }
+
+
+  .gridArea1-1{
+      grid-area: 1/1;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 50px;
+  }
+
+  .gridArea1-2 {
+      grid-area: 1/2;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: left;
+      width: 100%;
+      height: 50px;
+
+  }
+
+  .gridArea2-1{
+      grid-area: 2/1;
+      position: relative;
+      width: 100%;
+      height: 100px;
+      display: grid;
+      /* place-items: left; */
+
+  }
+
+  .gridArea2-2{
+      grid-area: 2/2;
+      position: relative;
+      width: 100%;
+      height: 100px;
+  }
+
+  .filter-option {
+      position: relative;
+      margin: 5px;
+      margin-left: 0px;
+    }
+
+    .sort-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      margin: 5px;
+      /* margin-left: 350px; */
+    }
+
+    .filter-input {
+      position: absolute;
+      margin-left: 5px;
+      border-radius: 5px;
+      width: 25px;
+    }
+
+    .location-input {
+      position: absolute;
+      margin-left: 5px;
+      border-radius: 5px;
+      width: 100px;
+    }
+
+    .sizeInput {
+      border-radius: 5px;
+      width: 30px;
+    }
+
+
+    input.location-input::-webkit-inner-spin-button,
+    input.filter-input::-webkit-inner-spin-button,
+    input.sizeInput::-webkit-inner-spin-button,
+    input.inputBoxLocation::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .searchPic {
+      height: 20px;
+      width: 20px;
+    }
+
+    .filterPic {
+      height: 20px;
+      width: 20px;
+      margin:5px;
+    }
+
+    .size {
+      margin-left: 50px;
+      margin-right: 50px;
+    }
+
+    .table {
+      position: relative;
+      top: 150px;
+    }
+
+    .locationChoices {
+      position:absolute;
+      top: 20px;
+      /* margin-left:5%; */
+      font-weight: bold;
+      font-size: 20px;
+      /* transform: translateX(-50%); */
+    }
+
+    .chosenLocations {
+      width: 300px;
+      font-size: 16px;
+      font-weight: normal;
+      display: flex;
+      align-items: center;
+
+    }
+
+    .removeButton {
+      margin-left: 5px;
+      border: none;
+      background-color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+
+    .deletePic {
+      height: 20px;
+      width: 20px;
+
+    }
+
+    .search2 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 20px;
+      margin-top: 100px;
+      text-align: center;
+
+    }
+
+    .search2Button {
+      width: 600px;
+      height: 50px;
+      background-color: rgb(128, 231, 134);
+      cursor: pointer;
+      border-radius: 10px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+    }
+
+    .locationError {
+        width: 400px;
+        margin: 10px auto;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: red;
+        font-size: 14px;
+        font-weight: bold;
+        background-color: rgb(252, 223, 228);
+        border-radius: 10px;
+    }
+
+    .locationErrorhidden {
+        margin: 10px;
+        height: 30px;
+        background-color: white;
+    }

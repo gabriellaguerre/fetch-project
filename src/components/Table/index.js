@@ -9,7 +9,7 @@ function Table() {
 
   const details = useSelector(getDogDetails);
   const searchResult = useSelector(getSearches)
-  
+
   const [likeID, setLikeID] = useState([]);
   const [matchedDog, setMatchedDog] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,9 +18,9 @@ function Table() {
   let nextUrl = searchResult.next;
   let previousUrl = searchResult.prev
   let list = searchResult.resultIds
-  
+
   console.log(total, 'total')
-  console.log(details, 'details')  
+  console.log(details, 'details')
   console.log(searchResult, 'searchResult')
 
     const handleNext = async () => {
@@ -42,7 +42,7 @@ function Table() {
     if(!likeID.includes(id)) {
        setLikeID((prev)=> [...prev, id])
     }
-   
+
   }
   console.log(likeID, 'likeId')
 
@@ -64,11 +64,15 @@ function Table() {
 
   return (
     <>
+    <div className='topRow'>
     <div>Total Finds: {total}</div>
-    <div><button onClick={handleNext}>Next</button></div>
-    <div><button onClick={handlePrevious}>Previous</button></div>
+    <div className='nexPrevButtons'>
+    <div><button onClick={handlePrevious}>&lt; Previous</button></div>
+    <div><button onClick={handleNext}>Next &gt;</button></div>
+    </div>
     <div><button onClick={()=>match(likeID)}>Match</button></div>
-   
+    </div>
+
     <div className='resultDisplayed'>
           {details?.map(dog =>
             <button key={dog.id} className='dogSet' onClick={()=>likeDogs(dog.id)}>

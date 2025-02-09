@@ -9,7 +9,7 @@ import searchImg from '../../Assets/search.png';
 import plusImg from '../../Assets/orange-plus.png'
 import filterImg from '../../Assets/filter-pic.png'
 import deleteImg from '../../Assets/trash-can.png';
-import sortImg from '../../Assets/sort-by.png';
+
 
 
 function Locations() {
@@ -60,6 +60,7 @@ function Locations() {
 
     const [searching, setSearching] = useState("")
     const [menu, setMenu] = useState(false);
+    const [error, setError] = useState("")
 
 
     let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
@@ -118,35 +119,67 @@ function Locations() {
     //  }
 
   }
+  let addLocation = (selectedLocation) => {
+    console.log(selectedLocation, 'selectedLocation')
+
+    if(selectedLocation.length < 5 || selectedLocation > 5) {
+      setError('Enter a valid Zip Code')
+
+    }
+
+    if(!selected.includes(selectedLocation) && selectedLocation.length === 5) {
+      setSelected(prevSelected => {const updatedSelection = [...prevSelected,selectedLocation];
+        setError("")
+        return updatedSelection;
+
+      })
+      // console.log(selected, 'after adding location')
+
+    }
+
+
+  }
+  console.log(selected, 'after adding location')
+
+  let removeLocation = (places) => {
+    let newArray = selected.filter((place) => place != places);
+    console.log(newArray, 'newArray')
+    setSelected(newArray)
+  }
+
   let results = locations.filter((word)=>word.includes(capitalLetterWord))
   // console.log(searchResult, 'results obj')
+
+  const errorClassName = 'locationError' + (error ? "": "hidden")
+  console.log(errorClassName, 'errorclass name')
 
    return (
     <>
      <Profile user={user}/>
-     {/* <div className='instruction'>Type to search our available breeds, then click the + to add that breed to your search list</div> */}
+     <div className={errorClassName}>{error}</div>
      <div className='searchAndFilter'>
 
-      {/* <div className='gridArea1-1'> */}
+      <div className='gridArea1-1'>
 
         <div className='inputDiv'>
       <input
-         className='inputBox'
-         type="text"
+         className='inputBoxLocation'
+         type="number"
          value={searching}
          placeholder="Enter a zip code and press +"
          onFocus={() => setMenu(true)}
-         onChange={(e) => setSearching(e.target.value)}
+         onChange={(e) => {setSearching(e.target.value);setError("")}}
          /> </div>
 
 
-        <div className='searchDiv'>
-          <button className='addButton' ><img src={plusImg} className="searchPic"/></button>
-          {/* <button className='searchButton' onClick={()=>{search(searching);setMenu(false)}}><img src={searchImg} className="searchPic"/></button> */}
-            </div>
-            {/* </div> */}
+        <div className='searchDiv'><button className='addButton' onClick={()=>{addLocation(searching);setSearching("")}}><img src={plusImg} className="searchPic"/></button></div>
 
-        <div className='gridArea1-2'><button className='filterButton' onClick={()=>setFilters(!filters)}><img src={filterImg} className="filterPic"/>Filters</button>
+        </div>
+
+
+
+        <div className='gridArea1-2'>
+          <button className='filterButton' onClick={()=>setFilters(!filters)}><img src={filterImg} className="filterPic"/>Filters</button>
 
         <div className='size'>Locations per page:
           <input
@@ -156,17 +189,20 @@ function Locations() {
               // placeholder="Enter a maximum age"
               onChange={(e) => setSize(e.target.value)}/></div>
 
-
-
               </div>
 
-       <div className='gridArea2-1'>
+          <div className='gridArea2-1'>
+          <div className='locationChoices'>Zip Code choices:
+          {selected.map((places, index) =>(
+            <div key={index} className='chosenLocations'>{places}
+            <button className='removeButton' onClick={()=>removeLocation(places)}><img src={deleteImg} className="deletePic"/></button>
+            </div>
+          ))}
+          </div>
+          </div>
 
-        </div>
-
-        <div className='gridArea2-2'>
+       <div className='gridArea2-2'>
         {filters &&  (
-        <>
         <div className='filters'>
        <div className="filter-option">
         <label className='checkbox'>
@@ -181,7 +217,7 @@ function Locations() {
             type="text"
             value={city}
             // placeholder="Enter a minimum age"
-            onChange={(e) => setMinAge(e.target.value)}/>
+            onChange={(e) => setCity(e.target.value)}/>
           )}
         </div>
 
@@ -330,26 +366,20 @@ function Locations() {
             // placeholder="Enter a zip code"
             onChange={(e) => setTopRightLon(e.target.value)}/>
             </div>
-          </>
+            </>
         )}
-       </div>
-       </div>
-
-        <div className='locationChoices'>Breeds selected:
-          {selected.map((places, index) =>(
-            <div key={index} className='chosenLocations'>{places}
-            <button className='removeButton' ><img src={deleteImg} className="deletePic"/></button>
-            </div>
-
-          ))}
-          </div>
-           </>
-            )}
         </div>
-        <div className='search2'><button className='search2Button' onClick={()=>{search(searching);setMenu(false)}}>SEARCH<img src={searchImg} className="searchPic"/></button></div>
+        </div>
+        )}
+          </div>
+        </div>
+        <div>
+         <div className='search2'><button className='search2Button' onClick={()=>{search(searching);setMenu(false)}}>SEARCH<img src={searchImg} className="searchPic"/></button></div>
          <div className='table'><Table /></div>
             </div>
-      </>
+
+
+     </>
   );
 }
 

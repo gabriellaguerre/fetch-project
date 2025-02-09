@@ -19,3 +19,15 @@ table, th, td{
   width: 150px; */
   border-radius: 5px;
 }
+
+.topRow {
+  margin: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.nexPrevButtons{
+  display: flex;
+  gap: 5px;
+}

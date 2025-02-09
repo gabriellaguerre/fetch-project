@@ -17,14 +17,25 @@
 }
 
 .errorsLogin {
-     display: block;
-     height: 20px;
-     margin: 10px;
-     text-align: center;
-     color: red;
-     font-weight: bold;
-
+    width: 300px;
+    margin: 10px auto;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: red;
+    font-size: 14px;
+    font-weight: bold;
+    background-color: rgb(252, 223, 228);
+    border-radius: 10px;
 }
+
+.errorsLoginhidden {
+
+    height: 30px;
+    margin: 10px;
+}
+
 
 .nameInput {
     margin: 10px;
