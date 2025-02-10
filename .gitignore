@@ -1,5 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+REACT_APP_GOOGLE_MAPS_API_KEY=AIzaSyDxr7OHWtvmEyURe2OabkKrQCdy1YCFmb8
+
 # dependencies
 /node_modules
 /.pnp

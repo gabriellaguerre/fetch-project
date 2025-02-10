@@ -1,0 +1,13 @@
+.resultDisplayed {
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.locationSet {
+    margin: 10px;
+}

@@ -1,19 +1,34 @@
 import React, {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {allLocations} from '../../redux/locationsSlice';
-import './Table.css'
+import {allLocations, searchLocations} from '../../redux/locationsSlice';
+import { location, setLocation } from '../../redux/mapsSlice';
+import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import './LocationsResult.css'
+
 import MatchModal from '../Match';
+import Maps from '../Maps';
 
 function LocationsResult() {
+  
   const dispatch = useDispatch();
 
-  const locactionsList = useSelector(allLocations);
+  const locationsList = useSelector(allLocations);
+  const allSearchLocations = useSelector(searchLocations)
+//   dispatch(setLocation({ lat: 34.0522, lng: -118.2437 }))
+  console.log(allSearchLocations.results, 'allSearchLocation')
+  const map = useSelector(location)
 
+  let key = process.env.REACT_APP_GOOGLE_MAPS_API_KEY
+  console.log(key, 'key')
+
+
+  const mapContainerStyle = {
+  width: "200px",
+  height: "200px",
+};
 
   const [likeID, setLikeID] = useState([]);
-  const [matchedDog, setMatchedDog] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
+  
  
 //   const handleNext = async () => {
 //         console.log(nextUrl, 'next')
@@ -61,13 +76,36 @@ function LocationsResult() {
     <div><button>&lt; Previous</button></div>
     <div><button >Next &gt;</button></div>
     </div>
-    <div><button onClick={()=>match(likeID)}>Match</button></div>
+    <div><button>Match</button></div>
     </div>
-
-    <div className='resultDisplayed'>
-          {locactionsList?.map(location =>
+    {/* <div><Maps /></div> */}
+    {locationsList && (
+       <div className='resultDisplayed'>
+          {locationsList?.map(location =>
             <button key={location.id} className='locationSet'>
-                {/* <div><img src={dog.img} className='dogImage'/> </div> */}
+                <LoadScript googleMapsApiKey={key}>
+                     <GoogleMap mapContainerStyle={mapContainerStyle} center={{lat: location.latitude, lng: location.longitude}} zoom={10}>
+                         <Marker position={{lat: location.latitude, lng: location.longitude}} />
+                     </GoogleMap>
+              </LoadScript>
+                <div>City: {location.city}</div>
+                <div>County: {location.county}</div>
+                <div>State: {location.state}</div>
+                <div>Zip Code: {location.zip_code}</div>
+             </button>
+        )}
+     </div>
+      )
+   }
+     {allSearchLocations.results && (
+     <div className='resultDisplayed'>
+          {allSearchLocations.results?.map(location =>
+            <button key={location.id} className='locationSet'>
+                <LoadScript googleMapsApiKey={key}>
+                     <GoogleMap mapContainerStyle={mapContainerStyle} center={{lat: location.latitude, lng: location.longitude}} zoom={10}>
+                         <Marker position={{lat: location.latitude, lng: location.longitude}} />
+                     </GoogleMap>
+              </LoadScript>
                 <div>City: {location.city}</div>
                 <div>County: {location.county}</div>
                 <div>State: {location.state}</div>
@@ -75,6 +113,8 @@ function LocationsResult() {
              </button>
         )}
     </div>
+
+     )}
     </>
   )
 }
