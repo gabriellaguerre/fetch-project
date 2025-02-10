@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {useSelector, useDispatch} from 'react-redux';
 import {selectUser} from '../../redux/usersSlice';
-import {postLocations, searchLocations} from '../../redux/locationsSlice'
+import {allLocations, postLocations, searchLocations} from '../../redux/locationsSlice'
 import Profile from '../Profile';
 import Table from "../Table";
 import './Locations.css';
@@ -12,14 +12,15 @@ import deleteImg from '../../Assets/trash-can.png';
 
 
 
+
 function Locations() {
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
 
-    const locations = useSelector(postLocations);
+    const locations = useSelector(allLocations);
     const findLocations = useSelector(searchLocations);
 
-
+    console.log(locations, 'from the useSelector')
 
     const [selected, setSelected] = useState([]);
 
@@ -67,16 +68,12 @@ function Locations() {
 
 
   const search = async () => {
-    // const urlFrontend = new URL(dogSearchUrl);
-    // let searchParams = {};
-
-    // searchParams.breeds = selected;
-    // searchParams.breeds.forEach(breed => urlFrontend.searchParams.append('breeds', breed));
+   
 
     // searchParams.size = size ? size : '5';
     // urlFrontend.searchParams.append('size', searchParams.size)
 
-
+    await dispatch(postLocations(selected))
     // if(location && zipCode) {
     //   searchParams.zipCodes = [zipCode];
     //   searchParams.zipCodes.forEach(zipCode => urlFrontend.searchParams.append('zipCodes', zipCode));
@@ -139,7 +136,7 @@ function Locations() {
 
 
   }
-  console.log(selected, 'after adding location')
+  
 
   let removeLocation = (places) => {
     let newArray = selected.filter((place) => place != places);
@@ -147,11 +144,11 @@ function Locations() {
     setSelected(newArray)
   }
 
-  let results = locations.filter((word)=>word.includes(capitalLetterWord))
+  // let results = locations.filter((word)=>word.includes(capitalLetterWord))
   // console.log(searchResult, 'results obj')
 
   const errorClassName = 'locationError' + (error ? "": "hidden")
-  console.log(errorClassName, 'errorclass name')
+
 
    return (
     <>
@@ -374,7 +371,7 @@ function Locations() {
           </div>
         </div>
         <div>
-         <div className='search2'><button className='search2Button' onClick={()=>{search(searching);setMenu(false)}}>SEARCH<img src={searchImg} className="searchPic"/></button></div>
+         <div className='search2'><button className='search2Button' onClick={()=>{search();setMenu(false)}}>SEARCH<img src={searchImg} className="searchPic"/></button></div>
          <div className='table'><Table /></div>
             </div>
 

@@ -1,7 +1,7 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 
 // const usersURL = 'http://10.0.2.2:5000/api/users'
-const locationsURL = 'https://frontend-take-home-service.fetch.com/dogs/locations';
+const locationsURL = 'https://frontend-take-home-service.fetch.com/locations';
 const locationsSearchURL = 'https://frontend-take-home-service.fetch.com/dogs/locations/search';
 
 
@@ -11,23 +11,24 @@ const initialState = {
     locationsSearch: {},
 }
 
-export const locations = createAsyncThunk('locationss/ZIP_CODES', async (searchArray) => {
+export const postLocations = createAsyncThunk('locations/ZIP_CODES', async (searchArray) => {
     console.log(searchArray, 'in locations in locationSlice')
+   
     const response = await fetch(locationsURL, {
         method: 'POST',
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(searchArray),
+        body: JSON.stringify(["33324", "33442", "33126"]),
         credentials: 'include',
     })
-
+    console.log(response, 'response')
     if(response.ok){
         const data = await response.json()
-        console.log(data, 'dog details')
+        console.log(data, 'locations')
         return data;
     }
 })
 
-export const postSearchLocations = createAsyncThunk('locationss/ZIP_DETAILS', async (searchArray) => {
+export const postSearchLocations = createAsyncThunk('locations/ZIP_DETAILS', async (searchArray) => {
     console.log(searchArray, 'in postSearchLcocations in locationSlice')
     const response = await fetch(locationsSearchURL, {
         method: 'POST',
@@ -50,7 +51,7 @@ const locationsSlice = createSlice({
     reducers: {},
     extraReducers(builder) {
         builder
-            .addCase(locations.fulfilled, (state, action)=> {
+            .addCase(postLocations.fulfilled, (state, action)=> {
                 state.locations = action.payload;
                 state.status = 'succeeded';
                 state.error = null;
@@ -69,7 +70,7 @@ const locationsSlice = createSlice({
 
 })
 
-export const postLocations = (state) => state.locations.locations;
+export const allLocations = (state) => state.locations.locations;
 export const searchLocations = (state) => state.locations.searchlocations;
 
 // export const { addBreeds, addSearch  } = locationsSlice.actions
