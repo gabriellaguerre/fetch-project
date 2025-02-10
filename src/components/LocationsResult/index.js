@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {allLocations, searchLocations} from '../../redux/locationsSlice';
+import {allLocations, searchLocations, googleMapsApiKey} from '../../redux/locationsSlice';
 import { location, setLocation } from '../../redux/mapsSlice';
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import './LocationsResult.css'
@@ -17,10 +17,6 @@ function LocationsResult() {
 //   dispatch(setLocation({ lat: 34.0522, lng: -118.2437 }))
   console.log(allSearchLocations.results, 'allSearchLocation')
   const map = useSelector(location)
-
-  let key = process.env.REACT_APP_GOOGLE_MAPS_API_KEY
-  console.log(key, 'key')
-
 
   const mapContainerStyle = {
   width: "200px",
@@ -71,7 +67,12 @@ function LocationsResult() {
   return (
     <>
     <div className='topRow'>
-    <div>Total Finds: </div>
+    {allSearchLocations.total ? (
+      <div>Total Finds: {allSearchLocations.total}</div>
+    ):(
+      <div></div>
+    )}
+   
     <div className='nexPrevButtons'>
     <div><button>&lt; Previous</button></div>
     <div><button >Next &gt;</button></div>
@@ -83,7 +84,7 @@ function LocationsResult() {
        <div className='resultDisplayed'>
           {locationsList?.map(location =>
             <button key={location.id} className='locationSet'>
-                <LoadScript googleMapsApiKey={key}>
+                <LoadScript googleMapsApiKey={googleMapsApiKey}>
                      <GoogleMap mapContainerStyle={mapContainerStyle} center={{lat: location.latitude, lng: location.longitude}} zoom={10}>
                          <Marker position={{lat: location.latitude, lng: location.longitude}} />
                      </GoogleMap>
@@ -101,7 +102,7 @@ function LocationsResult() {
      <div className='resultDisplayed'>
           {allSearchLocations.results?.map(location =>
             <button key={location.id} className='locationSet'>
-                <LoadScript googleMapsApiKey={key}>
+                <LoadScript googleMapsApiKey={googleMapsApiKey}>
                      <GoogleMap mapContainerStyle={mapContainerStyle} center={{lat: location.latitude, lng: location.longitude}} zoom={10}>
                          <Marker position={{lat: location.latitude, lng: location.longitude}} />
                      </GoogleMap>
