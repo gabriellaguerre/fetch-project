@@ -6,10 +6,10 @@ import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import './LocationsResult.css'
 
 import MatchModal from '../Match';
-import Maps from '../Maps';
+
 
 function LocationsResult() {
-  
+
   const dispatch = useDispatch();
 
   const locationsList = useSelector(allLocations);
@@ -24,8 +24,8 @@ function LocationsResult() {
 };
 
   const [likeID, setLikeID] = useState([]);
-  
- 
+
+
 //   const handleNext = async () => {
 //         console.log(nextUrl, 'next')
 //         await dispatch(nextList(nextUrl));
@@ -47,7 +47,7 @@ function LocationsResult() {
 //     }
 
 //   }
-  
+
 //   const match = async (likeID) => {
 //     console.log('inside match function')
 //     let foundDog = await dispatch(dogMatch(likeID));
@@ -72,7 +72,7 @@ function LocationsResult() {
     ):(
       <div></div>
     )}
-   
+
     <div className='nexPrevButtons'>
     <div><button>&lt; Previous</button></div>
     <div><button >Next &gt;</button></div>
