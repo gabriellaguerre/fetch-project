@@ -6,13 +6,15 @@
     border-radius: 20px;
     padding: 25px;
     background-color: white;
+    border: 10px solid black;
 }
 
 .row1 {
     grid-row: 1;
-    margin: 10px;
+    margin: 5px;
     text-align: center;
     font-size: 20px;
+    font-weight: bold;
 }
 
 .row2 {
@@ -20,6 +22,7 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     margin: 10px;
+    border: 1px solid black;
 }
 
 .row3 {
@@ -32,16 +35,78 @@
 
 .row4 {
     grid-row: 4;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
 }
 
 .row2col1 {
-    
+    padding: 5px;
 }
 
 .row3col1 {
-   
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
 }
 
 .row3col2 {
-    
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+
+.row3col3 {
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.row3col4 {
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+
+
+
+
+.closeModalButton {
+    /* padding: 10px 20px; */
+    width: 100px;
+    height: 50px;
+    font-size: 16px;
+    border-radius: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.closeModalButton:hover {
+    background-color: #0056b3;
+}
+
+.lat, .lon {
+    margin: 5px;
+}
+
+.lat {
+    font-weight: bold;
+    background-color: #556B2F;
+    width: 35px;
+    color: white;
+    margin-left: 2px;
+    font-style: oblique;
+}
+
+.lon {
+    font-weight: bold;
+    background-color: #8B0000;
+    width: 35px;
+    color: white;
+    margin-left: 2px;
+    font-style: oblique;
 }

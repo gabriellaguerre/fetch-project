@@ -81,13 +81,13 @@ return (
          <div className='row2'>
           <div className='row2col1'>
             <div>Top:</div>
-          <div>LAT<input
+          <div className='lat'>LAT<input
             className="location-input"
             type="number"
             value={topLat}
             // placeholder="Enter a zip code"
             onChange={(e) => setTopLat(e.target.value)}/></div>
-         <div>LON<input
+         <div className='lon'>LON<input
             className="location-input"
             type="number"
             value={topLon}
@@ -96,13 +96,13 @@ return (
             </div>
 
           <div>Left:
-          <div>LAT<input
+          <div className='lat'>LAT<input
             className="location-input"
             type="number"
             value={leftLat}
             // placeholder="Enter a zip code"
             onChange={(e) => setLeftLat(e.target.value)}/></div>
-          <div>LON<input
+          <div className='lon'>LON<input
             className="location-input"
             type="number"
             value={leftLon}
@@ -111,13 +111,13 @@ return (
             </div>
 
             <div>Bottom:
-          <div>LAT<input
+          <div className='lat'>LAT<input
             className="location-input"
             type="number"
             value={bottomLat}
             // placeholder="Enter a zip code"
             onChange={(e) => setBottomLat(e.target.value)}/></div>
-          <div>LON<input
+          <div className='lon'>LON<input
             className="location-input"
             type="number"
             value={bottomLon}
@@ -126,13 +126,13 @@ return (
             </div>
 
             <div>Right:
-           <div>LAT<input
+           <div className='lat'>LAT<input
             className="location-input"
             type="number"
             value={rightLat}
             // placeholder="Enter a zip code"
             onChange={(e) => setRightLat(e.target.value)}/></div>
-           <div>LON<input
+           <div className='lon'>LON<input
             className="location-input"
             type="number"
             value={rightLon}
@@ -144,13 +144,13 @@ return (
           <div className='row3'>
         
           <div className='row3col1'>Bottom_Left:
-          <div>LAT<input
+          <div className='lat'>LAT<input
             className="location-input"
             type="number"
             value={bottomLeftLat}
             // placeholder="Enter a zip code"
             onChange={(e) => setBottomLeftLat(e.target.value)}/></div>
-          <div>LON<input
+          <div className='lon'>LON<input
             className="location-input"
             type="number"
             value={bottomLeftLon}
@@ -159,13 +159,13 @@ return (
             </div>
 
           <div className='row3col2'>Top_Right:
-          <div>LAT<input
+          <div className='lat'>LAT<input
             className="location-input"
             type="number"
             value={topRightLat}
             // placeholder="Enter a zip code"
             onChange={(e) => setTopRightLat(e.target.value)}/></div>
-          <div>LON<input
+          <div className='lon'>LON<input
             className="location-input"
             type="number"
             value={topRightLon}
@@ -176,13 +176,13 @@ return (
 
            
             <div className='row3col3'>Bottom_Right:
-           <div>LAT<input
+           <div className='lat'>LAT<input
             className="location-input"
             type="number"
             value={bottomRightLat}
             // placeholder="Enter a zip code"
             onChange={(e) => setBottomRightLat(e.target.value)}/></div>
-         <div>LON<input
+         <div className='lon'>LON<input
             className="location-input"
             type="number"
             value={bottomRightLon}
@@ -192,13 +192,13 @@ return (
             
 
             <div className='row3col4'>Top_Left:
-          <div>LAT<input
+          <div className='lat'>LAT<input
             className="location-input"
             type="number"
             value={topLeftLat}
             // placeholder="Enter a zip code"
             onChange={(e) => setTopLeftLat(e.target.value)}/></div>
-          <div>LON<input
+          <div className='lon'>LON<input
             className="location-input"
             type="number"
             value={topLeftLon}
@@ -208,7 +208,7 @@ return (
           
             </div>
 
-            <div className='row4'><button onClick={closeModal}>Close</button></div>
+            <div className='row4'><button className='closeModalButton'onClick={closeModal}>Close</button></div>
             </div>
         </>
     );
