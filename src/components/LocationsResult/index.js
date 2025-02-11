@@ -3,9 +3,10 @@ import {useSelector, useDispatch} from 'react-redux';
 import {allLocations, searchLocations, googleMapsApiKey} from '../../redux/locationsSlice';
 import { location, setLocation } from '../../redux/mapsSlice';
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import OpenModalButton from '../OpenModalButton';
+import MatchModal from '../Match';
 import './LocationsResult.css'
 
-import MatchModal from '../Match';
 
 
 function LocationsResult() {
@@ -77,7 +78,10 @@ function LocationsResult() {
     <div><button>&lt; Previous</button></div>
     <div><button >Next &gt;</button></div>
     </div>
-    <div><button>Match</button></div>
+    {/* <div><button><OpenModalButton
+                    buttonText=<div className='match'>Match</div>
+                    modalComponent={<MatchModal />}
+                    /></button></div> */}
     </div>
     {/* <div><Maps /></div> */}
     {locationsList && (

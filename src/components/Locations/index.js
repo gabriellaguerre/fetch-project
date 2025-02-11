@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {useSelector, useDispatch} from 'react-redux';
 import {selectUser} from '../../redux/usersSlice';
 import {allLocations, postLocations, postSearchLocations} from '../../redux/locationsSlice'
+import OpenModalButton from '../OpenModalButton';
 import Profile from '../Profile';
 import Table from "../Table";
 import './Locations.css';
@@ -10,6 +11,7 @@ import plusImg from '../../Assets/orange-plus.png'
 import filterImg from '../../Assets/filter-pic.png'
 import deleteImg from '../../Assets/trash-can.png';
 import LocationsResult from "../LocationsResult";
+import GeoBoundingBox from "../GeoBoundingBox";
 
 
 
@@ -34,29 +36,29 @@ function Locations() {
     const [states, setStates] = useState([]);
 
     const [chooseGeoBoundingBox, setChooseGeoBoundingBox] = useState(false);
-    const [topLat, setTopLat] = useState("");
-    const [topLon, setTopLon] = useState("");
+    // const [topLat, setTopLat] = useState("");
+    // const [topLon, setTopLon] = useState("");
 
-    const [leftLat, setLeftLat] = useState("");
-    const [leftLon, setLeftLon] = useState("");
+    // const [leftLat, setLeftLat] = useState("");
+    // const [leftLon, setLeftLon] = useState("");
 
-    const [bottomLat, setBottomLat] = useState("");
-    const [bottomLon, setBottomLon] = useState("");
+    // const [bottomLat, setBottomLat] = useState("");
+    // const [bottomLon, setBottomLon] = useState("");
 
-    const [rightLat, setRightLat] = useState("");
-    const [rightLon, setRightLon] = useState("");
+    // const [rightLat, setRightLat] = useState("");
+    // const [rightLon, setRightLon] = useState("");
 
-    const [bottomLeftLat, setBottomLeftLat] = useState("");
-    const [bottomLeftLon, setBottomLeftLon] =useState("");
+    // const [bottomLeftLat, setBottomLeftLat] = useState("");
+    // const [bottomLeftLon, setBottomLeftLon] =useState("");
 
-    const [bottomRightLat, setBottomRightLat] = useState("");
-    const [bottomRightLon, setBottomRightLon] = useState("");
+    // const [bottomRightLat, setBottomRightLat] = useState("");
+    // const [bottomRightLon, setBottomRightLon] = useState("");
 
-    const [topLeftLat, setTopLeftLat] = useState("");
-    const [topLeftLon, setTopLeftLon] = useState("");
+    // const [topLeftLat, setTopLeftLat] = useState("");
+    // const [topLeftLon, setTopLeftLon] = useState("");
 
-    const [topRightLat, setTopRightLat] = useState("");
-    const [topRightLon, setTopRightLon] = useState("");
+    // const [topRightLat, setTopRightLat] = useState("");
+    // const [topRightLon, setTopRightLon] = useState("");
 
     const [size, setSize] = useState("")
 
@@ -115,37 +117,37 @@ function Locations() {
   }
 
   const searchForLocations = () => {
-    let bodyParams = {}
+    // let bodyParams = {}
 
-    if(chooseCity && city) bodyParams.city = city
-    if(chooseStates && states) bodyParams.states = [states]
-    if(chooseGeoBoundingBox && topLat && leftLat && bottomLat && rightLat){
-      bodyParams.geoBoundingBox = {
-        top: {lat: topLat, lon: topLon},
-        left: {lat: leftLat, lon: leftLon},
-        bottom: {lat: bottomLat, lon: bottomLon},
-        right: {lat: rightLat, lon: rightLon},
-      }
-    }
+    // if(chooseCity && city) bodyParams.city = city
+    // if(chooseStates && states) bodyParams.states = [states]
+    // if(chooseGeoBoundingBox && topLat && leftLat && bottomLat && rightLat){
+    //   bodyParams.geoBoundingBox = {
+    //     top: {lat: topLat, lon: topLon},
+    //     left: {lat: leftLat, lon: leftLon},
+    //     bottom: {lat: bottomLat, lon: bottomLon},
+    //     right: {lat: rightLat, lon: rightLon},
+    //   }
+    // }
 
-      if(chooseGeoBoundingBox && bottomLeftLat && topRightLat){
-        bodyParams.geoBoundingBox = {
-          bottom_left: {lat: bottomLeftLat, lon: bottomLeftLon},
-          top_right: {lat: topRightLat, lon: topRightLon},
-        }
-    }
+    //   if(chooseGeoBoundingBox && bottomLeftLat && topRightLat){
+    //     bodyParams.geoBoundingBox = {
+    //       bottom_left: {lat: bottomLeftLat, lon: bottomLeftLon},
+    //       top_right: {lat: topRightLat, lon: topRightLon},
+    //     }
+    // }
 
-    if(chooseGeoBoundingBox && bottomRightLat && topLeftLat){
-      bodyParams.geoBoundingBox = {
-        bottom_right: {lat: bottomRightLat, lon: bottomRightLon},
-        top_left: {lat: topRightLat, lon: topRightLon},
-      }
+    // if(chooseGeoBoundingBox && bottomRightLat && topLeftLat){
+    //   bodyParams.geoBoundingBox = {
+    //     bottom_right: {lat: bottomRightLat, lon: bottomRightLon},
+    //     top_left: {lat: topRightLat, lon: topRightLon},
+    //   }
 
-    }
-    bodyParams.size = size ? size : '5';
+    // }
+    // bodyParams.size = size ? size : '5';
 
-    console.log(bodyParams, 'bodyParams')
-    dispatch(postSearchLocations(bodyParams))
+    // console.log(bodyParams, 'bodyParams')
+    // dispatch(postSearchLocations(bodyParams))
  }
 
 
@@ -269,7 +271,10 @@ function Locations() {
        </div>
 
       <div className="filter-option">
-      <div><button>Geo-Bounding Box</button></div>
+      <div><button><OpenModalButton
+                    buttonText=<div className='geoBoundingBox'>Geo-Bounding Box</div>
+                    modalComponent={<GeoBoundingBox/>}
+                    /></button></div>
         
         </div>
         </div>

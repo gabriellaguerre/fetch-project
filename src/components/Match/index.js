@@ -24,7 +24,7 @@ function MatchModal({match, onClose}) {
         <p><strong>Age:</strong> {match.age}</p>
         <p><strong>Breed:</strong> {match.breed}</p>
 
-        <button onClick={onClose} className="close-btn">Close</button>
+        <button onClick={closeModal} className="close-btn">Close</button>
       </div>
     </div>
     )
