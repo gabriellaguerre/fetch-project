@@ -1,12 +1,14 @@
 import React, {useState} from "react";
 import {useSelector, useDispatch} from 'react-redux';
 import { useModal } from '../Context/Modal'
+import { addGeoBoundingData } from "../../redux/locationsSlice";
 import './GeoBoundingBox.css';
 
 
 
 
 function GeoBoundingBox(){
+  
   const dispatch = useDispatch()
   const {closeModal} = useModal();
 
@@ -39,7 +41,9 @@ function GeoBoundingBox(){
   const [menu, setMenu] = useState(false);
   const [error, setError] = useState("")
 
-  const searchForLocations = () => {
+  
+
+  const geoBoundingData = () => {
     let bodyParams = {}
 
     // if(chooseCity && city) bodyParams.city = city
@@ -66,10 +70,14 @@ function GeoBoundingBox(){
         top_left: {lat: topRightLat, lon: topRightLon},
       }
 
-      //  bodyParams.size = size ? size : '5';
+     
 
 
     }
+    
+    
+    dispatch(addGeoBoundingData(bodyParams))
+    closeModal();
 
   }
 
@@ -216,10 +224,14 @@ return (
 
             </div>
 
-            <div className='row4'><button className='closeModalButton'onClick={closeModal}>Close</button></div>
+            <div className='row4'><button className='closeModalButton'onClick={closeModal}>Close</button>
+            <button className='doneButton'onClick={geoBoundingData}>Done</button>
+            </div>
+            
             </div>
         </>
     );
 
 }
 export default GeoBoundingBox;
+

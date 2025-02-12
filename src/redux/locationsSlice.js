@@ -9,6 +9,9 @@ export const googleMapsApiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 const initialState = {
     locations: [],
     locationsSearch: {},
+    geoBounding: {},
+    status: 'idle',
+    error: null,
 }
 
 export const postLocations = createAsyncThunk('locations/ZIP_CODES', async (searchArray) => {
@@ -48,7 +51,12 @@ export const postSearchLocations = createAsyncThunk('locations/ZIP_DETAILS', asy
 const locationsSlice = createSlice({
     name: 'locations',
     initialState,
-    reducers: {},
+    reducers: {
+         addGeoBoundingData(state,action){
+            console.log(action.payload, 'action payload in location slice line 54')
+            state.geoBounding = action.payload
+         }
+    },
     extraReducers(builder) {
         builder
             .addCase(postLocations.fulfilled, (state, action)=> {
@@ -72,7 +80,8 @@ const locationsSlice = createSlice({
 
 export const allLocations = (state) => state.locations.locations;
 export const searchLocations = (state) => state.locations.locationsSearch;
+export const geoBoundingData = (state) => state.locations.geoBounding;
 
-// export const { addBreeds, addSearch  } = locationsSlice.actions
+export const { addGeoBoundingData  } = locationsSlice.actions;
 
-export default locationsSlice.reducer
+export default locationsSlice.reducer;

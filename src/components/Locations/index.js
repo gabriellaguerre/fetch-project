@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {useSelector, useDispatch} from 'react-redux';
 import {selectUser} from '../../redux/usersSlice';
-import {allLocations, postLocations, postSearchLocations} from '../../redux/locationsSlice'
+import {postLocations, geoBoundingData, postSearchLocations} from '../../redux/locationsSlice'
 import OpenModalButton from '../OpenModalButton';
 import Profile from '../Profile';
 import Table from "../Table";
@@ -19,7 +19,8 @@ import GeoBoundingBox from "../GeoBoundingBox";
 function Locations() {
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
-
+    const bodyParams = useSelector(geoBoundingData);
+    console.log(bodyParams, 'bodyParams in line 23')
     // const locations = useSelector(allLocations);
     // const findLocations = useSelector(searchLocations);
 
@@ -65,7 +66,7 @@ function Locations() {
     const [searching, setSearching] = useState("")
     const [menu, setMenu] = useState(false);
     const [error, setError] = useState("")
-
+   
 
     let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
 
@@ -181,6 +182,7 @@ function Locations() {
 
   // let results = locations.filter((word)=>word.includes(capitalLetterWord))
   // console.log(searchResult, 'results obj')
+ 
 
   const errorClassName = 'locationError' + (error ? "": "hidden")
 
@@ -273,7 +275,7 @@ function Locations() {
       <div className="filter-option">
       <div><button className='openModalButton'><OpenModalButton
                     buttonText=<div className='geoBoundingBox'>Geo-Bounding Box</div>
-                    modalComponent={<GeoBoundingBox/>}
+                    modalComponent={<GeoBoundingBox />}
                     /></button></div>
 
         </div>
@@ -297,3 +299,5 @@ function Locations() {
 }
 
 export default Locations;
+
+

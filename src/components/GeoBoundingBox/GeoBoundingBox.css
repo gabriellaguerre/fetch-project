@@ -89,21 +89,6 @@
     border-radius: 0px 5px 5px 0px;
 }
 
-.closeModalButton {
-    /* padding: 10px 20px; */
-    width: 100px;
-    height: 50px;
-    font-size: 16px;
-    border-radius: 10px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-.closeModalButton:hover {
-    background-color: #0056b3;
-}
 
 .lat, .lon  {
     margin: 5px;
@@ -140,7 +125,40 @@
     font-weight: bold;
 }
 
-    input.geo-location-input::-webkit-inner-spin-button {
+input.geo-location-input::-webkit-inner-spin-button {
       -webkit-appearance: none;
       margin: 0;
-    }
+ }
+
+ .doneButton {
+    width: 100px;
+    height: 50px;
+    font-size: 16px;
+    border-radius: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-left: 5px;
+ }
+
+ .closeModalButton {
+    /* padding: 10px 20px; */
+    width: 100px;
+    height: 50px;
+    font-size: 16px;
+    border-radius: 10px;
+    background-color: rgb(241, 106, 128);
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.closeModalButton:hover {
+    background-color: red;
+}
+
+.doneButton:hover {
+    background-color: rgb(3, 3, 119);
+}
