@@ -157,7 +157,7 @@
     width: 25px;
   }
 
-  .location-input {
+  .zip-location-input {
     position: absolute;
     margin-left: 5px;
     border-radius: 5px;
@@ -170,7 +170,7 @@
   }
 
 
-  input.location-input::-webkit-inner-spin-button,
+  input.zip-location-input::-webkit-inner-spin-button,
   input.filter-input::-webkit-inner-spin-button,
   input.sizeInput::-webkit-inner-spin-button {
     -webkit-appearance: none;

@@ -271,11 +271,11 @@ function Locations() {
        </div>
 
       <div className="filter-option">
-      <div><button><OpenModalButton
+      <div><button className='openModalButton'><OpenModalButton
                     buttonText=<div className='geoBoundingBox'>Geo-Bounding Box</div>
                     modalComponent={<GeoBoundingBox/>}
                     /></button></div>
-        
+
         </div>
         </div>
         )}

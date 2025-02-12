@@ -281,7 +281,7 @@ function Breeds() {
           />Zip Code: </label>
           {location && (
           <input
-            className="location-input"
+            className="zip-location-input"
             type="number"
             value={zipCode}
             // placeholder="Enter a zip code"
