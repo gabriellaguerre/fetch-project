@@ -155,12 +155,32 @@ function Locations() {
   let addLocation = (selectedLocation) => {
     console.log(selectedLocation, 'selectedLocation')
 
-    if(selectedLocation.length < 5 || selectedLocation > 5) {
-      setError('Enter a valid Zip Code')
+    if(selectedLocation.length > 2) {
+      setError('Enter a two-letter state/territory abbreviations ')
 
     }
 
-    if(!selected.includes(selectedLocation) && selectedLocation.length === 5) {
+    if(!selected.includes(selectedLocation) && selectedLocation.length === 2) {
+      setSelected(prevSelected => {const updatedSelection = [...prevSelected,selectedLocation];
+        setError("")
+        return updatedSelection;
+
+      })
+      }
+  }
+
+
+  let removeLocation = (places) => {
+    let newArray = selected.filter((place) => place != places);
+    console.log(newArray, 'newArray')
+    setSelected(newArray)
+  }
+
+  let addState = (selectedLocation) => {
+    console.log(selectedLocation, 'selectedLocation')
+
+   
+    if(!states.includes(selectedLocation) && selectedLocation.length === 5) {
       setSelected(prevSelected => {const updatedSelection = [...prevSelected,selectedLocation];
         setError("")
         return updatedSelection;
@@ -172,14 +192,6 @@ function Locations() {
 
 
   }
-
-
-  let removeLocation = (places) => {
-    let newArray = selected.filter((place) => place != places);
-    console.log(newArray, 'newArray')
-    setSelected(newArray)
-  }
-
   // let results = locations.filter((word)=>word.includes(capitalLetterWord))
   // console.log(searchResult, 'results obj')
  
@@ -198,22 +210,20 @@ function Locations() {
         <div className='inputDiv'>
       <input
          className='inputBoxLocation'
+         disabled={filters}
          type="number"
          value={searching}
          placeholder="Enter a zip code and press +"
          onFocus={() => setMenu(true)}
          onChange={(e) => {setSearching(e.target.value);setError("")}}
          /> </div>
-
-
-        <div className='searchDiv'><button className='addButton' onClick={()=>{addLocation(searching);setSearching("")}}><img src={plusImg} className="searchPic"/></button></div>
-
+        <div className='searchDiv'><button className='addButton' disabled={filters} onClick={()=>{addLocation(searching);setSearching("")}}><img src={plusImg} className="searchPic"/></button></div>
         </div>
 
 
 
         <div className='gridArea1-2'>
-          <button className='filterButton' onClick={()=>setFilters(!filters)}><img src={filterImg} className="filterPic"/>Filters</button>
+          <button className='filterButton' onClick={()=>{setFilters(!filters);setError("")}}><img src={filterImg} className="filterPic"/>Filters</button>
 
         <div className='size'>Locations per page:
           <input
@@ -226,13 +236,24 @@ function Locations() {
               </div>
 
           <div className='gridArea2-1'>
-          <div className='locationChoices'>Zip Code choices:
+          {filters? (
+             <div className='locationChoices'>States selected:
+             {selected.map((places, index) =>(
+               <div key={index} className='chosenLocations'>{places}
+               <button className='removeButton' onClick={()=>removeLocation(places)}><img src={deleteImg} className="deletePic"/></button>
+               </div>
+             ))}
+             </div>
+          ):(
+  
+          <div className='locationChoices'>Zip Codes selected:
           {selected.map((places, index) =>(
             <div key={index} className='chosenLocations'>{places}
             <button className='removeButton' onClick={()=>removeLocation(places)}><img src={deleteImg} className="deletePic"/></button>
             </div>
           ))}
           </div>
+          )}
           </div>
 
        <div className='gridArea2-2'>
@@ -247,7 +268,7 @@ function Locations() {
           />City: </label>
           {chooseCity && (
         <input
-            className="filter-input-city"
+            className="filter-input"
             type="text"
             value={city}
             // placeholder="Enter a minimum age"
@@ -255,7 +276,7 @@ function Locations() {
           )}
         </div>
 
-      <div className="filter-option">
+      <div className="filter-option-state">
         <label>
           <input
           type="checkbox"
@@ -263,12 +284,17 @@ function Locations() {
           onChange={()=>setChooseStates(!chooseStates)}
           />State: </label>
           {chooseStates && (
+          <>
         <input
-            className="filter-input"
+            className="filter-input-state"
             type="text"
             value={states}
             // placeholder="Enter a maximum age"
+            onFocus={() => setMenu(true)}
             onChange={(e) => setStates(e.target.value)}/>
+            <span className='searchDiv'><button className='addStateButton' disabled={chooseCity} onClick={()=>{addLocation(states);setStates("")}}><img src={plusImg} className="searchStatePic"/></button></span>
+            <span className='stateInstruction'>Use abbreviated States</span>
+            </>
           )}
        </div>
 

@@ -87,16 +87,16 @@ function LocationsResult() {
     {locationsList && (
        <div className='resultDisplayed'>
           {locationsList?.map(location =>
-            <button key={location.id} className='locationSet'>
+            <button key={location?.id} className='locationSet'>
                 <LoadScript googleMapsApiKey={googleMapsApiKey}>
-                     <GoogleMap mapContainerStyle={mapContainerStyle} center={{lat: location.latitude, lng: location.longitude}} zoom={10}>
-                         <Marker position={{lat: location.latitude, lng: location.longitude}} />
+                     <GoogleMap mapContainerStyle={mapContainerStyle} center={{lat: location?.latitude, lng: location?.longitude}} zoom={10}>
+                         <Marker position={{lat: location?.latitude, lng: location?.longitude}} />
                      </GoogleMap>
               </LoadScript>
-                <div>City: {location.city}</div>
-                <div>County: {location.county}</div>
-                <div>State: {location.state}</div>
-                <div>Zip Code: {location.zip_code}</div>
+                <div>City: {location?.city}</div>
+                <div>County: {location?.county}</div>
+                <div>State: {location?.state}</div>
+                <div>Zip Code: {location?.zip_code}</div>
              </button>
         )}
      </div>
