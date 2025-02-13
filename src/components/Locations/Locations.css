@@ -55,12 +55,12 @@
   }
   .addStateButton{
     position: relative;
-    height: 22px;
+    height: 21px;
     width: 35px;
     left:5%;
     border-left: none;
     border-radius: 0px 5px 5px 0px;
-    /* padding-left: 10px; */
+    border-width: 0.5px;
     background-color: rgb(240, 240, 154);
     text-align: center;
     cursor: pointer;
@@ -128,13 +128,15 @@
    .filter-option-state {
       display: flex;
       align-items: center;
-      margin: 5px;
+      height: 30px;
+      
     }
 
-    .filter-option label {
+    .filter-option {
       display: flex;
-      align-items: center;
-      gap: 5px; /* Small gap between checkbox and label text */
+      height: 20px;
+      /* align-items: center; */
+    
   }
 
     .sort-option {
@@ -155,7 +157,10 @@
 
     .filter-input-city {
       width: 152px;
-      height: 20px;
+      height: 18px;
+      border-radius: 5px;
+      margin-left: 5px;
+      border-width: 0.5px;
     }
 
     .location-input {
@@ -298,9 +303,19 @@
 
   .filter-input-state {
     width: 30px;
+    height: 17px;
     margin-left: 5px;
+    border-radius: 5px 0px 0px 5px;
+    border-width: 0.5px;
+    padding-left: 5px;
   }
 
   .stateInstruction{
     margin-left: 20px;
+  }
+
+  .searchSpan{
+    position: relative;
+    right: 2px;
+    margin-top: 1px;
   }

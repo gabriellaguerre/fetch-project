@@ -1,0 +1,45 @@
+.mapModalContainer {
+    background-color: #d7eaea;
+    width: 400px;
+    height: 420px;
+    border-radius: 20px;
+    padding: 25px;
+    border: 10px solid #5986a8;
+}
+
+.mapGoogle {
+    display: flex;
+    justify-content: center;
+}
+
+.cityCounty {
+    display: flex;
+    margin: 10px;
+    justify-content: space-around;
+}
+
+.stateZip {
+    display: flex;
+    justify-content: space-around;
+}
+
+.mapCloseButtonDiv {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+}
+
+.closeMapModalButton {
+    width: 100px;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 10px;
+    background-color: rgb(241, 106, 128);
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.closeMapModalButton:hover {
+    background-color: red;
+}

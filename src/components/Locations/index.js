@@ -9,7 +9,7 @@ import './Locations.css';
 import searchImg from '../../Assets/search.png';
 import plusImg from '../../Assets/orange-plus.png'
 import filterImg from '../../Assets/filter-pic.png'
-import deleteImg from '../../Assets/trash-can.png';
+import deleteImg from '../../Assets/x.png';
 import LocationsResult from "../LocationsResult";
 import GeoBoundingBox from "../GeoBoundingBox";
 
@@ -235,12 +235,13 @@ function Locations() {
           />City: </label>
           {chooseCity && (
         <input
-            className="filter-input"
+            className="filter-input-city"
             type="text"
             value={city}
             // placeholder="Enter a minimum age"
             onChange={(e) => setCity(e.target.value)}/>
           )}
+          
         </div>
 
       <div className="filter-option-state">
@@ -259,7 +260,7 @@ function Locations() {
             // placeholder="Enter a maximum age"
             onFocus={() => setMenu(true)}
             onChange={(e) => setStates(e.target.value)}/>
-            <span className='searchDiv'><button className='addStateButton' disabled={chooseCity} onClick={()=>{addState(states);setStates("")}}><img src={plusImg} className="searchStatePic"/></button></span>
+            <span className='searchSpan'><button className='addStateButton' disabled={chooseCity} onClick={()=>{addState(states);setStates("")}}><img src={plusImg} className="searchStatePic"/></button></span>
             {/* <span className='stateInstruction'>Use abbreviated States</span> */}
             </>
           )}
@@ -276,7 +277,7 @@ function Locations() {
         )}
           </div>
         </div>
-        <div>
+       
           {filters ? (
             <div className='search2'><button className='search2Button' onClick={()=>{searchForLocations();setMenu(false)}}>SEARCH<img src={searchImg} className="searchPic"/></button></div>
           ):(
@@ -284,7 +285,7 @@ function Locations() {
           ) }
 
          <div className='table'><LocationsResult /></div>
-            </div>
+           
 
 
      </>

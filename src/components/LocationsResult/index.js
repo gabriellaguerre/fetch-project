@@ -4,7 +4,7 @@ import {allLocations, searchLocations, googleMapsApiKey} from '../../redux/locat
 import { location, setLocation } from '../../redux/mapsSlice';
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import OpenModalButton from '../OpenModalButton';
-import MatchModal from '../Match';
+import Map from '../Map';
 import './LocationsResult.css'
 
 
@@ -19,10 +19,7 @@ function LocationsResult() {
   console.log(allSearchLocations.results, 'allSearchLocation')
   const map = useSelector(location)
 
-  const mapContainerStyle = {
-  width: "200px",
-  height: "200px",
-};
+ 
 
   const [likeID, setLikeID] = useState([]);
 
@@ -67,44 +64,41 @@ function LocationsResult() {
 
   return (
     <>
-    <div className='topRow'>
+    <div className='topRowLocation'>
     {allSearchLocations.total ? (
+      <>
       <div>Total Finds: {allSearchLocations.total}</div>
+      <div className='nexPrevButtons'>
+      <div><button>&lt; Previous</button></div>
+      <div><button >Next &gt;</button></div>
+      </div>
+      </>
     ):(
-      <div></div>
+      <div><button>CLEAR ALL</button></div>
     )}
-
-    <div className='nexPrevButtons'>
-    <div><button>&lt; Previous</button></div>
-    <div><button >Next &gt;</button></div>
     </div>
-    {/* <div><button><OpenModalButton
-                    buttonText=<div className='match'>Match</div>
-                    modalComponent={<MatchModal />}
-                    /></button></div> */}
-    </div>
-    {/* <div><Maps /></div> */}
+    
     {locationsList && (
        <div className='resultDisplayed'>
           {locationsList?.map(location =>
-            <button key={location?.id} className='locationSet'>
-                <LoadScript googleMapsApiKey={googleMapsApiKey}>
-                     <GoogleMap mapContainerStyle={mapContainerStyle} center={{lat: location?.latitude, lng: location?.longitude}} zoom={10}>
-                         <Marker position={{lat: location?.latitude, lng: location?.longitude}} />
-                     </GoogleMap>
-              </LoadScript>
+            <div key={location?.id} className='locationSet'>
+              <button className='openMapModalButton'><OpenModalButton
+                    buttonText=<div className='getMap'>See Map</div>
+                    modalComponent={<Map location={location} />}
+                    /></button>
                 <div>City: {location?.city}</div>
                 <div>County: {location?.county}</div>
                 <div>State: {location?.state}</div>
                 <div>Zip Code: {location?.zip_code}</div>
-             </button>
+                
+             </div>
         )}
      </div>
       )
    }
      {allSearchLocations.results && (
      <div className='resultDisplayed'>
-          {allSearchLocations.results?.map(location =>
+          {/* {allSearchLocations.results?.map(location =>
             <button key={location.id} className='locationSet'>
                 <LoadScript googleMapsApiKey={googleMapsApiKey}>
                      <GoogleMap mapContainerStyle={mapContainerStyle} center={{lat: location.latitude, lng: location.longitude}} zoom={10}>
@@ -116,7 +110,7 @@ function LocationsResult() {
                 <div>State: {location.state}</div>
                 <div>Zip Code: {location.zip_code}</div>
              </button>
-        )}
+        )} */}
     </div>
 
      )}
