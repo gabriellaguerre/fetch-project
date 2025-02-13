@@ -16,7 +16,7 @@ const initialState = {
 
 export const postLocations = createAsyncThunk('locations/ZIP_CODES', async (searchArray) => {
     console.log(searchArray, 'in locations in locationSlice')
-   
+
     const response = await fetch(locationsURL, {
         method: 'POST',
         headers: {"Content-Type": "application/json"},

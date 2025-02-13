@@ -66,58 +66,17 @@ function Locations() {
     const [searching, setSearching] = useState("")
     const [menu, setMenu] = useState(false);
     const [error, setError] = useState("")
-   
+
 
     let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
 
 
-  const search = async () => {
-
+  const searchZipCodes = async () => {
     await dispatch(postLocations(selected))
-    // if(location && zipCode) {
-    //   searchParams.zipCodes = [zipCode];
-    //   searchParams.zipCodes.forEach(zipCode => urlFrontend.searchParams.append('zipCodes', zipCode));
-    // }
-
-    // if(minimumAge && minAge) {
-    //   searchParams.ageMin = minAge;
-    //   urlFrontend.searchParams.append('ageMin', searchParams.ageMin)
-    // }
-    // if(maximumAge && maxAge) {
-    //   searchParams.ageMax = maxAge;
-    //   urlFrontend.searchParams.append('ageMax', searchParams.ageMax)
-    // }
-
-    // if(breed && breedAsc) {
-    //   searchParams.sort = 'breed:asc'
-    //   urlFrontend.searchParams.append('sort', searchParams.sort)
-    // }
-    // if(breed && breedDesc) {
-    //   searchParams.sort = 'breed:desc'
-    //   urlFrontend.searchParams.append('sort', searchParams.sort)
-    // }
-
-    //  if(name && nameAsc) {
-    //   searchParams.sort = 'name:asc'
-    //   urlFrontend.searchParams.append('sort', searchParams.sort)
-    //  }
-    //  if(name && nameDesc) {
-    //   searchParams.sort = 'name:desc'
-    //   urlFrontend.searchParams.append('sort', searchParams.sort)
-    //  }
-
-    //  if(age && ageAsc) {
-    //   searchParams.sort = 'age:asc'
-    //   urlFrontend.searchParams.append('sort', searchParams.sort)
-    //  }
-    //  if(age && ageDesc) {
-    //   searchParams.sort = 'age:desc'
-    //   urlFrontend.searchParams.append('sort', searchParams.sort)
-    //  }
-
   }
 
   const searchForLocations = () => {
+    console.log('inside searchForLocations function')
     // let bodyParams = {}
 
     // if(chooseCity && city) bodyParams.city = city
@@ -152,16 +111,16 @@ function Locations() {
  }
 
 
-  let addLocation = (selectedLocation) => {
+  let addState = (selectedLocation) => {
     console.log(selectedLocation, 'selectedLocation')
 
-    if(selectedLocation.length > 2) {
+    if(chooseStates && selectedLocation.length > 2) {
       setError('Enter a two-letter state/territory abbreviations ')
 
     }
 
     if(!selected.includes(selectedLocation) && selectedLocation.length === 2) {
-      setSelected(prevSelected => {const updatedSelection = [...prevSelected,selectedLocation];
+        setSelected(prevSelected => {const updatedSelection = [...prevSelected,selectedLocation];
         setError("")
         return updatedSelection;
 
@@ -176,12 +135,20 @@ function Locations() {
     setSelected(newArray)
   }
 
-  let addState = (selectedLocation) => {
+  let addLocation = (selectedLocation) => {
     console.log(selectedLocation, 'selectedLocation')
 
-   
-    if(!states.includes(selectedLocation) && selectedLocation.length === 5) {
-      setSelected(prevSelected => {const updatedSelection = [...prevSelected,selectedLocation];
+    if(selectedLocation.length < 5 || selectedLocation.length > 5) {
+      setError("Enter a valid zip code")
+    }
+
+    if(selected.includes(selectedLocation)) {
+      setError("This zip code is already in your list")
+    }
+
+
+    if(!selected.includes(selectedLocation) && selectedLocation.length === 5) {
+        setSelected(prevSelected => {const updatedSelection = [...prevSelected,selectedLocation];
         setError("")
         return updatedSelection;
 
@@ -194,7 +161,7 @@ function Locations() {
   }
   // let results = locations.filter((word)=>word.includes(capitalLetterWord))
   // console.log(searchResult, 'results obj')
- 
+
 
   const errorClassName = 'locationError' + (error ? "": "hidden")
 
@@ -205,7 +172,7 @@ function Locations() {
      <div className={errorClassName}>{error}</div>
      <div className='searchAndFilter'>
 
-      <div className='gridArea1-1'>
+      <div className='gridArea1-1-Location'>
 
         <div className='inputDiv'>
       <input
@@ -222,8 +189,8 @@ function Locations() {
 
 
 
-        <div className='gridArea1-2'>
-          <button className='filterButton' onClick={()=>{setFilters(!filters);setError("")}}><img src={filterImg} className="filterPic"/>Filters</button>
+        <div className='gridArea1-2-Location'>
+          <button className='filterButton' onClick={()=>{setFilters(!filters);setError("");setSelected([])}}><img src={filterImg} className="filterPic"/>Filters</button>
 
         <div className='size'>Locations per page:
           <input
@@ -235,8 +202,8 @@ function Locations() {
 
               </div>
 
-          <div className='gridArea2-1'>
-          {filters? (
+          <div className='gridArea2-1-Location'>
+          {filters ? (
              <div className='locationChoices'>States selected:
              {selected.map((places, index) =>(
                <div key={index} className='chosenLocations'>{places}
@@ -245,7 +212,7 @@ function Locations() {
              ))}
              </div>
           ):(
-  
+
           <div className='locationChoices'>Zip Codes selected:
           {selected.map((places, index) =>(
             <div key={index} className='chosenLocations'>{places}
@@ -256,7 +223,7 @@ function Locations() {
           )}
           </div>
 
-       <div className='gridArea2-2'>
+       <div className='gridArea2-2-Location'>
         {filters &&  (
         <div className='filters'>
        <div className="filter-option">
@@ -292,8 +259,8 @@ function Locations() {
             // placeholder="Enter a maximum age"
             onFocus={() => setMenu(true)}
             onChange={(e) => setStates(e.target.value)}/>
-            <span className='searchDiv'><button className='addStateButton' disabled={chooseCity} onClick={()=>{addLocation(states);setStates("")}}><img src={plusImg} className="searchStatePic"/></button></span>
-            <span className='stateInstruction'>Use abbreviated States</span>
+            <span className='searchDiv'><button className='addStateButton' disabled={chooseCity} onClick={()=>{addState(states);setStates("")}}><img src={plusImg} className="searchStatePic"/></button></span>
+            {/* <span className='stateInstruction'>Use abbreviated States</span> */}
             </>
           )}
        </div>
@@ -310,10 +277,10 @@ function Locations() {
           </div>
         </div>
         <div>
-          {(chooseCity || chooseStates || chooseGeoBoundingBox) ? (
+          {filters ? (
             <div className='search2'><button className='search2Button' onClick={()=>{searchForLocations();setMenu(false)}}>SEARCH<img src={searchImg} className="searchPic"/></button></div>
           ):(
-            <div className='search2'><button className='search2Button' onClick={()=>{search();setMenu(false)}}>SEARCH<img src={searchImg} className="searchPic"/></button></div>
+            <div className='search2'><button className='search2Button' onClick={()=>{searchZipCodes();setMenu(false)}}>SEARCH<img src={searchImg} className="searchPic"/></button></div>
           ) }
 
          <div className='table'><LocationsResult /></div>
@@ -325,5 +292,3 @@ function Locations() {
 }
 
 export default Locations;
-
-

@@ -81,7 +81,7 @@
   }
 
 
-  .gridArea1-1{
+  .gridArea1-1-Location{
       grid-area: 1/1;
       display: flex;
       flex-direction: row;
@@ -91,7 +91,7 @@
       height: 50px;
   }
 
-  .gridArea1-2 {
+  .gridArea1-2-Location {
       grid-area: 1/2;
       display: flex;
       flex-direction: row;
@@ -102,7 +102,7 @@
 
   }
 
-  .gridArea2-1{
+  .gridArea2-1-Location{
       grid-area: 2/1;
       position: relative;
       width: 100%;
@@ -112,7 +112,7 @@
 
   }
 
-  .gridArea2-2{
+  .gridArea2-2-Location{
       grid-area: 2/2;
       position: relative;
       width: 100%;
@@ -211,7 +211,7 @@
       left: 25%;
       /* margin-left:1%; */
       font-weight: bold;
-      font-size: 20px;
+      font-size: 15px;
       /* transform: translateX(-50%); */
     }
 
