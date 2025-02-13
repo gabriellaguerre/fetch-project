@@ -19,7 +19,7 @@ function LocationsResult() {
   console.log(allSearchLocations.results, 'allSearchLocation')
   const map = useSelector(location)
 
- 
+
 
   const [likeID, setLikeID] = useState([]);
 
@@ -77,7 +77,7 @@ function LocationsResult() {
       <div><button>CLEAR ALL</button></div>
     )}
     </div>
-    
+
     {locationsList && (
        <div className='resultDisplayed'>
           {locationsList?.map(location =>
@@ -90,7 +90,7 @@ function LocationsResult() {
                 <div>County: {location?.county}</div>
                 <div>State: {location?.state}</div>
                 <div>Zip Code: {location?.zip_code}</div>
-                
+
              </div>
         )}
      </div>
@@ -98,19 +98,18 @@ function LocationsResult() {
    }
      {allSearchLocations.results && (
      <div className='resultDisplayed'>
-          {/* {allSearchLocations.results?.map(location =>
-            <button key={location.id} className='locationSet'>
-                <LoadScript googleMapsApiKey={googleMapsApiKey}>
-                     <GoogleMap mapContainerStyle={mapContainerStyle} center={{lat: location.latitude, lng: location.longitude}} zoom={10}>
-                         <Marker position={{lat: location.latitude, lng: location.longitude}} />
-                     </GoogleMap>
-              </LoadScript>
+           {allSearchLocations.results?.map(location =>
+            <div key={location.id} className='locationSet'>
+               <button className='openMapModalButton'><OpenModalButton
+                    buttonText=<div className='getMap'>See Map</div>
+                    modalComponent={<Map location={location} />}
+                    /></button>
                 <div>City: {location.city}</div>
                 <div>County: {location.county}</div>
                 <div>State: {location.state}</div>
                 <div>Zip Code: {location.zip_code}</div>
-             </button>
-        )} */}
+             </div>
+        )}
     </div>
 
      )}

@@ -42,7 +42,7 @@ export const postSearchLocations = createAsyncThunk('locations/ZIP_DETAILS', asy
     console.log(response, 'response in postsearchlocation function')
     if(response.ok){
         const data = await response.json()
-
+        console.log(data, 'data in locationSlice line 45')
         return data;
     }
 })

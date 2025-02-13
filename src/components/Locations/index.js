@@ -75,12 +75,14 @@ function Locations() {
     await dispatch(postLocations(selected))
   }
 
-  const searchForLocations = () => {
+  const searchForLocations = async () => {
     console.log('inside searchForLocations function')
-    // let bodyParams = {}
+    let params = {}
 
-    // if(chooseCity && city) bodyParams.city = city
-    // if(chooseStates && states) bodyParams.states = [states]
+    // console.log((chooseStates), selected, 'selected line 82')
+
+    if(chooseCity && city) params.city = city
+    if(chooseStates || selected.length > 0) params.states = selected
     // if(chooseGeoBoundingBox && topLat && leftLat && bottomLat && rightLat){
     //   bodyParams.geoBoundingBox = {
     //     top: {lat: topLat, lon: topLon},
@@ -104,15 +106,17 @@ function Locations() {
     //   }
 
     // }
-    // bodyParams.size = size ? size : '5';
+    params.size = size ? size : '5';
+    params.from = '20';
 
-    // console.log(bodyParams, 'bodyParams')
-    // dispatch(postSearchLocations(bodyParams))
+    console.log(params, 'params')
+    await dispatch(postSearchLocations(params))
  }
 
 
   let addState = (selectedLocation) => {
-    console.log(selectedLocation, 'selectedLocation')
+    console.log(selectedLocation.toUpperCase(), 'selectedLocation')
+    let allCapsState = selectedLocation.toUpperCase()
 
     if(chooseStates && selectedLocation.length > 2) {
       setError('Enter a two-letter state/territory abbreviations ')
@@ -120,7 +124,7 @@ function Locations() {
     }
 
     if(!selected.includes(selectedLocation) && selectedLocation.length === 2) {
-        setSelected(prevSelected => {const updatedSelection = [...prevSelected,selectedLocation];
+        setSelected(prevSelected => {const updatedSelection = [...prevSelected, allCapsState];
         setError("")
         return updatedSelection;
 
@@ -241,7 +245,7 @@ function Locations() {
             // placeholder="Enter a minimum age"
             onChange={(e) => setCity(e.target.value)}/>
           )}
-          
+
         </div>
 
       <div className="filter-option-state">
@@ -277,7 +281,7 @@ function Locations() {
         )}
           </div>
         </div>
-       
+
           {filters ? (
             <div className='search2'><button className='search2Button' onClick={()=>{searchForLocations();setMenu(false)}}>SEARCH<img src={searchImg} className="searchPic"/></button></div>
           ):(
@@ -285,7 +289,7 @@ function Locations() {
           ) }
 
          <div className='table'><LocationsResult /></div>
-           
+
 
 
      </>
