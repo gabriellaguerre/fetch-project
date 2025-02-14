@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {allLocations, searchLocations, googleMapsApiKey} from '../../redux/locationsSlice';
+import {allLocations, searchLocations, postSearchLocations} from '../../redux/locationsSlice';
 import { location, setLocation } from '../../redux/mapsSlice';
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import OpenModalButton from '../OpenModalButton';
@@ -9,58 +9,63 @@ import './LocationsResult.css'
 
 
 
-function LocationsResult() {
+function LocationsResult({data}) {
 
   const dispatch = useDispatch();
 
   const locationsList = useSelector(allLocations);
   const allSearchLocations = useSelector(searchLocations)
-//   dispatch(setLocation({ lat: 34.0522, lng: -118.2437 }))
-  console.log(allSearchLocations.results, 'allSearchLocation')
-  const map = useSelector(location)
+
+  const [page, setPage] = useState(1)
+ 
+  let total =  allSearchLocations.total || 0;
+  let pages = Math.ceil(total/Number(data.size)) || 1
+  let size = Number(data.size);
+  
+  let searchLocationArray = allSearchLocations.results
+  console.log(searchLocationArray, 'searchLocationArray')
+ 
+  // useEffect(()=>{
+  //    if(searchLocationArray?.length < size) {
+  //      setPage(page-1)
+  //      console.log(page, 'page in useEffect')
+  //      data.from = page*size
+  //      dispatch(postSearchLocations(data))
+  // }
+  // }, [searchLocationArray, size, data, page])
+ 
 
 
+  const nextPage = async () => {
+    console.log(page, "page in next function")
 
-  const [likeID, setLikeID] = useState([]);
+    data.from = page*size
+    setPage(page+1)
+ 
+   console.log(data, 'data after page change line 33')
+  
+   const checkArray = await dispatch(postSearchLocations(data))
+   console.log(checkArray?.payload.results.length < size, 'checkArray in nextPage function')
+
+   if(checkArray?.payload.results.length < size) {
+    console.log(page, "page line 51")
+    setPage(page)
+    data.from = page*size
+   }
+  
+  }
+
+  const prevPage = async () => {
+    console.log(page, 'page in prevPage function')
+    // setPage(page-1)
+    // let size = Number(data.size)
+    // console.log(size, page, 'size, page in prevPage function')
+    
+    console.log(data, 'data after page change line 57')
+    // await dispatch(postSearchLocations(data))
+   }
 
 
-//   const handleNext = async () => {
-//         console.log(nextUrl, 'next')
-//         await dispatch(nextList(nextUrl));
-//         let dogs2 = await dispatch(postSearchDog(list))
-//         console.log(dogs2, 'dogs')
-//     }
-
-//     const handlePrevious = async () => {
-//       console.log(previousUrl, 'next')
-//       await dispatch(nextList(previousUrl));
-//       let dogs2 = await dispatch(postSearchDog(list))
-//       console.log(dogs2, 'dogs')
-//   }
-
-//   const likeDogs = (id) => {
-//     console.log(id, 'id')
-//     if(!likeID.includes(id)) {
-//        setLikeID((prev)=> [...prev, id])
-//     }
-
-//   }
-
-//   const match = async (likeID) => {
-//     console.log('inside match function')
-//     let foundDog = await dispatch(dogMatch(likeID));
-//     console.log(foundDog.payload.match, 'foundDog')
-//     console.log(details, 'details in match function')
-//     let dogData = details.filter(dog => dog.id === foundDog.payload.match)
-
-//     if(dogData) {
-//       console.log('inside if statement with dogdata')
-//       setMatchedDog(dogData);
-//       setIsModalOpen(true)
-//     }
-//     console.log(dogData, 'dogData')
-
-//   }
 
   return (
     <>
@@ -68,9 +73,11 @@ function LocationsResult() {
     {allSearchLocations.total ? (
       <>
       <div>Total Finds: {allSearchLocations.total}</div>
+     
       <div className='nexPrevButtons'>
-      <div><button>&lt; Previous</button></div>
-      <div><button >Next &gt;</button></div>
+      <div><button onClick={prevPage} disabled={page === 1}> &lt; Previous</button></div>
+      <div><button onClick={nextPage} disabled={page === pages}>Next &gt;</button></div>
+      <div>page {page} of {pages} pages</div>
       </div>
       </>
     ):(

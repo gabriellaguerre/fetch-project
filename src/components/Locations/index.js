@@ -62,7 +62,8 @@ function Locations() {
     // const [topRightLon, setTopRightLon] = useState("");
 
     const [size, setSize] = useState("")
-
+    const [from, setFrom] = useState("")
+    const [data, setData] = useState({})
     const [searching, setSearching] = useState("")
     const [menu, setMenu] = useState(false);
     const [error, setError] = useState("")
@@ -107,9 +108,10 @@ function Locations() {
 
     // }
     params.size = size ? size : '5';
-    params.from = '20';
+    params.from = from ? from : '0';
 
     console.log(params, 'params')
+    setData(params)
     await dispatch(postSearchLocations(params))
  }
 
@@ -288,7 +290,7 @@ function Locations() {
             <div className='search2'><button className='search2Button' onClick={()=>{searchZipCodes();setMenu(false)}}>SEARCH<img src={searchImg} className="searchPic"/></button></div>
           ) }
 
-         <div className='table'><LocationsResult /></div>
+         <div className='table'><LocationsResult data={data}/></div>
 
 
 
