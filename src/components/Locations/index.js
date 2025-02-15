@@ -37,26 +37,8 @@ function Locations() {
     const [states, setStates] = useState([]);
 
     const [chooseGeoBoundingBox, setChooseGeoBoundingBox] = useState(false);
-    // const [topLat, setTopLat] = useState("");
-    // const [topLon, setTopLon] = useState("");
+    const [geoChoices, setGeoChoices] = useState(Object.keys(bodyParams?.geoBoundingBox || {}));
 
-    // const [leftLat, setLeftLat] = useState("");
-    // const [leftLon, setLeftLon] = useState("");
-
-    // const [bottomLat, setBottomLat] = useState("");
-    // const [bottomLon, setBottomLon] = useState("");
-
-    // const [rightLat, setRightLat] = useState("");
-    // const [rightLon, setRightLon] = useState("");
-
-    // const [bottomLeftLat, setBottomLeftLat] = useState("");
-    // const [bottomLeftLon, setBottomLeftLon] =useState("");
-
-    const [choice1, setChoice1] = useState(Object.keys(bodyParams?.geoBoundingBox || {}));
-    // const [choice2, setChoice2] = useState(bodyParams?.GeoBoundingBox.top_left);
-
-    // const [topRightLat, setTopRightLat] = useState("");
-    // const [topRightLon, setTopRightLon] = useState("");
 
     const [size, setSize] = useState("")
     const [from, setFrom] = useState("")
@@ -68,7 +50,7 @@ function Locations() {
 
     let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
 
-    
+
   const searchZipCodes = async () => {
     await dispatch(clearLocationsSearchGeo())
     await dispatch(postLocations(selected))
@@ -278,8 +260,8 @@ function Locations() {
                     buttonText={<div className='geoBoundingBox'>Geo-Bounding Box</div>}
                     modalComponent={<GeoBoundingBox />}
                     /></button></div>
-      {choice1.map((choices, index) => (
-          <div key={index} className='geoChoice'>{choices}</div>
+      {geoChoices.map((choice, index) => (
+          <div key={index} className='geoChoice'>{choice}</div>
       ))}
        </div>
         </div>
