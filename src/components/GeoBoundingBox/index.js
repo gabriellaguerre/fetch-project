@@ -8,7 +8,7 @@ import './GeoBoundingBox.css';
 
 
 function GeoBoundingBox(){
-  
+
   const dispatch = useDispatch()
   const {closeModal} = useModal();
 
@@ -41,7 +41,7 @@ function GeoBoundingBox(){
   const [menu, setMenu] = useState(false);
   const [error, setError] = useState("")
 
-  
+
 
   const geoBoundingData = () => {
     let bodyParams = {}
@@ -69,13 +69,9 @@ function GeoBoundingBox(){
         bottom_right: {lat: bottomRightLat, lon: bottomRightLon},
         top_left: {lat: topRightLat, lon: topRightLon},
       }
-
-     
-
-
     }
-    
-    
+
+
     dispatch(addGeoBoundingData(bodyParams))
     closeModal();
 
@@ -227,11 +223,10 @@ return (
             <div className='row4'><button className='closeModalButton'onClick={closeModal}>Close</button>
             <button className='doneButton'onClick={geoBoundingData}>Done</button>
             </div>
-            
+
             </div>
         </>
     );
 
 }
 export default GeoBoundingBox;
-

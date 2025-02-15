@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {useSelector, useDispatch} from 'react-redux';
 import {selectUser} from '../../redux/usersSlice';
-import {postLocations, geoBoundingData, postSearchLocations} from '../../redux/locationsSlice'
+import {postLocations, geoBoundingData, postSearchLocations, clearLocations, clearLocationsSearchGeo} from '../../redux/locationsSlice'
 import OpenModalButton from '../OpenModalButton';
 import Profile from '../Profile';
 import Table from "../Table";
@@ -73,6 +73,7 @@ function Locations() {
 
 
   const searchZipCodes = async () => {
+    await dispatch(clearLocationsSearchGeo())
     await dispatch(postLocations(selected))
   }
 
@@ -84,7 +85,7 @@ function Locations() {
 
     if(chooseCity && city) params.city = city
     if(chooseStates || selected.length > 0) params.states = selected
-    // if(chooseGeoBoundingBox && topLat && leftLat && bottomLat && rightLat){
+    // if(topLat && leftLat && bottomLat && rightLat){
     //   bodyParams.geoBoundingBox = {
     //     top: {lat: topLat, lon: topLon},
     //     left: {lat: leftLat, lon: leftLon},
@@ -112,6 +113,7 @@ function Locations() {
 
     console.log(params, 'params')
     setData(params)
+    await dispatch(clearLocations())
     await dispatch(postSearchLocations(params))
  }
 

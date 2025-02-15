@@ -55,7 +55,14 @@ const locationsSlice = createSlice({
          addGeoBoundingData(state,action){
             // console.log(action.payload, 'action payload in location slice line 54')
             state.geoBounding = action.payload
-         }
+         },
+         clearLocations(state) {
+            state.locations = []
+         },
+         clearLocationsSearchGeo(state) {
+            state.locationsSearch = {}
+            state.geoBounding = {}
+         },
     },
     extraReducers(builder) {
         builder
@@ -82,6 +89,6 @@ export const allLocations = (state) => state.locations.locations;
 export const searchLocations = (state) => state.locations.locationsSearch;
 export const geoBoundingData = (state) => state.locations.geoBounding;
 
-export const { addGeoBoundingData  } = locationsSlice.actions;
+export const { addGeoBoundingData, clearLocations, clearLocationsSearchGeo  } = locationsSlice.actions;
 
 export default locationsSlice.reducer;
