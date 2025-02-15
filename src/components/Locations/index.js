@@ -52,11 +52,8 @@ function Locations() {
     // const [bottomLeftLat, setBottomLeftLat] = useState("");
     // const [bottomLeftLon, setBottomLeftLon] =useState("");
 
-    // const [bottomRightLat, setBottomRightLat] = useState("");
-    // const [bottomRightLon, setBottomRightLon] = useState("");
-
-    // const [topLeftLat, setTopLeftLat] = useState("");
-    // const [topLeftLon, setTopLeftLon] = useState("");
+    const [choice1, setChoice1] = useState(Object.keys(bodyParams?.geoBoundingBox || {}));
+    // const [choice2, setChoice2] = useState(bodyParams?.GeoBoundingBox.top_left);
 
     // const [topRightLat, setTopRightLat] = useState("");
     // const [topRightLon, setTopRightLon] = useState("");
@@ -71,7 +68,7 @@ function Locations() {
 
     let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
 
-
+    
   const searchZipCodes = async () => {
     await dispatch(clearLocationsSearchGeo())
     await dispatch(postLocations(selected))
@@ -101,13 +98,14 @@ function Locations() {
     //     }
     // }
 
-    // if(chooseGeoBoundingBox && bottomRightLat && topLeftLat){
-    //   bodyParams.geoBoundingBox = {
-    //     bottom_right: {lat: bottomRightLat, lon: bottomRightLon},
-    //     top_left: {lat: topRightLat, lon: topRightLon},
-    //   }
+    if(chooseGeoBoundingBox){
+      params.geoBoundingBox = {
+        bottom_right: {lat: bodyParams.geoBoundingBox.bottom_right.lat, lon: bodyParams.geoBoundingBox.bottom_right.lon},
+        top_left: {lat: bodyParams.geoBoundingBox.top_left.lat, lon: bodyParams.geoBoundingBox.top_left.lon},
+      }
 
-    // }
+
+    }
     params.size = size ? size : '5';
     params.from = from ? from : '0';
 
@@ -117,6 +115,7 @@ function Locations() {
     await dispatch(postSearchLocations(params))
  }
 
+  console.log(choice1, 'choice1')
 
   let addState = (selectedLocation) => {
     console.log(selectedLocation.toUpperCase(), 'selectedLocation')
@@ -138,7 +137,7 @@ function Locations() {
 
 
   let removeLocation = (places) => {
-    let newArray = selected.filter((place) => place != places);
+    let newArray = selected.filter((place) => place !== places);
     console.log(newArray, 'newArray')
     setSelected(newArray)
   }
@@ -275,12 +274,14 @@ function Locations() {
        </div>
 
       <div className="filter-option">
-      <div><button className='openModalButton'><OpenModalButton
-                    buttonText=<div className='geoBoundingBox'>Geo-Bounding Box</div>
+      <div><button className='openModalButton' onClick={()=>setChooseGeoBoundingBox(true)}><OpenModalButton
+                    buttonText={<div className='geoBoundingBox'>Geo-Bounding Box</div>}
                     modalComponent={<GeoBoundingBox />}
                     /></button></div>
-
-        </div>
+      {choice1.map((choices, index) => (
+          <div key={index} className='geoChoice'>{choices}</div>
+      ))}
+       </div>
         </div>
         )}
           </div>

@@ -25,7 +25,7 @@ function GeoBoundingBox(){
   const [rightLon, setRightLon] = useState("");
 
   const [bottomLeftLat, setBottomLeftLat] = useState("");
-  const [bottomLeftLon, setBottomLeftLon] =useState("");
+  const [bottomLeftLon, setBottomLeftLon] = useState("");
 
   const [bottomRightLat, setBottomRightLat] = useState("");
   const [bottomRightLon, setBottomRightLon] = useState("");
@@ -48,7 +48,7 @@ function GeoBoundingBox(){
 
     // if(chooseCity && city) bodyParams.city = city
     // if(chooseStates && states) bodyParams.states = [states]
-    if(topLat && leftLat && bottomLat && rightLat){
+    if(topLat.length > 0 && leftLat.length > 0 && bottomLat.length > 0 && rightLat.length > 0){
       bodyParams.geoBoundingBox = {
         top: {lat: topLat, lon: topLon},
         left: {lat: leftLat, lon: leftLon},
@@ -57,20 +57,23 @@ function GeoBoundingBox(){
       }
     }
 
-      if(bottomLeftLat && topRightLat){
+      if(bottomLeftLat.length > 0 && topRightLat.length > 0){
         bodyParams.geoBoundingBox = {
           bottom_left: {lat: bottomLeftLat, lon: bottomLeftLon},
           top_right: {lat: topRightLat, lon: topRightLon},
         }
     }
 
-    if(bottomRightLat && topLeftLat){
+    if(bottomRightLat.length > 0 && topLeftLat.length > 0){
       bodyParams.geoBoundingBox = {
         bottom_right: {lat: bottomRightLat, lon: bottomRightLon},
-        top_left: {lat: topRightLat, lon: topRightLon},
+        top_left: {lat: topLeftLat, lon: topLeftLon},
       }
     }
 
+    console.log(`bottom_right: lat: ${bottomRightLat}, lon: ${bottomRightLon}`)
+    console.log(`top_left: lat: ${topLeftLat}, lon: ${topLeftLon}`)
+    console.log((bottomRightLat.length > 0 && topLeftLat.length > 0), 'bottomRightLat && topLeftLat')
 
     dispatch(addGeoBoundingData(bodyParams))
     closeModal();

@@ -129,14 +129,14 @@
       display: flex;
       align-items: center;
       height: 30px;
-      
+
     }
 
     .filter-option {
       display: flex;
       height: 20px;
       /* align-items: center; */
-    
+
   }
 
     .sort-option {
@@ -318,4 +318,9 @@
     position: relative;
     right: 2px;
     margin-top: 1px;
+  }
+
+  .geoChoice {
+    display: flex;
+    margin-left: 10px;
   }
