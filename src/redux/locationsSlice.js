@@ -15,7 +15,7 @@ const initialState = {
 }
 
 export const postLocations = createAsyncThunk('locations/ZIP_CODES', async (searchArray) => {
-    console.log(searchArray, 'in locations in locationSlice')
+    // console.log(searchArray, 'in locations in locationSlice')
 
     const response = await fetch(locationsURL, {
         method: 'POST',
@@ -32,17 +32,17 @@ export const postLocations = createAsyncThunk('locations/ZIP_CODES', async (sear
 })
 
 export const postSearchLocations = createAsyncThunk('locations/ZIP_DETAILS', async (searchArray) => {
-    console.log(searchArray, 'in postSearchLcocations in locationSlice')
+    // console.log(searchArray, 'in postSearchLcocations in locationSlice')
     const response = await fetch(locationsSearchURL, {
         method: 'POST',
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(searchArray),
         credentials: 'include',
     })
-    console.log(response, 'response in postsearchlocation function')
+    // console.log(response, 'response in postsearchlocation function')
     if(response.ok){
         const data = await response.json()
-        console.log(data, 'data in locationSlice line 45')
+        // console.log(data, 'data in locationSlice line 45')
         return data;
     }
 })
@@ -53,7 +53,7 @@ const locationsSlice = createSlice({
     initialState,
     reducers: {
          addGeoBoundingData(state,action){
-            console.log(action.payload, 'action payload in location slice line 54')
+            // console.log(action.payload, 'action payload in location slice line 54')
             state.geoBounding = action.payload
          }
     },
@@ -68,7 +68,7 @@ const locationsSlice = createSlice({
 
             .addCase(postSearchLocations.fulfilled, (state, action)=> {
                 state.locationsSearch = action.payload;
-                console.log(action.payload, 'in postSearchLocations')
+                // console.log(action.payload, 'in postSearchLocations')
                 state.status = 'succeeded';
                 state.error = null;
             })
