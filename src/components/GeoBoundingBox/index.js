@@ -7,87 +7,94 @@ import './GeoBoundingBox.css';
 
 
 
-function GeoBoundingBox(){
-
+function GeoBoundingBox({parameters}){
+  console.log(parameters, 'edit body params line 11');
   const dispatch = useDispatch()
   const {closeModal} = useModal();
 
-  const [topLat, setTopLat] = useState("");
-  const [topLon, setTopLon] = useState("");
+  const [topLat, setTopLat] = useState(() => parameters?.geoBoundingBox?.top?.lat || "");
+  const [topLon, setTopLon] = useState(() => parameters?.geoBoundingBox?.top?.lon ||"");
 
-  const [leftLat, setLeftLat] = useState("");
-  const [leftLon, setLeftLon] = useState("");
+  const [leftLat, setLeftLat] = useState(() => parameters?.geoBoundingBox?.left?.lat ||"");
+  const [leftLon, setLeftLon] = useState(() => parameters?.geoBoundingBox?.left?.lon ||"");
 
-  const [bottomLat, setBottomLat] = useState("");
-  const [bottomLon, setBottomLon] = useState("");
+  const [bottomLat, setBottomLat] = useState(() => parameters?.geoBoundingBox?.bottom?.lat ||"");
+  const [bottomLon, setBottomLon] = useState(() => parameters?.geoBoundingBox?.bottom?.lon ||"");
 
-  const [rightLat, setRightLat] = useState("");
-  const [rightLon, setRightLon] = useState("");
+  const [rightLat, setRightLat] = useState(() => parameters?.geoBoundingBox?.right?.lat ||"");
+  const [rightLon, setRightLon] = useState(() => parameters?.geoBoundingBox?.right?.lon ||"");
 
-  const [bottomLeftLat, setBottomLeftLat] = useState("");
-  const [bottomLeftLon, setBottomLeftLon] = useState("");
+  const [bottomLeftLat, setBottomLeftLat] = useState(() => parameters?.geoBoundingBox?.bottom_left?.lat || "");
+  const [bottomLeftLon, setBottomLeftLon] = useState(() =>parameters?.geoBoundingBox?.bottom_left?.lon || "");
 
-  const [bottomRightLat, setBottomRightLat] = useState("");
-  const [bottomRightLon, setBottomRightLon] = useState("");
+  const [bottomRightLat, setBottomRightLat] = useState(() =>parameters?.geoBoundingBox?.bottom_right?.lat || "");
+  const [bottomRightLon, setBottomRightLon] = useState(() =>parameters?.geoBoundingBox?.bottom_right?.lon || "");
 
-  const [topLeftLat, setTopLeftLat] = useState("");
-  const [topLeftLon, setTopLeftLon] = useState("");
+  const [topLeftLat, setTopLeftLat] = useState(() =>parameters?.geoBoundingBox?.top_left?.lat || "");
+  const [topLeftLon, setTopLeftLon] = useState(()=>parameters?.geoBoundingBox?.top_left?.lon || "");
 
-  const [topRightLat, setTopRightLat] = useState("");
-  const [topRightLon, setTopRightLon] = useState("");
+  const [topRightLat, setTopRightLat] = useState(() =>parameters?.geoBoundingBox?.top_right?.lat || "");
+  const [topRightLon, setTopRightLon] = useState(() =>parameters?.geoBoundingBox?.top_right?.lon || "");
 
-
-  const [searching, setSearching] = useState("")
-  const [menu, setMenu] = useState(false);
-  const [error, setError] = useState("")
-
-
+  const [error, setError] = useState("");
 
   const geoBoundingData = () => {
-    let bodyParams = {}
+    const set1 = [topLat, topLon, leftLat, leftLon, bottomLat, bottomLon, rightLat, rightLon].some(value => value.length > 0)
+    const set2 = [bottomLeftLat, bottomLeftLon, topRightLat, topRightLon].some(value => value.length > 0);
+    const set3 = [bottomRightLat, bottomRightLon, topLeftLat, topLeftLon].some(value => value.length > 0)
 
-    // if(chooseCity && city) bodyParams.city = city
-    // if(chooseStates && states) bodyParams.states = [states]
-    if(topLat.length > 0 && leftLat.length > 0 && bottomLat.length > 0 && rightLat.length > 0){
-      bodyParams.geoBoundingBox = {
-        top: {lat: topLat, lon: topLon},
-        left: {lat: leftLat, lon: leftLon},
-        bottom: {lat: bottomLat, lon: bottomLon},
-        right: {lat: rightLat, lon: rightLon},
-      }
+
+    if((set1 && set2) || (set1 && set3) || (set2 && set3)) {
+      setError("**Only 1 Set of Geo Bounding Values Can be Selected**")
+      return;
     }
 
-      if(bottomLeftLat.length > 0 && topRightLat.length > 0){
+      setError("")
+      let bodyParams = {}
+
+      if(set1 && [topLat, topLon, leftLat, leftLon, bottomLat, bottomLon, rightLat, rightLon].every(value => value.length > 0)){
         bodyParams.geoBoundingBox = {
-          bottom_left: {lat: bottomLeftLat, lon: bottomLeftLon},
-          top_right: {lat: topRightLat, lon: topRightLon},
+          top: {lat: topLat, lon: topLon},
+          left: {lat: leftLat, lon: leftLon},
+          bottom: {lat: bottomLat, lon: bottomLon},
+          right: {lat: rightLat, lon: rightLon},
         }
-    }
 
-    if(bottomRightLat.length > 0 && topLeftLat.length > 0){
-      bodyParams.geoBoundingBox = {
-        bottom_right: {lat: bottomRightLat, lon: bottomRightLon},
-        top_left: {lat: topLeftLat, lon: topLeftLon},
+      } else if(set2 && [bottomLeftLat, bottomLeftLon, topRightLat, topRightLon].every(value => value.length > 0)){
+          bodyParams.geoBoundingBox = {
+            bottom_left: {lat: bottomLeftLat, lon: bottomLeftLon},
+            top_right: {lat: topRightLat, lon: topRightLon},
+          }
+
+      } else if (set3 && [bottomRightLat, bottomRightLon, topLeftLat, topLeftLon].every(value => value.length > 0)){
+        bodyParams.geoBoundingBox = {
+          bottom_right: {lat: bottomRightLat, lon: bottomRightLon},
+          top_left: {lat: topLeftLat, lon: topLeftLon},
+        }
+
+      } else {
+         setError("**All Fields in a Set Should be Filled**");
+         return;
       }
-    }
-
-    console.log(`bottom_right: lat: ${bottomRightLat}, lon: ${bottomRightLon}`)
-    console.log(`top_left: lat: ${topLeftLat}, lon: ${topLeftLon}`)
-    console.log((bottomRightLat.length > 0 && topLeftLat.length > 0), 'bottomRightLat && topLeftLat')
 
     dispatch(addGeoBoundingData(bodyParams))
     closeModal();
 
-  }
+    }
+
+
+
 
 return (
 <>
          <div className='container'>
-        <div className='row1'>Geo-Bounding Box </div>
+        <div className='row1'>Geo-Bounding Box <div className='geoError'>{error}</div></div>
+
 
          <div className='row2'>
 
         <div className='row2col1'>
+
          <div className='labels'>Top:</div>
           <div className='lat'>LAT<input
             className="geo-location-input"
@@ -189,6 +196,7 @@ return (
 
 
             <div className='row3col3'>
+
             <div className='labels'>Bottom_Right:</div>
            <div className='lat'>LAT<input
             className="geo-location-input"

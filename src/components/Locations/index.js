@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {useSelector, useDispatch} from 'react-redux';
 import {selectUser} from '../../redux/usersSlice';
-import {postLocations, geoBoundingData, postSearchLocations, clearLocations, clearLocationsSearchGeo} from '../../redux/locationsSlice'
+import {postLocations, geoBoundingData, postSearchLocations, clearLocations, clearLocationsSearch, clearGeoBounding} from '../../redux/locationsSlice'
 import OpenModalButton from '../OpenModalButton';
 import Profile from '../Profile';
 import Table from "../Table";
@@ -20,12 +20,12 @@ function Locations() {
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
     const bodyParams = useSelector(geoBoundingData);
-    console.log(bodyParams, 'bodyParams in line 23')
+    // console.log(Object.keys(bodyParams.geoBoundingBox), 'obj keys bodyParams in line 23')
     // const locations = useSelector(allLocations);
     // const findLocations = useSelector(searchLocations);
 
-    // console.log(locations, 'from the useSelector')
-
+    console.log(bodyParams.geoBoundingBox, 'bodyParams line 27')
+    let geoChoices = bodyParams.geoBoundingBox ? Object.keys(bodyParams.geoBoundingBox) : [];
     const [selected, setSelected] = useState([]);
 
     const[filters, setFilters] = useState(false);
@@ -37,7 +37,7 @@ function Locations() {
     const [states, setStates] = useState([]);
 
     const [chooseGeoBoundingBox, setChooseGeoBoundingBox] = useState(false);
-    const [geoChoices, setGeoChoices] = useState(Object.keys(bodyParams?.geoBoundingBox || {}));
+    // const [geoChoices, setGeoChoices] = useState(Object.keys(bodyParams?.geoBoundingBox || {}));
 
 
     const [size, setSize] = useState("")
@@ -49,10 +49,11 @@ function Locations() {
 
 
     let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
-
+    console.log(geoChoices, 'geoChoices')
 
   const searchZipCodes = async () => {
-    await dispatch(clearLocationsSearchGeo())
+    await dispatch(clearGeoBounding())
+    await dispatch(clearLocationsSearch())
     await dispatch(postLocations(selected))
   }
 
@@ -97,7 +98,7 @@ function Locations() {
     await dispatch(postSearchLocations(params))
  }
 
-  console.log(choice1, 'choice1')
+  // console.log(choice1, 'choice1')
 
   let addState = (selectedLocation) => {
     console.log(selectedLocation.toUpperCase(), 'selectedLocation')
@@ -148,8 +149,11 @@ function Locations() {
 
 
   }
-  // let results = locations.filter((word)=>word.includes(capitalLetterWord))
-  // console.log(searchResult, 'results obj')
+
+  const deleteGeoChoices = async ()=>{
+    setChooseGeoBoundingBox(false)
+    await dispatch(clearGeoBounding())
+  }
 
 
   const errorClassName = 'locationError' + (error ? "": "hidden")
@@ -173,13 +177,13 @@ function Locations() {
          onFocus={() => setMenu(true)}
          onChange={(e) => {setSearching(e.target.value);setError("")}}
          /> </div>
-        <div className='searchDiv'><button className='addButton' disabled={filters} onClick={()=>{addLocation(searching);setSearching("")}}><img src={plusImg} className="searchPic"/></button></div>
+        <div className='searchDiv'><button className='addButton' disabled={filters} onClick={()=>{addLocation(searching);setSearching("")}}><img src={plusImg} className="searchPic" alt='plusimg'/></button></div>
         </div>
 
 
 
         <div className='gridArea1-2-Location'>
-          <button className='filterButton' onClick={()=>{setFilters(!filters);setError("");setSelected([])}}><img src={filterImg} className="filterPic"/>Filters</button>
+          <button className='filterButton' onClick={()=>{setFilters(!filters);setError("");setSelected([])}}><img src={filterImg} className="filterPic" alt='filterimg'/>Filters</button>
 
         <div className='size'>Locations per page:
           <input
@@ -196,7 +200,7 @@ function Locations() {
              <div className='locationChoices'>States selected:
              {selected.map((places, index) =>(
                <div key={index} className='chosenLocations'>{places}
-               <button className='removeButton' onClick={()=>removeLocation(places)}><img src={deleteImg} className="deletePic"/></button>
+               <button className='removeButton' onClick={()=>removeLocation(places)}><img src={deleteImg} className="deletePic" alt='deleteimg'/></button>
                </div>
              ))}
              </div>
@@ -205,7 +209,7 @@ function Locations() {
           <div className='locationChoices'>Zip Codes selected:
           {selected.map((places, index) =>(
             <div key={index} className='chosenLocations'>{places}
-            <button className='removeButton' onClick={()=>removeLocation(places)}><img src={deleteImg} className="deletePic"/></button>
+            <button className='removeButton' onClick={()=>removeLocation(places)}><img src={deleteImg} className="deletePic" alt='plusimg'/></button>
             </div>
           ))}
           </div>
@@ -249,8 +253,8 @@ function Locations() {
             // placeholder="Enter a maximum age"
             onFocus={() => setMenu(true)}
             onChange={(e) => setStates(e.target.value)}/>
-            <span className='searchSpan'><button className='addStateButton' disabled={chooseCity} onClick={()=>{addState(states);setStates("")}}><img src={plusImg} className="searchStatePic"/></button></span>
-            {/* <span className='stateInstruction'>Use abbreviated States</span> */}
+            <span className='searchSpan'><button className='addStateButton' disabled={chooseCity} onClick={()=>{addState(states);setStates("")}}><img src={plusImg} className="searchStatePic" alt='plusimg'/></button></span>
+
             </>
           )}
        </div>
@@ -260,19 +264,32 @@ function Locations() {
                     buttonText={<div className='geoBoundingBox'>Geo-Bounding Box</div>}
                     modalComponent={<GeoBoundingBox />}
                     /></button></div>
-      {geoChoices.map((choice, index) => (
-          <div key={index} className='geoChoice'>{choice}</div>
+      {geoChoices.length>0 ?  (
+        <>
+      {geoChoices?.map((choice, index) => (
+          <div key={index} className='geoChoice' id={'s'+ index}>{choice}</div>
       ))}
+      <div className='editGeoDiv'><button className='editGeoChoiceButton'>
+                    <OpenModalButton
+                    buttonText={<div className='geoBoundingBox'>edit</div>}
+                    modalComponent={<GeoBoundingBox parameters={bodyParams}/>} /></button></div>
+      <div className='deleteGeoDiv'><button className='deleteGeoChoiceButton'onClick={deleteGeoChoices}>delete</button></div>
+      </>
+         ) : (
+          null
+         )}
        </div>
+
+
         </div>
         )}
           </div>
         </div>
 
           {filters ? (
-            <div className='search2'><button className='search2Button' onClick={()=>{searchForLocations();setMenu(false)}}>SEARCH<img src={searchImg} className="searchPic"/></button></div>
+            <div className='search2'><button className='search2Button' onClick={()=>{searchForLocations();setMenu(false)}}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg'/></button></div>
           ):(
-            <div className='search2'><button className='search2Button' onClick={()=>{searchZipCodes();setMenu(false)}}>SEARCH<img src={searchImg} className="searchPic"/></button></div>
+            <div className='search2'><button className='search2Button' onClick={()=>{searchZipCodes();setMenu(false)}}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg'/></button></div>
           ) }
 
          <div className='table'><LocationsResult data={data}/></div>

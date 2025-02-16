@@ -135,6 +135,7 @@
     .filter-option {
       display: flex;
       height: 20px;
+      width: auto;
       /* align-items: center; */
 
   }
@@ -323,4 +324,36 @@
   .geoChoice {
     display: flex;
     margin-left: 10px;
+    /* width: 200px; */
+    height: 25px;
+    justify-content:center;
+    align-items: center;
+    border-radius: 10px;
+  }
+
+  #s0, #s2  {
+    background-color: green;
+    color:white;
+    font-style:oblique;
+    font-weight: bold;
+    padding-right: 3px;
+    padding-left: 3px;
+  }
+
+  #s1, #s3 {
+    background-color: orange;
+    color:white;
+    font-style:oblique;
+    font-weight: bold;
+    padding-right: 3px;
+    padding-left: 3px;
+  }
+
+  .editGeoDiv, .deleteGeoDiv{
+    margin-left: 10px;
+
+  }
+
+  .editGeoChoiceButton, .deleteGeoChoiceButton{
+    height: 25px;
   }

@@ -2,7 +2,7 @@
     display: grid;
     grid-template-rows: repeat(4, 1fr);
     width: 700px;
-    height: 300px;
+    height: 400px;
     border-radius: 20px;
     padding: 25px;
 
@@ -13,7 +13,7 @@
 
 .row1 {
     grid-row: 1;
-    /* margin: 5px; */
+
     text-align: center;
     font-size: 20px;
     font-weight: bold;
@@ -161,4 +161,11 @@ input.geo-location-input::-webkit-inner-spin-button {
 
 .doneButton:hover {
     background-color: rgb(3, 3, 119);
+}
+
+.geoError {
+    color: red;
+    background-color: rgb(252, 223, 228);
+    font-size: 15px;
+    margin: 20px;
 }
