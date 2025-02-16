@@ -349,7 +349,7 @@
     padding-left: 3px;
   }
 
-  .editGeoDiv, .deleteGeoDiv{
+  .editGeoDiv{
     margin-left: 10px;
 
   }
@@ -358,7 +358,13 @@
     height: 25px;
   }
 
-  .editPic {
-    height: 15px;
-    width: 15px;
+  .editPic, .deleteGeoPic {
+    height: 20px;
+    width: 20px;
+  }
+
+  .editGeoChoiceButton, .deleteGeoChoiceButton {
+    background-color: white;
+    border:none;
+    cursor:pointer;
   }

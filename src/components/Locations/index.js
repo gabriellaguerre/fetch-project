@@ -158,7 +158,7 @@ function Locations() {
 
 
   const errorClassName = 'locationError' + (error ? "": "hidden")
-
+  console.log(chooseGeoBoundingBox, 'chooseGeoBoundingBox')
 
    return (
     <>
@@ -261,7 +261,7 @@ function Locations() {
        </div>
 
       <div className="filter-option">
-      <div><button className='openModalButton' onClick={()=>setChooseGeoBoundingBox(true)}><OpenModalButton
+      <div><button className='openModalButton' onClick={()=>setChooseGeoBoundingBox(true)} disabled={chooseGeoBoundingBox}><OpenModalButton
                     buttonText={<div className='geoBoundingBox'>Geo-Bounding Box</div>}
                     modalComponent={<GeoBoundingBox />}
                     /></button></div>
@@ -273,9 +273,9 @@ function Locations() {
       <div className='editGeoDiv'><button className='editGeoChoiceButton'>
                     <OpenModalButton
                     buttonText={<div className='geoBoundingBox'><img src={editImg} className="editPic" alt='editimg'/></div>}
-                    modalComponent={<GeoBoundingBox parameters={bodyParams}/>} /></button></div>
-      <div className='deleteGeoDiv'><button className='deleteGeoChoiceButton'onClick={deleteGeoChoices}>
-        <img src={deleteImg} className="deletePic" alt='plusimg'/></button></div>
+                    modalComponent={<GeoBoundingBox parameters={bodyParams} chooseGeoBoundingBox={chooseGeoBoundingBox}/>} /></button></div>
+      <div className='deleteGeoDiv'><button className='deleteGeoChoiceButton'onClick={()=>{deleteGeoChoices();setChooseGeoBoundingBox(false)}} >
+        <img src={deleteImg} className="deleteGeoPic" alt='plusimg'/></button></div>
       </>
          ) : (
           null
