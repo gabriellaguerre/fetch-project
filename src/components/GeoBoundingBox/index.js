@@ -8,7 +8,7 @@ import './GeoBoundingBox.css';
 
 
 function GeoBoundingBox({parameters}){
-  console.log(parameters, 'edit body params line 11');
+  // console.log(parameters, 'edit body params line 11');
   const dispatch = useDispatch()
   const {closeModal} = useModal();
 

@@ -10,6 +10,7 @@ import searchImg from '../../Assets/search.png';
 import plusImg from '../../Assets/orange-plus.png'
 import filterImg from '../../Assets/filter-pic.png'
 import deleteImg from '../../Assets/x.png';
+import editImg from '../../Assets/edit.png'
 import LocationsResult from "../LocationsResult";
 import GeoBoundingBox from "../GeoBoundingBox";
 
@@ -271,9 +272,10 @@ function Locations() {
       ))}
       <div className='editGeoDiv'><button className='editGeoChoiceButton'>
                     <OpenModalButton
-                    buttonText={<div className='geoBoundingBox'>edit</div>}
+                    buttonText={<div className='geoBoundingBox'><img src={editImg} className="editPic" alt='editimg'/></div>}
                     modalComponent={<GeoBoundingBox parameters={bodyParams}/>} /></button></div>
-      <div className='deleteGeoDiv'><button className='deleteGeoChoiceButton'onClick={deleteGeoChoices}>delete</button></div>
+      <div className='deleteGeoDiv'><button className='deleteGeoChoiceButton'onClick={deleteGeoChoices}>
+        <img src={deleteImg} className="deletePic" alt='plusimg'/></button></div>
       </>
          ) : (
           null
