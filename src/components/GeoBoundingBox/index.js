@@ -7,8 +7,8 @@ import './GeoBoundingBox.css';
 
 
 
-function GeoBoundingBox({parameters, chooseThisGeoBoundingBox}){
-  console.log(chooseThisGeoBoundingBox, 'edit body params line 11');
+function GeoBoundingBox({parameters}){
+  
   const dispatch = useDispatch()
   const {closeModal} = useModal();
 
@@ -232,7 +232,7 @@ return (
 
             </div>
 
-            <div className='row4'><button className='closeModalButton'onClick={()=>{closeModal()}} >Close</button>
+            <div className='row4'><button className='closeModalButton'onClick={()=>{closeModal()}} >Cancel</button>
             <button className='doneButton'onClick={geoBoundingData}>Done</button>
             </div>
 

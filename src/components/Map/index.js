@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import { useModal } from '../Context/Modal'
 import {googleMapsApiKey} from '../../redux/locationsSlice';
 import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
@@ -8,7 +8,7 @@ import './Map.css';
 const libraries = ["places"]
 
 function Map({location}){
-
+  console.log("inside Map function line 11")
   const {closeModal} = useModal();
 
 
@@ -20,6 +20,7 @@ function Map({location}){
 
   const mapRef = useRef(null);
   const markerRef = useRef(null);
+  const [mapReady, setMapReady] = useState(false);
 
   // Load Google Maps API
   const { isLoaded } = useJsApiLoader({
@@ -27,12 +28,25 @@ function Map({location}){
     libraries
   });
 
+  const handleMapLoad = (map) => {
+    // console.log("Google Map Loaded", map);
+    mapRef.current = map;
+    setMapReady(true); // Ensure marker rendering waits for this
+  };
+
+  // console.log(isLoaded, mapReady, 'line 30')
+  // google.maps.marker.AdvancedMarkerElement
+  // window.google.maps
+  // window.google.maps.Marker
+
   useEffect(() => {
-    if (isLoaded && mapRef.current && location) {
-      console.log("Google Maps API is loaded:", isLoaded);
-      console.log("Location received:", location);
+    if (isLoaded && mapReady && location) {
+
+      // console.log("Google Maps API is loaded:", isLoaded);
+      // console.log("Location received:", location);
+
       if (window.google && window.google.maps ) {
-        console.log("Creating marker at:", location.latitude, location.longitude);
+        // console.log("Creating marker at:", location.latitude, location.longitude);
 
         markerRef.current = new window.google.maps.Marker({
           position: { lat: location.latitude, lng: location.longitude },
@@ -46,13 +60,13 @@ function Map({location}){
         console.error("Google Maps API not loaded properly.");
       }
     }
-  }, [isLoaded, location]);
+  }, [isLoaded, mapReady, location]);
 
 
 
   return isLoaded ? (
          <div className='mapModalContainer'>
-        <div className='mapGoogle'><GoogleMap mapContainerStyle={mapContainerStyle} center={{lat: location?.latitude, lng: location?.longitude}} zoom={10} onLoad={(map) => (mapRef.current = map)} /></div>
+        <div className='mapGoogle'><GoogleMap mapContainerStyle={mapContainerStyle} center={{lat: location?.latitude, lng: location?.longitude}} zoom={10} onLoad={handleMapLoad} /></div>
 
         <div className='cityCounty'>
         <div>City: {location?.city}</div>

@@ -6,7 +6,7 @@ import { logout } from "../../redux/usersSlice";
 import OpenModalButton from '../OpenModalButton';
 import Profile from '../Profile';
 import Breeds from '../Breeds';
-import Table from "../Table";
+import BreedsResult from "../BreedsResult";
 import {breeds, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, dogMatch } from '../../redux/dogsSlice';
 import './Main.css';
 import breedImg from '../../Assets/breed_pic-main.png'

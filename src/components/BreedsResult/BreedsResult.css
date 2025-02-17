@@ -7,16 +7,22 @@
 }
 
 .dogSet{
+  width: 180px;
+  height: 250px;
+  border-radius: 5px;
   margin: 10px;
+  cursor:pointer;
 }
 
-table, th, td{
-  border: 1px solid;
+.dogSet:hover {
+  background-color: white;
 }
+
 
 .dogImage {
-  /* height: 100px;
-  width: 150px; */
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
   border-radius: 5px;
 }
 

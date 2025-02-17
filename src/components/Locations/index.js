@@ -4,7 +4,7 @@ import {selectUser} from '../../redux/usersSlice';
 import {postLocations, geoBoundingData, postSearchLocations, clearZCLocations, clearLocationsSearch, clearGeoBounding} from '../../redux/locationsSlice'
 import OpenModalButton from '../OpenModalButton';
 import Profile from '../Profile';
-import Table from "../Table";
+import BreedsResult from "../BreedsResult";
 import './Locations.css';
 import searchImg from '../../Assets/search.png';
 import plusImg from '../../Assets/orange-plus.png'
@@ -53,7 +53,7 @@ function Locations() {
     // console.log(geoChoices, 'geoChoices')
 
   const searchZipCodes = async () => {
-    
+
     await dispatch(clearGeoBounding())
     await dispatch(clearLocationsSearch())
     await dispatch(postLocations(selected))
@@ -236,7 +236,7 @@ function Locations() {
             // placeholder="Enter a maximum age"
             onFocus={() => setMenu(true)}
             onChange={(e) => setStates(e.target.value)}/>
-            <span className='searchSpan'><button className='addStateButton' disabled={chooseCity} onClick={()=>{addState(states);setStates("")}}><img src={plusImg} className="searchStatePic" alt='plusimg'/></button></span>
+            <span className='searchSpan'><button className='addStateButton' onClick={()=>{addState(states);setStates("")}}><img src={plusImg} className="searchStatePic" alt='plusimg'/></button></span>
 
             </>
           )}
@@ -255,7 +255,7 @@ function Locations() {
       <div className='editGeoDiv'><button className='editGeoChoiceButton'>
                     <OpenModalButton
                     buttonText={<div className='geoBoundingBox'><img src={editImg} className="editPic" alt='editimg'/></div>}
-                    modalComponent={<GeoBoundingBox parameters={bodyParams} chooseGeoBoundingBox={chooseGeoBoundingBox}/>} /></button></div>
+                    modalComponent={<GeoBoundingBox parameters={bodyParams} />} /></button></div>
       <div className='deleteGeoDiv'><button className='deleteGeoChoiceButton'onClick={()=>{deleteGeoChoices()}} >
         <img src={deleteImg} className="deleteGeoPic" alt='plusimg'/></button></div>
       </>

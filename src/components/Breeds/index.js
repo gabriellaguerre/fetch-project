@@ -4,13 +4,13 @@ import {selectUser} from '../../redux/usersSlice';
 import {useNavigate} from 'react-router';
 import { logout } from "../../redux/usersSlice";
 import Profile from '../Profile';
-import Table from "../Table";
+import BreedsResult from "../BreedsResult";
 import {breeds, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, dogMatch } from '../../redux/dogsSlice';
 import './Breeds.css';
 import searchImg from '../../Assets/search.png';
 import plusImg from '../../Assets/orange-plus.png'
 import filterImg from '../../Assets/filter-pic.png'
-import deleteImg from '../../Assets/trash-can.png';
+import deleteImg from '../../Assets/x.png';
 import sortImg from '../../Assets/sort-by.png';
 
 
@@ -25,8 +25,8 @@ function Breeds() {
 
 
 
-    let searchArray = searchResult.resultIds;
-    console.log(searchArray, 'searchArray')
+    // let searchArray = searchResult.resultIds;
+    // console.log(searchArray, 'searchArray line 29')
 
 
     const [selected, setSelected] = useState([]);
@@ -66,11 +66,6 @@ function Breeds() {
 
     let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
 
-
-
-//   useEffect(() => {
-//     dispatch(breeds());
-//   }, [dispatch]);
 
   const search = async () => {
     const urlFrontend = new URL(dogSearchUrl);
@@ -124,38 +119,12 @@ function Breeds() {
       urlFrontend.searchParams.append('sort', searchParams.sort)
      }
 
+    let searchDogResults = await dispatch(searchDog(urlFrontend));
+    let searchArray = searchDogResults.payload.resultIds
+    console.log(searchArray, 'searchArray line 124')
+    let dogs = await dispatch(postSearchDog(searchArray))
+    console.log(dogs, 'dogs')
 
-
-
-
-    console.log(searchParams, 'searchParams')
-    console.log(urlFrontend, 'urlFrontend')
-    await dispatch(searchDog(urlFrontend));
-
-    console.log(searchArray, 'inside search for searchArray')
-
-    if(searchArray.length > 0) {
-        let dogs = await dispatch(postSearchDog(searchArray))
-        console.log(dogs, 'dogs')
-    }
-
-
-
-
-//     // setBreedName(searching)
-//     // console.log(breed, breedName, breed && breedName.length>0, 'breedName in search')
-//     // let selectedParams = [];
-
-//     // if(breed && breedName.length>0) selectedParams = [...selectedParams,breedName];
-//     // // if(minimumAge && minAge) selectedParams = [...selectedParams,minAge];
-//     // // if(maximumAge && maxAge) selectedParams = [...selectedParams,maxAge];
-//     // // if(location && zipCode) selectedParams = [...selectedParams,zipCode];
-
-//     // if(selectedParams.length>0){
-//     //   // console.log(selectedParams,'selectedparams')
-//     //   setSelected(selectedParams);
-//     //   dispatch(searchDog(selectedParams));
-//     // }
   }
 
 
@@ -163,28 +132,20 @@ function Breeds() {
       // console.log(searchResult, 'results obj')
 
       let addBreed = (selectedBreed) => {
-        console.log(selectedBreed, 'selectedBreed')
-
         if(!selected.includes(selectedBreed)) {
 
           setSelected(prevSelected => {const updatedSelection = [...prevSelected,selectedBreed];
             return updatedSelection;
           })
-          console.log(selected, 'after adding breed')
 
         }
-
-
       }
-      console.log(selected, 'after adding breed')
+
 
       let removeBreed = (breed) => {
         let newArray = selected.filter((dog) => dog != breed);
-        console.log(newArray, 'newArray')
         setSelected(newArray)
       }
-
-      console.log(sort, 'sort')
 
    return (
     <>
@@ -346,7 +307,7 @@ function Breeds() {
           ))}
         </div>
         <div className='search2'><button className='search2Button' onClick={()=>{search(searching);setMenu(false)}}>SEARCH<img src={searchImg} className="searchPic"/></button></div>
-         <div className='table'><Table /></div>
+         <div className='table'><BreedsResult /></div>
       </>
   );
 }

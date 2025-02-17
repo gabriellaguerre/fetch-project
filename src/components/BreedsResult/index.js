@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {breeds, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, nextList, dogMatch } from '../../redux/dogsSlice';
-import './Table.css'
-import MatchModal from '../Match';
+import './BreedsResult.css'
 
-function Table() {
+
+function BreedsResult() {
   const dispatch = useDispatch();
 
   const details = useSelector(getDogDetails);
@@ -21,17 +21,18 @@ function Table() {
 
   console.log(total, 'total')
   console.log(details, 'details')
-  console.log(searchResult, 'searchResult')
+  console.log(searchResult, 'searchResult line 24')
+  console.log(nextUrl.length>0, 'next line 25')
 
     const handleNext = async () => {
-        console.log(nextUrl, 'next')
+        console.log(nextUrl, 'next line 27')
         await dispatch(nextList(nextUrl));
         let dogs2 = await dispatch(postSearchDog(list))
         console.log(dogs2, 'dogs')
     }
 
     const handlePrevious = async () => {
-      console.log(previousUrl, 'next')
+      console.log(previousUrl, 'prev line 34')
       await dispatch(nextList(previousUrl));
       let dogs2 = await dispatch(postSearchDog(list))
       console.log(dogs2, 'dogs')
@@ -67,8 +68,8 @@ function Table() {
     <div className='topRow'>
     <div>Total Finds: {total}</div>
     <div className='nexPrevButtons'>
-    <div><button onClick={handlePrevious}>&lt; Previous</button></div>
-    <div><button onClick={handleNext}>Next &gt;</button></div>
+    <div><button onClick={handlePrevious} disabled={!previousUrl}>&lt; Previous</button></div>
+    <div><button onClick={handleNext} disabled={!nextUrl}>Next &gt;</button></div>
     </div>
     <div><button onClick={()=>match(likeID)}>Match</button></div>
     </div>
@@ -77,7 +78,6 @@ function Table() {
           {details?.map(dog =>
             <button key={dog.id} className='dogSet' onClick={()=>likeDogs(dog.id)}>
                 <div><img src={dog.img} className='dogImage'/> </div>
-                <div>ID: {dog.id}</div>
                 <div>Name: {dog.name}</div>
                 <div>Age: {dog.age}</div>
                 <div>Breed: {dog.breed}</div>
@@ -88,4 +88,4 @@ function Table() {
   )
 }
 
-export default Table;
+export default BreedsResult;
