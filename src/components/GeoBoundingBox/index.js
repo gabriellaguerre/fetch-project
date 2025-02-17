@@ -12,7 +12,7 @@ function GeoBoundingBox({parameters, chooseThisGeoBoundingBox}){
   const dispatch = useDispatch()
   const {closeModal} = useModal();
 
-  const [chooseGeoBoundingBox, setChooseGeoBoundingBox] = useState(chooseGeoBoundingBox)
+
   const [topLat, setTopLat] = useState(() => parameters?.geoBoundingBox?.top?.lat || "");
   const [topLon, setTopLon] = useState(() => parameters?.geoBoundingBox?.top?.lon ||"");
 
@@ -232,7 +232,7 @@ return (
 
             </div>
 
-            <div className='row4'><button className='closeModalButton'onClick={()=>{chooseGeoBoundingBox(false);closeModal()}} >Close</button>
+            <div className='row4'><button className='closeModalButton'onClick={()=>{closeModal()}} >Close</button>
             <button className='doneButton'onClick={geoBoundingData}>Done</button>
             </div>
 

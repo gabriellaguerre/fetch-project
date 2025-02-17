@@ -32,17 +32,17 @@ export const postLocations = createAsyncThunk('locations/ZIP_CODES', async (sear
 })
 
 export const postSearchLocations = createAsyncThunk('locations/ZIP_DETAILS', async (searchArray) => {
-    // console.log(searchArray, 'in postSearchLcocations in locationSlice')
+    console.log(searchArray, 'in postSearchLcocations in locationSlice')
     const response = await fetch(locationsSearchURL, {
         method: 'POST',
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(searchArray),
         credentials: 'include',
     })
-    // console.log(response, 'response in postsearchlocation function')
+    console.log(response, 'response in postsearchlocation function')
     if(response.ok){
         const data = await response.json()
-        // console.log(data, 'data in locationSlice line 45')
+        console.log(data, 'data in locationSlice line 45')
         return data;
     }
 })
@@ -55,7 +55,7 @@ const locationsSlice = createSlice({
          addGeoBoundingData(state,action){
             state.geoBounding = action.payload
          },
-         clearLocations(state) {
+         clearZCLocations(state) {
             state.locations = []
          },
          clearLocationsSearch(state) {
@@ -90,6 +90,6 @@ export const allLocations = (state) => state.locations.locations;
 export const searchLocations = (state) => state.locations.locationsSearch;
 export const geoBoundingData = (state) => state.locations.geoBounding;
 
-export const { addGeoBoundingData, clearLocations, clearLocationsSearch, clearGeoBounding } = locationsSlice.actions;
+export const { addGeoBoundingData, clearZCLocations, clearLocationsSearch, clearGeoBounding } = locationsSlice.actions;
 
 export default locationsSlice.reducer;

@@ -5,12 +5,12 @@ import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 import './Map.css';
 
 
-const libraries = ["marker"]
+const libraries = ["places"]
 
 function Map({location}){
-  
+
   const {closeModal} = useModal();
-  
+
 
   const mapContainerStyle = {
     width: "300px",
@@ -29,15 +29,18 @@ function Map({location}){
 
   useEffect(() => {
     if (isLoaded && mapRef.current && location) {
-      // Ensure google is available
-      if (window.google && window.google.maps && window.google.maps.marker) {
-        const { AdvancedMarkerElement } = window.google.maps.marker;
-        
-        // Create AdvancedMarkerElement
-        markerRef.current = new AdvancedMarkerElement({
+      console.log("Google Maps API is loaded:", isLoaded);
+      console.log("Location received:", location);
+      if (window.google && window.google.maps ) {
+        console.log("Creating marker at:", location.latitude, location.longitude);
+
+        markerRef.current = new window.google.maps.Marker({
           position: { lat: location.latitude, lng: location.longitude },
           map: mapRef.current,
           title: "Location Marker",
+          icon: {
+            url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png", // Explicit red marker
+          },
         });
       } else {
         console.error("Google Maps API not loaded properly.");
@@ -45,17 +48,17 @@ function Map({location}){
     }
   }, [isLoaded, location]);
 
- 
+
 
   return isLoaded ? (
-         <div className='mapModalContainer'> 
+         <div className='mapModalContainer'>
         <div className='mapGoogle'><GoogleMap mapContainerStyle={mapContainerStyle} center={{lat: location?.latitude, lng: location?.longitude}} zoom={10} onLoad={(map) => (mapRef.current = map)} /></div>
-      
+
         <div className='cityCounty'>
         <div>City: {location?.city}</div>
         <div>County: {location?.county}</div>
         </div>
-      
+
         <div className='stateZip'>
         <div>State: {location?.state}</div>
         <div>Zip Code: {location?.zip_code}</div>
@@ -68,4 +71,3 @@ function Map({location}){
     );
 }
 export default Map;
-

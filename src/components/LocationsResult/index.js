@@ -20,32 +20,15 @@ function LocationsResult({ data }) {
   const [contentPage, setContentPage] = useState(1)
 
   let newPage;
-  let total = allSearchLocations.total || 0;
+  let total = allSearchLocations?.total ? allSearchLocations.total : 0;
   let pages = Math.ceil(total / Number(data.size)) || 1
   let size = Number(data.size);
 
   let searchLocationArray = allSearchLocations.results
   console.log(searchLocationArray, 'searchLocationArray')
 
-  // useEffect(()=>{
-  //    if(searchLocationArray?.length < size) {
-  //      setPage(page-1)
-  //      console.log(page, 'page in useEffect')
-  //      data.from = page*size
-  //      dispatch(postSearchLocations(data))
-  // }
-  // }, [searchLocationArray, size, data, page])
+   const nextPage = async () => {
 
-
-
-  const nextPage = async () => {
-
-    console.log(page, "page in next function line 43")
-    // if (page === 0) {
-    //   data.from = 1 * size
-    //   await dispatch(postSearchLocations(data))
-    //   setPage(1)
-    // } else {
     if(page === -1) {
       newPage = 1
     } else {
@@ -55,49 +38,30 @@ function LocationsResult({ data }) {
 
       data.from = newPage * size
 
-      console.log(newPage, 'newPage line 50')
-      console.log(data, 'data after page change line 51')
-
       const checkArray = await dispatch(postSearchLocations(data))
-      console.log(checkArray?.payload.results.length < size, 'checkArray in nextPage function')
+
 
       if (checkArray?.payload.results.length < size) {
-        console.log(page, "page line 51")
-        // let prevPage = page - 1
-        // setPage(prevPage)
-        // data.from = prevPage * size
         newPage -= 1
         setPage(newPage)
         data.from = newPage * size
 
       }
       setPage(newPage)
-
-
   }
 
   const prevPage = async () => {
-    console.log(page, 'page in line 69')
-    // data.from = page * size
 
     let newPage = page - 1
-    console.log(newPage, 'newPage line 74')
-    data.from = newPage * size
 
+    data.from = newPage * size
 
     if (page === 0) {
       let newPage = page
-      console.log(newPage, 'newPage line 83')
       setPage(newPage)
-      console.log(newPage, 'page line 85')
       data.from = newPage*size
     }
     setPage(newPage)
-
-    // // let size = Number(data.size)
-    console.log(page, 'page line 89')
-
-    console.log(data, 'data after page change line 81')
     await dispatch(postSearchLocations(data))
   }
 
@@ -106,7 +70,7 @@ function LocationsResult({ data }) {
   return (
     <>
       <div className='topRowLocation'>
-        {allSearchLocations.total ? (
+        {allSearchLocations?.total ? (
           <>
             <div>Total Finds: {allSearchLocations.total}</div>
 
@@ -133,12 +97,11 @@ function LocationsResult({ data }) {
               <div>County: {location?.county}</div>
               <div>State: {location?.state}</div>
               <div>Zip Code: {location?.zip_code}</div>
-
             </div>
           )}
         </div>
-      )
-      }
+      )}
+
       {allSearchLocations.results && (
         <div className='resultDisplayed'>
           {allSearchLocations.results?.map(location =>

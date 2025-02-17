@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {useSelector, useDispatch} from 'react-redux';
 import {selectUser} from '../../redux/usersSlice';
-import {postLocations, geoBoundingData, postSearchLocations, clearLocations, clearLocationsSearch, clearGeoBounding} from '../../redux/locationsSlice'
+import {postLocations, geoBoundingData, postSearchLocations, clearZCLocations, clearLocationsSearch, clearGeoBounding} from '../../redux/locationsSlice'
 import OpenModalButton from '../OpenModalButton';
 import Profile from '../Profile';
 import Table from "../Table";
@@ -25,7 +25,7 @@ function Locations() {
     // const locations = useSelector(allLocations);
     // const findLocations = useSelector(searchLocations);
 
-    console.log(bodyParams.geoBoundingBox, 'bodyParams line 27')
+    console.log(bodyParams, 'bodyParams line 27')
     let geoChoices = bodyParams.geoBoundingBox ? Object.keys(bodyParams.geoBoundingBox) : [];
     const [selected, setSelected] = useState([]);
 
@@ -50,9 +50,10 @@ function Locations() {
 
 
     let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
-    console.log(geoChoices, 'geoChoices')
+    // console.log(geoChoices, 'geoChoices')
 
   const searchZipCodes = async () => {
+    
     await dispatch(clearGeoBounding())
     await dispatch(clearLocationsSearch())
     await dispatch(postLocations(selected))
@@ -60,42 +61,23 @@ function Locations() {
 
   const searchForLocations = async () => {
     console.log('inside searchForLocations function')
+    await dispatch(clearZCLocations())
+
     let params = {}
 
     // console.log((chooseStates), selected, 'selected line 82')
 
     if(chooseCity && city) params.city = city
     if(chooseStates || selected.length > 0) params.states = selected
-    // if(topLat && leftLat && bottomLat && rightLat){
-    //   bodyParams.geoBoundingBox = {
-    //     top: {lat: topLat, lon: topLon},
-    //     left: {lat: leftLat, lon: leftLon},
-    //     bottom: {lat: bottomLat, lon: bottomLon},
-    //     right: {lat: rightLat, lon: rightLon},
-    //   }
-    // }
 
-    //   if(chooseGeoBoundingBox && bottomLeftLat && topRightLat){
-    //     bodyParams.geoBoundingBox = {
-    //       bottom_left: {lat: bottomLeftLat, lon: bottomLeftLon},
-    //       top_right: {lat: topRightLat, lon: topRightLon},
-    //     }
-    // }
+    if(Object.keys(bodyParams).length>0) params.geoBoundingBox = bodyParams.geoBoundingBox
 
-    if(chooseGeoBoundingBox){
-      params.geoBoundingBox = {
-        bottom_right: {lat: bodyParams.geoBoundingBox.bottom_right.lat, lon: bodyParams.geoBoundingBox.bottom_right.lon},
-        top_left: {lat: bodyParams.geoBoundingBox.top_left.lat, lon: bodyParams.geoBoundingBox.top_left.lon},
-      }
-
-
-    }
     params.size = size ? size : '5';
     params.from = from ? from : '0';
 
     console.log(params, 'params')
     setData(params)
-    await dispatch(clearLocations())
+
     await dispatch(postSearchLocations(params))
  }
 
@@ -158,7 +140,7 @@ function Locations() {
 
 
   const errorClassName = 'locationError' + (error ? "": "hidden")
-  console.log(chooseGeoBoundingBox, 'chooseGeoBoundingBox')
+  // console.log(chooseGeoBoundingBox, 'chooseGeoBoundingBox')
 
    return (
     <>
@@ -261,7 +243,7 @@ function Locations() {
        </div>
 
       <div className="filter-option">
-      <div><button className='openModalButton' onClick={()=>setChooseGeoBoundingBox(true)} disabled={chooseGeoBoundingBox}><OpenModalButton
+      <div><button className='openModalButton' onClick={()=>setChooseGeoBoundingBox(true)} disabled={geoChoices.length>0}><OpenModalButton
                     buttonText={<div className='geoBoundingBox'>Geo-Bounding Box</div>}
                     modalComponent={<GeoBoundingBox />}
                     /></button></div>
@@ -274,7 +256,7 @@ function Locations() {
                     <OpenModalButton
                     buttonText={<div className='geoBoundingBox'><img src={editImg} className="editPic" alt='editimg'/></div>}
                     modalComponent={<GeoBoundingBox parameters={bodyParams} chooseGeoBoundingBox={chooseGeoBoundingBox}/>} /></button></div>
-      <div className='deleteGeoDiv'><button className='deleteGeoChoiceButton'onClick={()=>{deleteGeoChoices();setChooseGeoBoundingBox(false)}} >
+      <div className='deleteGeoDiv'><button className='deleteGeoChoiceButton'onClick={()=>{deleteGeoChoices()}} >
         <img src={deleteImg} className="deleteGeoPic" alt='plusimg'/></button></div>
       </>
          ) : (
