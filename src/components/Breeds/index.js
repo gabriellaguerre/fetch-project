@@ -64,6 +64,7 @@ function Breeds() {
 
     const [searching, setSearching] = useState("")
     const [menu, setMenu] = useState(false);
+    const [choose, setChoose] = useState(false);
 
 
     let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
@@ -149,11 +150,30 @@ function Breeds() {
         setSelected(newArray)
       }
 
+      const ascBreed = `breed ${breedAsc ? "asc" : ""}`
+      const descBreed = `breed ${breedDesc ? "desc" : ""}`
+      const ascName = `name ${nameAsc ? "asc" : ""}`
+      const descName = `name ${nameDesc ? "desc" : ""}`
+      const ascAge = `age ${ageAsc ? "asc" : ""}`
+      const descAge = `age ${ageDesc ? "desc" : ""}`
+
+      const clearSort = () => {
+        setBreedAsc(false); setBreedDesc(false);
+        setNameAsc(false); setNameDesc(false);
+        setAgeAsc(false); setAgeDesc(false);
+        setBreed(false);setName(false);setAge(false)
+      }
+
+      const clearFilters = () =>{
+        setMinimumAge(false); setMaximumAge(false);setLocation(false);
+      }
+
+
    return (
     <>
      <Profile user={user}/>
-  
-     <div className='searchAndFilter'>
+
+     <div className='searchAndFilterBreed'>
 
       <div className='gridArea1-1'>
 
@@ -173,7 +193,7 @@ function Breeds() {
 
             </div></div>
 
-        <div className='gridArea1-2'><button className='filterButton' onClick={()=>setFilters(!filters)}><img src={filterImg} className="filterPic" alt='filterimg'/>Filters</button>
+        <div className='gridArea1-2'><button className='filterButton' onClick={()=>{clearFilters();setFilters(!filters)}}><img src={filterImg} className="filterPic" alt='filterimg'/>Filters</button>
 
         <div className='size'>Dogs per page:
           <input
@@ -183,7 +203,7 @@ function Breeds() {
               // placeholder="Enter a maximum age"
               onChange={(e) => setSize(e.target.value)}/></div>
 
-          <div><button className='filterButton' onClick={()=>setSort(!sort)}><img src={sortImg} className="filterPic" alt='sortimg'/>Sort By</button></div>
+          <div><button className='filterButton' onClick={()=>{clearSort();setSort(!sort)}}><img src={sortImg} className="filterPic" alt='sortimg'/>Sort By</button></div>
 
               </div>
 
@@ -265,10 +285,13 @@ function Breeds() {
           value={breed}
           onChange={()=>setBreed(!breed)}
           />Breed: </label>
-
-        <div className='sort-buttons'><button className='ascdesc' onClick={()=>{setBreedAsc(true);setBreedDesc(false)}}>
+        {breed && (
+            <div className='sort-buttons'><button className={ascBreed} onClick={()=>{setBreedAsc(true);setBreedDesc(false)}}>
               <img src={ascImg} className="ascPic" alt='ascimg'/></button>
-             <button className='ascdesc' onClick={()=>{setBreedAsc(false);setBreedDesc(true)}}><img src={descImg} className="descPic" alt='descimg'/></button></div>
+             <button className={descBreed} onClick={()=>{setBreedAsc(false);setBreedDesc(true)}}><img src={descImg} className="descPic" alt='descimg'/></button>
+             </div>
+        )}
+
 
         </div>
 
@@ -279,9 +302,11 @@ function Breeds() {
           value={name}
           onChange={()=>setName(!name)}
           />Name: </label>
-
-         <div><button className='ascdesc' onClick={()=>{setNameAsc(true);setNameDesc(false)}}><img src={ascImg} className="ascPic" alt='ascimg'/></button>
-             <button className='ascdesc' onClick={()=>{setNameAsc(false);setNameDesc(true)}}><img src={descImg} className="descPic" alt='descimg'/></button></div>
+          {name && (
+          <div><button className={ascName} onClick={()=>{setNameAsc(true);setNameDesc(false)}}><img src={ascImg} className="ascPic" alt='ascimg'/></button>
+             <button className={descName} onClick={()=>{setNameAsc(false);setNameDesc(true)}}><img src={descImg} className="descPic" alt='descimg'/></button>
+             </div>
+          )}
 
        </div>
 
@@ -292,8 +317,13 @@ function Breeds() {
           value={age}
           onChange={()=>setAge(!age)}
           />Age: </label>
-           <div><button className='ascdesc' onClick={()=>{setAgeAsc(true);setAgeDesc(false)}}><img src={ascImg} className="ascPic" alt='ascimg'/></button>
-             <button className='ascdesc' onClick={()=>{setAgeAsc(false);setAgeDesc(true)}}><img src={descImg} className="descPic" alt='descimg'/></button></div>
+          {age && (
+             <div className='ageSort'><button className={ascAge} onClick={()=>{setAgeAsc(true);setAgeDesc(false)}}><img src={ascImg} className="ascPic" alt='ascimg'/></button>
+             <button className={descAge} onClick={()=>{setAgeAsc(false);setAgeDesc(true)}}><img src={descImg} className="descPic" alt='descimg'/></button>
+             </div>
+          )}
+
+
        </div>
        </div>
         </>

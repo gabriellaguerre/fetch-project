@@ -4,7 +4,7 @@
 
 .results {
     position: absolute;
-    margin-top: 1px;
+    margin-bottom: 56%;
     width: 90%;
     max-width: 415px;
     border: 1px solid #ccc;
@@ -48,12 +48,14 @@
     padding-left: 10px;
 }
 
-.searchAndFilter {
+.searchAndFilterBreed {
   display: grid;
   grid-template-columns: repeat(2,1fr);
   grid-template-rows: repeat(2,1fr);
   height: 50px;
-  margin-top: 20px;
+  margin-top: 40px;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 
 .searchButton {
@@ -145,7 +147,8 @@
     gap: 10px;
     position: relative;
     margin: 5px;
-    /* margin-left: 350px; */
+    height: 25px;
+
   }
 
   .filter-input-breed {
@@ -197,8 +200,8 @@
 
   .breedChoices {
     position:absolute;
-    top: 250px;
-    margin-left:12%;
+    top: 35%;
+    margin-left:13%;
     font-weight: bold;
     font-size: 20px;
     /* transform: translateX(-50%); */
@@ -260,13 +263,21 @@
     width: 20px;
   }
 
-  .ascdesc {
+  .breed, .name, .age {
     border: none;
     background-color:white;
     cursor:pointer;
     border-radius: 5px;
   }
 
-  .ascdesc:hover {
-    background-color:yellow;
+  .breed:hover, .name:hover, .age:hover {
+    background-color:rgb(196, 196, 245);
+  }
+
+  .breed.asc, .breed.desc, .name.asc, .name.desc, .age.asc, .age.desc {
+    background-color:rgb(196, 196, 245);
+  }
+
+  .ageSort {
+    margin-left:10px;
   }
