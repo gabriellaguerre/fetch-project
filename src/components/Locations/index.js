@@ -6,11 +6,11 @@ import OpenModalButton from '../OpenModalButton';
 import Profile from '../Profile';
 import BreedsResult from "../BreedsResult";
 import './Locations.css';
-import searchImg from '../../Assets/search.png';
-import plusImg from '../../Assets/orange-plus.png'
-import filterImg from '../../Assets/filter-pic.png'
-import deleteImg from '../../Assets/x.png';
-import editImg from '../../Assets/edit.png'
+import searchImg from '../../assets/search.png';
+import plusImg from '../../assets/orange-plus.png'
+import filterImg from '../../assets/filter-pic.png'
+import deleteImg from '../../assets/x.png';
+import editImg from '../../assets/edit.png'
 import LocationsResult from "../LocationsResult";
 import GeoBoundingBox from "../GeoBoundingBox";
 

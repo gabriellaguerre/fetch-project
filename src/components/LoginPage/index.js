@@ -3,7 +3,7 @@ import { login } from "../../redux/usersSlice";
 import { useDispatch } from "react-redux";
 import {useNavigate} from 'react-router';
 import './LoginPage.css';
-import fetchin from '../../Assets/dog_fetchin_pic.png'
+import fetchin from '../../assets/dog_fetchin_pic.png'
 
 
 function LoginPage() {

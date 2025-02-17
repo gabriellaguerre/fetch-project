@@ -7,11 +7,11 @@ import Profile from '../Profile';
 import BreedsResult from "../BreedsResult";
 import {breeds, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, dogMatch } from '../../redux/dogsSlice';
 import './Breeds.css';
-import searchImg from '../../Assets/search.png';
-import plusImg from '../../Assets/orange-plus.png'
-import filterImg from '../../Assets/filter-pic.png'
-import deleteImg from '../../Assets/x.png';
-import sortImg from '../../Assets/sort-by.png';
+import searchImg from '../../assets/search.png';
+import plusImg from '../../assets/orange-plus.png'
+import filterImg from '../../assets/filter-pic.png'
+import deleteImg from '../../assets/x.png';
+import sortImg from '../../assets/sort-by.png';
 
 
 function Breeds() {

@@ -9,8 +9,8 @@ import Breeds from '../Breeds';
 import BreedsResult from "../BreedsResult";
 import {breeds, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, dogMatch } from '../../redux/dogsSlice';
 import './Main.css';
-import breedImg from '../../Assets/breed_pic-main.png'
-import locationImg from '../../Assets/location_pic-main.png'
+import breedImg from '../../assets/breed_pic-main.png'
+import locationImg from '../../assets/location_pic-main.png'
 
 
 function Main() {
