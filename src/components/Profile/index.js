@@ -3,7 +3,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {selectUser} from '../../redux/usersSlice';
 import {useNavigate} from 'react-router';
 import { logout } from "../../redux/usersSlice";
-import profile from '../../Assets/puppy_profile_pic.png';
+import profile from '../../assets/puppy_profile_pic.png';
 import './Profile.css';
 
 function Profile({user}) {

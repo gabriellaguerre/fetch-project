@@ -12,6 +12,8 @@ import plusImg from '../../assets/orange-plus.png'
 import filterImg from '../../assets/filter-pic.png'
 import deleteImg from '../../assets/x.png';
 import sortImg from '../../assets/sort-by.png';
+import ascImg from '../../assets/asc.png';
+import descImg from '../../assets/desc.png';
 
 
 function Breeds() {
@@ -143,14 +145,14 @@ function Breeds() {
 
 
       let removeBreed = (breed) => {
-        let newArray = selected.filter((dog) => dog != breed);
+        let newArray = selected.filter((dog) => dog !== breed);
         setSelected(newArray)
       }
 
    return (
     <>
      <Profile user={user}/>
-     {/* <div className='instruction'>Type to search our available breeds, then click the + to add that breed to your search list</div> */}
+  
      <div className='searchAndFilter'>
 
       <div className='gridArea1-1'>
@@ -167,11 +169,11 @@ function Breeds() {
 
 
         <div className='searchDiv'>
-          <button className='addButton' onClick={()=>{addBreed(searching);setMenu(false);setSearching("")}}><img src={plusImg} className="searchPic"/></button>
-          {/* <button className='searchButton' onClick={()=>{search(searching);setMenu(false)}}><img src={searchImg} className="searchPic"/></button> */}
+          <button className='addButton' onClick={()=>{addBreed(searching);setMenu(false);setSearching("")}}><img src={plusImg} className="searchPic" alt='plusimg'/></button>
+
             </div></div>
 
-        <div className='gridArea1-2'><button className='filterButton' onClick={()=>setFilters(!filters)}><img src={filterImg} className="filterPic"/>Filters</button>
+        <div className='gridArea1-2'><button className='filterButton' onClick={()=>setFilters(!filters)}><img src={filterImg} className="filterPic" alt='filterimg'/>Filters</button>
 
         <div className='size'>Dogs per page:
           <input
@@ -181,7 +183,7 @@ function Breeds() {
               // placeholder="Enter a maximum age"
               onChange={(e) => setSize(e.target.value)}/></div>
 
-          <div><button className='filterButton' onClick={()=>setSort(!sort)}><img src={sortImg} className="filterPic"/>Sort By</button></div>
+          <div><button className='filterButton' onClick={()=>setSort(!sort)}><img src={sortImg} className="filterPic" alt='sortimg'/>Sort By</button></div>
 
               </div>
 
@@ -198,9 +200,9 @@ function Breeds() {
         <div className='gridArea2-2'>
         {filters &&  (
         <>
-        <div className='filters'>
-       <div className="filter-option">
-        <label className='checkbox'>
+        <div className='filters-breed'>
+       <div className="filter-option-breed">
+        <label>
           <input
           type="checkbox"
           value={minimumAge}
@@ -208,7 +210,7 @@ function Breeds() {
           />Minimum Age: </label>
           {minimumAge && (
         <input
-            className="filter-input"
+            className="filter-input-breed"
             type="number"
             value={minAge}
             // placeholder="Enter a minimum age"
@@ -216,7 +218,7 @@ function Breeds() {
           )}
         </div>
 
-      <div className="filter-option">
+      <div className="filter-option-breed">
         <label>
           <input
           type="checkbox"
@@ -225,7 +227,7 @@ function Breeds() {
           />Maximum Age: </label>
           {maximumAge && (
         <input
-            className="filter-input"
+            className="filter-input-breed"
             type="number"
             value={maxAge}
             // placeholder="Enter a maximum age"
@@ -233,7 +235,7 @@ function Breeds() {
           )}
        </div>
 
-      <div className="filter-option">
+      <div className="filter-option-breed">
         <label>
           <input
           type="checkbox"
@@ -242,7 +244,7 @@ function Breeds() {
           />Zip Code: </label>
           {location && (
           <input
-            className="zip-location-input"
+            className="zip-location-input-breed"
             type="number"
             value={zipCode}
             // placeholder="Enter a zip code"
@@ -264,8 +266,9 @@ function Breeds() {
           onChange={()=>setBreed(!breed)}
           />Breed: </label>
 
-        <div className='sort-buttons'><button onClick={()=>{setBreedAsc(true);setBreedDesc(false)}}>Asc</button>
-             <button onClick={()=>{setBreedAsc(false);setBreedDesc(true)}}>Desc</button></div>
+        <div className='sort-buttons'><button className='ascdesc' onClick={()=>{setBreedAsc(true);setBreedDesc(false)}}>
+              <img src={ascImg} className="ascPic" alt='ascimg'/></button>
+             <button className='ascdesc' onClick={()=>{setBreedAsc(false);setBreedDesc(true)}}><img src={descImg} className="descPic" alt='descimg'/></button></div>
 
         </div>
 
@@ -277,8 +280,8 @@ function Breeds() {
           onChange={()=>setName(!name)}
           />Name: </label>
 
-         <div><button onClick={()=>{setNameAsc(true);setNameDesc(false)}}>Asc</button>
-             <button onClick={()=>{setNameAsc(false);setNameDesc(true)}}>Desc</button></div>
+         <div><button className='ascdesc' onClick={()=>{setNameAsc(true);setNameDesc(false)}}><img src={ascImg} className="ascPic" alt='ascimg'/></button>
+             <button className='ascdesc' onClick={()=>{setNameAsc(false);setNameDesc(true)}}><img src={descImg} className="descPic" alt='descimg'/></button></div>
 
        </div>
 
@@ -289,10 +292,8 @@ function Breeds() {
           value={age}
           onChange={()=>setAge(!age)}
           />Age: </label>
-
-           <div><button onClick={()=>{setAgeAsc(true);setAgeDesc(false)}}>Asc</button>
-             <button onClick={()=>{setAgeAsc(false);setAgeDesc(true)}}>Desc</button></div>
-
+           <div><button className='ascdesc' onClick={()=>{setAgeAsc(true);setAgeDesc(false)}}><img src={ascImg} className="ascPic" alt='ascimg'/></button>
+             <button className='ascdesc' onClick={()=>{setAgeAsc(false);setAgeDesc(true)}}><img src={descImg} className="descPic" alt='descimg'/></button></div>
        </div>
        </div>
         </>
@@ -302,11 +303,11 @@ function Breeds() {
         <div className='breedChoices'>Breeds selected:
           {selected.map((breed, index) =>(
             <div key={index} className='chosenBreeds'>{breed}
-            <button className='removeButton' onClick={()=>removeBreed(breed)}><img src={deleteImg} className="deletePic"/></button>
+            <button className='removeButton' onClick={()=>removeBreed(breed)}><img src={deleteImg} className="deletePic" alt='deleteimg'/></button>
             </div>
           ))}
         </div>
-        <div className='search2'><button className='search2Button' onClick={()=>{search(searching);setMenu(false)}}>SEARCH<img src={searchImg} className="searchPic"/></button></div>
+        <div className='search2'><button className='search2Button' onClick={()=>{search(searching);setMenu(false)}}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg'/></button></div>
          <div className='table'><BreedsResult /></div>
       </>
   );

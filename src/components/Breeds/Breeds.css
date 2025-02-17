@@ -22,14 +22,11 @@
     background-color: rgb(128, 231, 134);
 }
 
-.filters {
+.filters-breed {
     position: absolute;
     margin-top: 1px;
     width: 250px;
-    /* background: #f9f9f9; */
     padding: 10px;
-    /* border: 1px solid #ccc; */
-    /* border-radius: 10px; */
   }
 
   .sort {
@@ -135,10 +132,11 @@
     height: 100px;
 }
 
-.filter-option {
-    position: relative;
+  .filter-option-breed {
+    display: flex;
     margin: 5px;
-    margin-left: 0px;
+    height: 20px;
+
   }
 
   .sort-option {
@@ -150,28 +148,27 @@
     /* margin-left: 350px; */
   }
 
-  .filter-input {
-    position: absolute;
+  .filter-input-breed {
     margin-left: 5px;
     border-radius: 5px;
     width: 25px;
   }
 
-  .zip-location-input {
-    position: absolute;
+  .zip-location-input-breed {
     margin-left: 5px;
     border-radius: 5px;
     width: 100px;
   }
 
   .sizeInput {
+    margin-left: 3px;
     border-radius: 5px;
     width: 30px;
   }
 
 
-  input.zip-location-input::-webkit-inner-spin-button,
-  input.filter-input::-webkit-inner-spin-button,
+  input.zip-location-input-breed::-webkit-inner-spin-button,
+  input.filter-input-breed::-webkit-inner-spin-button,
   input.sizeInput::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
@@ -256,4 +253,20 @@
     font-size: 18px;
     font-weight: bold;
     border: none;
+  }
+
+  .ascPic, .descPic {
+    height: 20px;
+    width: 20px;
+  }
+
+  .ascdesc {
+    border: none;
+    background-color:white;
+    cursor:pointer;
+    border-radius: 5px;
+  }
+
+  .ascdesc:hover {
+    background-color:yellow;
   }

@@ -22,7 +22,7 @@ function BreedsResult() {
   console.log(total, 'total')
   console.log(details, 'details')
   console.log(searchResult, 'searchResult line 24')
-  console.log(nextUrl.length>0, 'next line 25')
+ 
 
     const handleNext = async () => {
         console.log(nextUrl, 'next line 27')
