@@ -26,11 +26,6 @@ function Breeds() {
     const dogSearchUrl = 'https://frontend-take-home-service.fetch.com/dogs/search?';
 
 
-
-    // let searchArray = searchResult.resultIds;
-    // console.log(searchArray, 'searchArray line 29')
-
-
     const [selected, setSelected] = useState([]);
 
     const [breed, setBreed] = useState(false);
@@ -64,7 +59,7 @@ function Breeds() {
 
     const [searching, setSearching] = useState("")
     const [menu, setMenu] = useState(false);
-    const [choose, setChoose] = useState(false);
+    const [error, setError] = useState("");
 
 
     let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
@@ -73,6 +68,32 @@ function Breeds() {
   const search = async () => {
     const urlFrontend = new URL(dogSearchUrl);
     let searchParams = {};
+
+    if(selected.length === 0) {
+      setError("Enter a Breed For Your Search")
+      return;
+    }
+
+    if((breed && name) || (breed && age) || (name && age)) {
+       setError("Choose 1 Sort Method")
+       return;
+    }
+
+    if((breed && !breedAsc) || (breed && !breedDesc) || (name && !nameAsc) || (name && !nameDesc) || (age && !ageAsc) || (age && !ageDesc)) {
+      setError("Choose an Ascending or Descending Type for your Sort")
+      return;
+    }
+
+    if((location && zipCode.length === 0) || (location && zipCode.length>0)) {
+      setError("Enter a Valid Zip Code")
+      return;
+    }
+
+    if(minAge < 0 || maxAge < 0) {
+      setError("Please Enter a Valid Age")
+      return
+    }
+
 
     searchParams.breeds = selected;
     searchParams.breeds.forEach(breed => urlFrontend.searchParams.append('breeds', breed));
@@ -122,6 +143,7 @@ function Breeds() {
       urlFrontend.searchParams.append('sort', searchParams.sort)
      }
 
+     setError("")
     let searchDogResults = await dispatch(searchDog(urlFrontend));
     let searchArray = searchDogResults.payload.resultIds
     console.log(searchArray, 'searchArray line 124')
@@ -168,32 +190,41 @@ function Breeds() {
         setMinimumAge(false); setMaximumAge(false);setLocation(false);
       }
 
+      const breedError = 'breedErrors' + (error ? "": "hidden")
 
    return (
     <>
      <Profile user={user}/>
+     
+     <div className={breedError}>{error}</div>
 
      <div className='searchAndFilterBreed'>
 
       <div className='gridArea1-1'>
-
+      {searching && results.length>0 && menu? (
+          <div className="results">
+           {results.map((word, index)=> (
+          <ul key={index} className='resultList' onClick={()=>{setSearching(word);setMenu(false)}}>{word}</ul>
+               ))}
+          </div>
+         ):null}
         <div className='inputDiv'>
       <input
          className='inputBox'
          type="text"
          value={searching}
          placeholder="Type to search our available breeds"
-         onFocus={() => setMenu(true)}
+         onFocus={() => {setMenu(true);setError("")}}
          onChange={(e) => setSearching(e.target.value)}
          /> </div>
 
 
-        <div className='searchDiv'>
-          <button className='addButton' onClick={()=>{addBreed(searching);setMenu(false);setSearching("")}}><img src={plusImg} className="searchPic" alt='plusimg'/></button>
+          <div className='searchDiv'>
+          <button className='addButton' onClick={()=>{addBreed(searching);setMenu(false);setSearching("")}}><img src={plusImg} className="searchPic" alt='plusimg'/></button></div>
+            
+            </div>
 
-            </div></div>
-
-        <div className='gridArea1-2'><button className='filterButton' onClick={()=>{clearFilters();setFilters(!filters)}}><img src={filterImg} className="filterPic" alt='filterimg'/>Filters</button>
+        <div className='gridArea1-2'><button className='filterButton' onClick={()=>{clearFilters();setFilters(!filters);setError("")}}><img src={filterImg} className="filterPic" alt='filterimg'/>Filters</button>
 
         <div className='size'>Dogs per page:
           <input
@@ -203,18 +234,20 @@ function Breeds() {
               // placeholder="Enter a maximum age"
               onChange={(e) => setSize(e.target.value)}/></div>
 
-          <div><button className='filterButton' onClick={()=>{clearSort();setSort(!sort)}}><img src={sortImg} className="filterPic" alt='sortimg'/>Sort By</button></div>
+          <div><button className='filterButton' onClick={()=>{clearSort();setSort(!sort);setError("")}}><img src={sortImg} className="filterPic" alt='sortimg'/>Sort By</button></div>
 
               </div>
 
        <div className='gridArea2-1'>
-           {searching && results.length>0 && menu? (
-          <div className="results">
-           {results.map((word, index)=> (
-          <ul key={index} className='resultList' onClick={()=>{setSearching(word);setMenu(false)}}>{word}</ul>
-               ))}
-          </div>
-         ):null}
+           
+          <div className='breedChoices'>Breeds selected:
+          {selected.map((breed, index) =>(
+            <div key={index} className='chosenBreeds'>{breed}
+            <button className='removeButton' onClick={()=>removeBreed(breed)}><img src={deleteImg} className="deletePic" alt='deleteimg'/></button>
+            </div>
+          ))}
+        </div>
+
         </div>
 
         <div className='gridArea2-2'>
@@ -283,7 +316,7 @@ function Breeds() {
           <input
           type="checkbox"
           value={breed}
-          onChange={()=>setBreed(!breed)}
+          onChange={()=>{setBreed(!breed)}}
           />Breed: </label>
         {breed && (
             <div className='sort-buttons'><button className={ascBreed} onClick={()=>{setBreedAsc(true);setBreedDesc(false)}}>
@@ -330,15 +363,9 @@ function Breeds() {
         )}
         </div>
       </div>
-        <div className='breedChoices'>Breeds selected:
-          {selected.map((breed, index) =>(
-            <div key={index} className='chosenBreeds'>{breed}
-            <button className='removeButton' onClick={()=>removeBreed(breed)}><img src={deleteImg} className="deletePic" alt='deleteimg'/></button>
-            </div>
-          ))}
-        </div>
+    
         <div className='search2'><button className='search2Button' onClick={()=>{search(searching);setMenu(false)}}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg'/></button></div>
-         <div className='table'><BreedsResult /></div>
+         <div className='breedResult'><BreedsResult /></div>
       </>
   );
 }

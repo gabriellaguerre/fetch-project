@@ -3,7 +3,9 @@
    gap: 10px;
    flex-direction: row;
    flex-wrap: wrap;
-  
+   margin-left: 10%;
+   margin-right: 10%;
+   margin-bottom: 200px;
 }
 
 .dogSet{
@@ -27,13 +29,27 @@
 }
 
 .topRow {
-  margin: 20px;
+  margin: 20px auto;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  background-color: rgb(253, 210, 129);
+  height: 40px;
+  align-items: center;
+  width: 80%;
 }
 
 .nexPrevButtons{
   display: flex;
   gap: 5px;
+}
+
+.waitingDogDiv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.totalFinds{
+  font-weight: bold;
 }

@@ -54,9 +54,11 @@ function Locations() {
 
   const searchZipCodes = async () => {
 
-    await dispatch(clearGeoBounding())
-    await dispatch(clearLocationsSearch())
-    await dispatch(postLocations(selected))
+  
+       await dispatch(clearGeoBounding())
+       await dispatch(clearLocationsSearch())
+       await dispatch(postLocations(selected))
+       
   }
 
   const searchForLocations = async () => {
@@ -112,11 +114,11 @@ function Locations() {
     console.log(selectedLocation, 'selectedLocation')
 
     if(selectedLocation.length < 5 || selectedLocation.length > 5) {
-      setError("Enter a valid zip code")
+      setError("Enter a Valid Zip Code")
     }
 
     if(selected.includes(selectedLocation)) {
-      setError("This zip code is already in your list")
+      setError("This Zip Code is Already in Your List")
     }
 
 
@@ -276,9 +278,7 @@ function Locations() {
             <div className='search2'><button className='search2Button' onClick={()=>{searchZipCodes();setMenu(false)}}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg'/></button></div>
           ) }
 
-         <div className='table'><LocationsResult data={data}/></div>
-
-
+         <div className='locationsResult'><LocationsResult data={data}/></div>
 
      </>
   );

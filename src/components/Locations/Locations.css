@@ -368,3 +368,7 @@
     border:none;
     cursor:pointer;
   }
+
+  .locationsResult {
+    text-align: center;
+  }

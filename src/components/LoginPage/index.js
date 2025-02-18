@@ -15,18 +15,20 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
 
-  let checkedEmail = email;
+ 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
 
     if (!name) {
-      setError("Please enter a name");
+      setError("Please enter a name"); //Checking if a name was entered
     }
 
+//***********************Verifying if email entered is standard************************ */
 
     const emailVerification = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+   
     if(emailVerification.test(email)){
       console.log('valid email')
     } else{
@@ -34,6 +36,8 @@ function LoginPage() {
     }
 
   }
+
+  //**********************Login Without Entering a name and email */
 
   const demoLogin = async () => {
      const data = await dispatch(login({name, email}));
@@ -43,8 +47,9 @@ function LoginPage() {
 
     }
   }
+//******************************************************************************** */
 
-  const errorClassName = 'errorsLogin' + (error ? "": "hidden")
+  const errorClassName = 'errorsLogin' + (error ? "": "hidden") //toggle errors messages
 
   return (
     <>
@@ -57,7 +62,7 @@ function LoginPage() {
 
       <div className='loginText'>Welcome to Fetch!</div>
       <div className={errorClassName}>{error}</div>
-        {/* <div className='errorsLogin'> </div> */}
+       
         <div className='nameInput'>
           Name:{' '}
           <input

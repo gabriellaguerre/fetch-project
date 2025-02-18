@@ -5,6 +5,7 @@ import { location, setLocation } from '../../redux/mapsSlice';
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import OpenModalButton from '../OpenModalButton';
 import Map from '../Map';
+import dogWaiting from '../../assets/dogwaiting-pic.png'
 import './LocationsResult.css'
 
 
@@ -70,23 +71,19 @@ function LocationsResult({ data }) {
   return (
     <>
       <div className='topRowLocation'>
-        {allSearchLocations?.total ? (
-          <>
-            <div>Total Finds: {allSearchLocations.total}</div>
+      <div>Total Finds: {allSearchLocations.total}</div>
+        
+        <div className='nextPrevButtonsLocation'>
+          
+           <div><button onClick={() => { prevPage(); setContentPage(contentPage - 1) }} disabled={contentPage === 1}> &lt; Previous</button>
+              <button onClick={() => { nextPage(); setContentPage(contentPage + 1) }} disabled={contentPage === pages}>Next &gt;</button></div>
+         </div>
 
-            <div className='nexPrevButtons'>
-              <div><button onClick={() => { prevPage(); setContentPage(contentPage - 1) }} disabled={contentPage === 1}> &lt; Previous</button></div>
-              <div><button onClick={() => { nextPage(); setContentPage(contentPage + 1) }} disabled={contentPage === pages}>Next &gt;</button></div>
-              <div>page {contentPage} of {pages} pages</div>
-            </div>
-          </>
-        ) : (
-          <div><button>CLEAR ALL</button></div>
-        )}
+         <div>page {contentPage} of {pages} pages</div>
       </div>
 
       {locationsList && (
-        <div className='resultDisplayed'>
+        <div className='resultDisplayedLocation'>
           {locationsList?.map(location =>
             <div key={location?.id} className='locationSet'>
               <button className='openMapModalButton'><OpenModalButton
@@ -103,7 +100,7 @@ function LocationsResult({ data }) {
       )}
 
       {allSearchLocations.results && (
-        <div className='resultDisplayed'>
+        <div className='resultDisplayedLocation'>
           {allSearchLocations.results?.map(location =>
             <div key={location.id} className='locationSet'>
               <button className='openMapModalButton'><OpenModalButton
@@ -117,8 +114,11 @@ function LocationsResult({ data }) {
             </div>
           )}
         </div>
-
       )}
+      {(locationsList?.length===0 && searchLocationArray===undefined) && (
+        <div className='waitingDogDivLocation'><img src={dogWaiting} className='waitingDogImg'/></div>
+      )} 
+        
     </>
   )
 }

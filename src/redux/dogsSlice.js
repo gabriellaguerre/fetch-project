@@ -1,9 +1,7 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 
 
-// const usersURL = 'http://10.0.2.2:5000/api/users'
 const dogBreedsURL = 'https://frontend-take-home-service.fetch.com/dogs/breeds';
-// const dogSearchUrl = 'https://frontend-take-home-service.fetch.com/dogs/search?';
 const dogMatchrUrl = 'https://frontend-take-home-service.fetch.com/dogs/match';
 const postDogURL = 'https://frontend-take-home-service.fetch.com/dogs';
 
@@ -14,6 +12,8 @@ const initialState = {
     dogsDetail: [],
     match: {},
 }
+
+// *******************GET /dogs/breeds ***********************************/
 
   export const breeds = createAsyncThunk('dogs/BREEDS', async () => {
     console.log('in Breeds fxn')
@@ -30,6 +30,8 @@ const initialState = {
     }
 
 })
+
+//  *******************GET /dogs/search **************************************/
 
 export const searchDog = createAsyncThunk('dogs/SEARCH', async (urlFrontend) => {
     console.log(urlFrontend.href, 'searchDog in dogSlice line 34')
@@ -66,6 +68,8 @@ export const nextList = createAsyncThunk('dogs/NEXT_SEARCH', async (nextUrl) => 
     }
 })
 
+//*************************POST /dogs******************************************************* */
+
 export const postSearchDog = createAsyncThunk('dogs/DOG_DETAILS', async (searchArray) => {
     console.log(searchArray, 'postSearchDog in dogSlice line 69')
     const response = await fetch(postDogURL, {
@@ -83,6 +87,8 @@ export const postSearchDog = createAsyncThunk('dogs/DOG_DETAILS', async (searchA
 })
 
 
+//*************************POST /dogs/match ************************************** */
+
 export const dogMatch = createAsyncThunk('dogs/MATCH', async (match) => {
     const response = await fetch(dogMatchrUrl, {
         method: 'POST',
@@ -97,7 +103,6 @@ export const dogMatch = createAsyncThunk('dogs/MATCH', async (match) => {
         return data;
     }
 })
-
 
 
 const dogsSlice = createSlice({

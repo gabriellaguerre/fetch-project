@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {breeds, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, nextList, dogMatch } from '../../redux/dogsSlice';
 import './BreedsResult.css'
+import dogWaiting from '../../assets/dogwaiting-pic.png'
 
 
 function BreedsResult() {
@@ -62,19 +63,21 @@ function BreedsResult() {
     console.log(dogData, 'dogData')
 
   }
+// 
 
   return (
     <>
     <div className='topRow'>
-    <div>Total Finds: {total}</div>
+    <div className='totalFinds'>Total Finds: {total}</div>
     <div className='nexPrevButtons'>
     <div><button onClick={handlePrevious} disabled={!previousUrl}>&lt; Previous</button></div>
-    <div><button onClick={handleNext} disabled={!nextUrl}>Next &gt;</button></div>
+    <div><button onClick={handleNext} disabled={nextUrl}>Next &gt;</button></div>
     </div>
-    <div><button onClick={()=>match(likeID)}>Match</button></div>
+    <div><button onClick={()=>match(likeID)} disabled={details.length===0}>Match</button></div>
     </div>
 
-    <div className='resultDisplayed'>
+    {details.length>0 ? (
+        <div className='resultDisplayed'>
           {details?.map(dog =>
             <button key={dog.id} className='dogSet' onClick={()=>likeDogs(dog.id)}>
                 <div><img src={dog.img} className='dogImage'/> </div>
@@ -83,7 +86,11 @@ function BreedsResult() {
                 <div>Breed: {dog.breed}</div>
              </button>
         )}
-    </div>
+        </div>
+    ):(
+      <div className='waitingDogDiv'><img src={dogWaiting} className='waitingDogImg'/></div>
+    )}
+    
     </>
   )
 }

@@ -1,14 +1,16 @@
 .topRowLocation {
-    /* margin: 20px; */
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    background-color: aqua;
-    height: 50px;
+  margin: 20px auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  background-color: rgb(253, 210, 129);
+  height: 40px;
+  align-items: center;
+  width: 80%;
   }
 
 
-.resultDisplayed {
+.resultDisplayedLocation {
     display: flex;
     gap: 10px;
     flex-direction: row;
@@ -26,3 +28,13 @@
     border-radius: 10px;
 }
 
+.nextPrevButtonsLocation{
+    display: flex;
+    gap: 5px;
+  }
+
+  .waitingDogDivLocation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }

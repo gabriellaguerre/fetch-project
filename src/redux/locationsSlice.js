@@ -1,6 +1,6 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 
-// const usersURL = 'http://10.0.2.2:5000/api/users'
+
 const locationsURL = 'https://frontend-take-home-service.fetch.com/locations';
 const locationsSearchURL = 'https://frontend-take-home-service.fetch.com/locations/search';
 export const googleMapsApiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
@@ -14,9 +14,10 @@ const initialState = {
     error: null,
 }
 
-export const postLocations = createAsyncThunk('locations/ZIP_CODES', async (searchArray) => {
-    // console.log(searchArray, 'in locations in locationSlice')
+//*****************************************POST /locations************************************* */
 
+export const postLocations = createAsyncThunk('locations/ZIP_CODES', async (searchArray) => {
+  
     const response = await fetch(locationsURL, {
         method: 'POST',
         headers: {"Content-Type": "application/json"},
@@ -30,6 +31,8 @@ export const postLocations = createAsyncThunk('locations/ZIP_CODES', async (sear
         return data;
     }
 })
+
+//*************************************POST /locations/search******************************************** */
 
 export const postSearchLocations = createAsyncThunk('locations/ZIP_DETAILS', async (searchArray) => {
     console.log(searchArray, 'in postSearchLcocations in locationSlice')
