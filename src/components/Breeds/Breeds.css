@@ -19,12 +19,12 @@
 
 ul.resultList {
   height: 20px;
- 
+
 }
 
 .resultList:hover{
   background-color: rgb(240, 240, 154);
- 
+
 }
 
 .filters-breed {
@@ -41,7 +41,7 @@ ul.resultList {
     left: 320px;
     width: 250px;
     padding: 10px;
-  
+
   }
 
 
@@ -125,7 +125,7 @@ ul.resultList {
     grid-area: 2/1;
     width: 100%;
     height: 100px;
-  
+
 
 }
 
@@ -203,11 +203,11 @@ ul.resultList {
   .breedChoices {
     position:absolute;
     margin-top: 10px;
-    margin-left:140px;
+    left:180px;
     font-weight: bold;
     font-size: 20px;
-    
-  
+
+
   }
 
   .chosenBreeds {

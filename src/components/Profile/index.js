@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useRef} from "react";
 import {useSelector, useDispatch} from 'react-redux';
-import {selectUser} from '../../redux/usersSlice';
+import { Link, useLocation } from 'react-router-dom';
 import {useNavigate} from 'react-router';
 import { logout } from "../../redux/usersSlice";
 import profile from '../../assets/puppy_profile_pic.png';
@@ -10,6 +10,7 @@ function Profile({user}) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const ulRef = useRef();
+    const thisLocation = useLocation();
 
     const [showMenu, setShowMenu] = useState(false);
 
@@ -49,6 +50,15 @@ function Profile({user}) {
           <>
          <div className='menu'>
          <div className='userName'> Hello {user}!</div>
+
+         <div className='breedSearchLink'>
+          <Link to="/breeds" className={thisLocation.pathname === "/breeds" ? "disabled-link" : ""}>
+          Search By Breed</Link></div>
+
+         <div className='locationSearchLink'>
+          <Link to="/locations" className={thisLocation.pathname === "/locations" ? "disabled-link" : ""}>
+          Search By Location</Link></div>
+
          <div className='buttonDiv'><button className='logoutButton' onClick={logoutUser}>Logout</button></div>
          </div>
          </>
