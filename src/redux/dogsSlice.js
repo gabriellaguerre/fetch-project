@@ -16,16 +16,16 @@ const initialState = {
 // *******************GET /dogs/breeds ***********************************/
 
   export const breeds = createAsyncThunk('dogs/BREEDS', async () => {
-    console.log('in Breeds fxn')
+    // console.log('in Breeds fxn')
     const response = await fetch(dogBreedsURL, {
     headers: {"Content-Type": "application/json",},
     credentials: 'include',
     })
 
-    console.log(response)
+    // console.log(response)
     if(response.ok){
        const data = response.json();
-       console.log(data, 'data')
+    //    console.log(data, 'data')
        return data;
     }
 
@@ -44,16 +44,16 @@ export const searchDog = createAsyncThunk('dogs/SEARCH', async (urlFrontend) => 
     // console.log(response);
     if(response.ok){
         const data = await response.json()
-        console.log(data, 'data in searchDog in dogSlice line 44')
+        // console.log(data, 'data in searchDog in dogSlice line 44')
         return data;
     }
 })
 
-export const nextList = createAsyncThunk('dogs/NEXT_SEARCH', async (nextUrl) => {
-    console.log(nextUrl, 'nextList in dogSlice line 50')
+export const nextPrevList = createAsyncThunk('dogs/NEXT_SEARCH', async (nextPrevUrl) => {
+    // console.log(nextUrl, 'nextList in dogSlice line 50')
 
 
-    const url = `https://frontend-take-home-service.fetch.com${nextUrl}`;
+    const url = `https://frontend-take-home-service.fetch.com${nextPrevUrl}`;
 
       const response = await fetch(url, {
         method: 'GET',
@@ -63,7 +63,7 @@ export const nextList = createAsyncThunk('dogs/NEXT_SEARCH', async (nextUrl) => 
     // console.log(response);
     if(response.ok){
         const data = await response.json()
-        console.log(data, 'data in nextList in dogSlice line 63')
+        // console.log(data, 'data in nextList in dogSlice line 63')
         return data;
     }
 })
@@ -71,7 +71,7 @@ export const nextList = createAsyncThunk('dogs/NEXT_SEARCH', async (nextUrl) => 
 //*************************POST /dogs******************************************************* */
 
 export const postSearchDog = createAsyncThunk('dogs/DOG_DETAILS', async (searchArray) => {
-    console.log(searchArray, 'postSearchDog in dogSlice line 69')
+    // console.log(searchArray, 'postSearchDog in dogSlice line 69')
     const response = await fetch(postDogURL, {
         method: 'POST',
         headers: {"Content-Type": "application/json"},
@@ -81,7 +81,7 @@ export const postSearchDog = createAsyncThunk('dogs/DOG_DETAILS', async (searchA
 
     if(response.ok){
         const data = await response.json()
-        console.log(data, 'data in postSearchDog in dogSlice line 79')
+        // console.log(data, 'data in postSearchDog in dogSlice line 79')
         return data;
     }
 })
@@ -99,7 +99,7 @@ export const dogMatch = createAsyncThunk('dogs/MATCH', async (match) => {
 
     if(response.ok){
         const data = response.json()
-        console.log(data, 'data in dogMatch in dogSlice line 95')
+        // console.log(data, 'data in dogMatch in dogSlice line 95')
         return data;
     }
 })
@@ -119,19 +119,20 @@ const dogsSlice = createSlice({
             })
             .addCase(searchDog.fulfilled, (state, action)=> {
                 state.search = action.payload;
-                console.log(action.payload, 'action payload for searchDog in dogSlice line 116')
+                // console.log(action.payload, 'action payload for searchDog in dogSlice line 116')
                 state.status = 'succeeded';
                 state.error = null;
             })
 
             .addCase(postSearchDog.fulfilled, (state, action)=> {
                 state.dogsDetail = action.payload;
-                console.log(action.payload, 'action payload for postSearchDog in dogSlice line 123')
+                // console.log(action.payload, 'action payload for postSearchDog in dogSlice line 123')
                 state.status = 'succeeded';
                 state.error = null;
             })
 
-            .addCase(nextList.fulfilled, (state, action)=> {
+            .addCase(nextPrevList.fulfilled, (state, action)=> {
+              
                 state.search = action.payload;
                 console.log(action.payload)
                 state.status = 'succeeded';

@@ -3,6 +3,9 @@
    gap: 10px;
    flex-direction: row;
    flex-wrap: wrap;
+   justify-content: center;
+   align-items: center;
+   cursor: pointer;
    margin-left: 10%;
    margin-right: 10%;
    margin-bottom: 200px;
@@ -53,4 +56,11 @@
 
 .totalFinds{
   font-weight: bold;
+}
+
+.goToPage-breed {
+  margin-left: 5px;
+  border-radius: 5px;
+  width: 35px;
+  align-items: center;
 }

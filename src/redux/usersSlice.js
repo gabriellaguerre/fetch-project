@@ -19,7 +19,7 @@ const initialState = {
     body: JSON.stringify({name: "asd", email: 'asdf@adf.com'}),
     credentials: 'include',
     })
-    console.log(response, 'response')
+    // console.log(response, 'response')
     if(response.ok){
        return  { name: "asd" };
       

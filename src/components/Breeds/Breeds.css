@@ -203,7 +203,9 @@ ul.resultList {
   .breedChoices {
     position:absolute;
     margin-top: 10px;
-    left:180px;
+    left:315px;
+    width: 250px;
+    padding:10px;
     font-weight: bold;
     font-size: 20px;
 

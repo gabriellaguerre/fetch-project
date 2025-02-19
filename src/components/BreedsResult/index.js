@@ -1,58 +1,67 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {breeds, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, nextList, dogMatch } from '../../redux/dogsSlice';
+import {breeds, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, nextPrevList, dogMatch } from '../../redux/dogsSlice';
 import './BreedsResult.css'
 import dogWaiting from '../../assets/dogwaiting-pic.png'
 
 
-function BreedsResult() {
+function BreedsResult({thisPage, totalPage}) {
   const dispatch = useDispatch();
-
+  console.log(thisPage, totalPage, 'thisPage, totalPages')
   const details = useSelector(getDogDetails);
   const searchResult = useSelector(getSearches)
-
-  const [likeID, setLikeID] = useState([]);
-  const [matchedDog, setMatchedDog] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   let total = searchResult.total;
   let nextUrl = searchResult.next;
   let previousUrl = searchResult.prev
   let list = searchResult.resultIds
 
-  console.log(total, 'total')
-  console.log(details, 'details')
-  console.log(searchResult, 'searchResult line 24')
+  const [likeID, setLikeID] = useState([]);
+  const [page, setPage] = useState(1)
+  const [goToPage, setGoToPage] = useState("")
+  const [matchedDog, setMatchedDog] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  
+  
+  console.log(page, 'page line 25')
  
-
     const handleNext = async () => {
-        console.log(nextUrl, 'next line 27')
-        await dispatch(nextList(nextUrl));
-        let dogs2 = await dispatch(postSearchDog(list))
-        console.log(dogs2, 'dogs')
+      
+      let getNextList = await dispatch(nextPrevList(nextUrl));
+      // console.log(getNextList, 'getNextList line 33')
+  
+      let dogs2 = await dispatch(postSearchDog(getNextList.payload.resultIds))
+  
+      // console.log(dogs2, 'dogs after pressing Next line 36')
     }
 
     const handlePrevious = async () => {
-      console.log(previousUrl, 'prev line 34')
-      await dispatch(nextList(previousUrl));
-      let dogs2 = await dispatch(postSearchDog(list))
-      console.log(dogs2, 'dogs')
+      
+      // console.log(previousUrl, 'prev line 40')
+ 
+      let getPrevList = await dispatch(nextPrevList(previousUrl));
+      // console.log(getPrevList, 'getNextList line 33')
+ 
+      let dogs2 = await dispatch(postSearchDog(getPrevList.payload.resultIds))
+  
+      // console.log(dogs2, 'dogs after pressing Prev line 46')
   }
 
   const likeDogs = (id) => {
-    console.log(id, 'id')
+    // console.log(id, 'id')
     if(!likeID.includes(id)) {
        setLikeID((prev)=> [...prev, id])
     }
 
   }
-  console.log(likeID, 'likeId')
+  // console.log(likeID, 'likeId')
 
   const match = async (likeID) => {
-    console.log('inside match function')
+    // console.log('inside match function')
     let foundDog = await dispatch(dogMatch(likeID));
-    console.log(foundDog.payload.match, 'foundDog')
-    console.log(details, 'details in match function')
+    // console.log(foundDog.payload.match, 'foundDog')
+    // console.log(details, 'details in match function')
     let dogData = details.filter(dog => dog.id === foundDog.payload.match)
 
     if(dogData) {
@@ -60,7 +69,7 @@ function BreedsResult() {
       setMatchedDog(dogData);
       setIsModalOpen(true)
     }
-    console.log(dogData, 'dogData')
+    // console.log(dogData, 'dogData')
 
   }
 // 
@@ -70,8 +79,13 @@ function BreedsResult() {
     <div className='topRow'>
     <div className='totalFinds'>Total Finds: {total}</div>
     <div className='nexPrevButtons'>
-    <div><button onClick={handlePrevious} disabled={!previousUrl}>&lt; Previous</button></div>
-    <div><button onClick={handleNext} disabled={nextUrl}>Next &gt;</button></div>
+    {(details.length>0 && totalPage) && (
+      <div>page {page} of {totalPage} pages</div>
+    )}
+  
+    <div><button onClick={()=>{setPage(page-1);handlePrevious()}} disabled={!previousUrl || page === 0}>&lt; Previous</button></div>
+    <div><button onClick={()=>{setPage(page+1);handleNext()}} disabled={!nextUrl || page === totalPage }>Next &gt;</button></div>
+   
     </div>
     <div><button onClick={()=>match(likeID)} disabled={details.length===0}>Match</button></div>
     </div>
