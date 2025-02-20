@@ -67,12 +67,12 @@ function Breeds() {
 
 
     let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
-    console.log(size, 'size line 69')
+    console.log(size.length, 'size line 69')
 
     const search = async () => {
     const urlFrontend = new URL(dogSearchUrl);
 
-    if(size<0) {
+    if(size <= 0) {
       setError("Enter a Valid Number of Dogs To Display")
       setSize(25);
       return;
@@ -257,14 +257,14 @@ function Breeds() {
         <div className='gridArea1-2'>
           <button className='filterButton' onClick={()=>{clearFilters();setFilters(!filters);setError("")}}><img src={filterImg} className="filterPic" alt='filterimg'/>Filters</button>
 
-        <div className='size'>Dogs per page:
+        <div className='sizeBreed'>Dogs per page:
           <input
-              className='sizeInput'
+              className='sizeInputBreed'
               type="number"
               value={size}
-              onFocus={() => {setSizeChange(true);setUpdateButton(true)}}
+              onFocus={() => {setSizeChange(true);setUpdateButton(true);setError("")}}
               onChange={(e) => {setSize(e.target.value);setSizeChange(true)}}/>
-              <button onClick={()=>search(searching)} disabled={!updateButton}>Update</button></div>
+              <button className='updateButton' onClick={()=>search(searching)} disabled={!updateButton}>Update</button></div>
 
           <div><button className='filterButton' onClick={()=>{clearSort();setSort(!sort);setError("")}}><img src={sortImg} className="filterPic" alt='sortimg'/>Sort By</button></div>
 

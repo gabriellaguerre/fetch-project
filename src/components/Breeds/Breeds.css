@@ -169,16 +169,23 @@ ul.resultList {
     width: 100px;
   }
 
-  .sizeInput {
+  .sizeInputBreed {
     margin-left: 3px;
-    border-radius: 5px;
+    height: 18px;
     width: 30px;
+    border-right: none;
+    background-color: rgb(189, 231, 192);
+  }
+
+  .updateButton {
+    height: 24px;
+    cursor: pointer;
   }
 
 
   input.zip-location-input-breed::-webkit-inner-spin-button,
   input.filter-input-breed::-webkit-inner-spin-button,
-  input.sizeInput::-webkit-inner-spin-button {
+  input.sizeInputBreed::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
@@ -194,7 +201,7 @@ ul.resultList {
     margin:5px;
   }
 
-  .size {
+  .sizeBreed {
     margin-left: 50px;
     margin-right: 50px;
   }
@@ -313,3 +320,4 @@ ul.resultList {
 .breedResult {
  text-align: center;
 }
+
