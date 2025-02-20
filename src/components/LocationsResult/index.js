@@ -72,9 +72,9 @@ function LocationsResult({ data }) {
     <>
       <div className='topRowLocation'>
       <div>Total Finds: {allSearchLocations.total}</div>
-        
+
         <div className='nextPrevButtonsLocation'>
-          
+
            <div><button onClick={() => { prevPage(); setContentPage(contentPage - 1) }} disabled={contentPage === 1}> &lt; Previous</button>
               <button onClick={() => { nextPage(); setContentPage(contentPage + 1) }} disabled={contentPage === pages}>Next &gt;</button></div>
          </div>
@@ -87,7 +87,7 @@ function LocationsResult({ data }) {
           {locationsList?.map(location =>
             <div key={location?.id} className='locationSet'>
               <button className='openMapModalButton'><OpenModalButton
-                buttonText=<div className='getMap'>See Map</div>
+                buttonText={<div className='getMap'>See Map</div>}
                 modalComponent={<Map location={location} />}
               /></button>
               <div>City: {location?.city}</div>
@@ -117,8 +117,8 @@ function LocationsResult({ data }) {
       )}
       {(locationsList?.length===0 && searchLocationArray===undefined) && (
         <div className='waitingDogDivLocation'><img src={dogWaiting} className='waitingDogImg'/></div>
-      )} 
-        
+      )}
+
     </>
   )
 }

@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {breeds, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, nextPrevList, dogMatch } from '../../redux/dogsSlice';
+import {addLikeDog, getSearches, getLikeDogs, getDogDetails, postSearchDog, nextPrevList, dogMatch,removeLikeDog } from '../../redux/dogsSlice';
+import OpenModalButton from '../OpenModalButton';
+import Match from '../Match';
 import './BreedsResult.css'
 import dogWaiting from '../../assets/dogwaiting-pic.png'
 
@@ -10,11 +12,13 @@ function BreedsResult({size, sizeChange, totalPage}) {
 
   const details = useSelector(getDogDetails);
   const searchResult = useSelector(getSearches)
+  const likeList = useSelector(getLikeDogs)
 
   let total = searchResult.total;
   let nextUrl = searchResult.next;
   let previousUrl = searchResult.prev
   let list = searchResult.resultIds
+  console.log(likeList, 'likeList line 19')
 
   const [likeID, setLikeID] = useState([]);
   const [page, setPage] = useState(1)
@@ -23,14 +27,14 @@ function BreedsResult({size, sizeChange, totalPage}) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [notEmpty, setNotEmpty] = useState(true)
 
-  console.log(size, totalPage, sizeChange, 'size, totalPages, sizeChange line 26')
+  // console.log(size, totalPage, sizeChange, 'size, totalPages, sizeChange line 26')
 
   useEffect(()=> {
     if(totalPage === Infinity || totalPage<0) totalPage = 0
     if(sizeChange) setPage(1)
   }, [totalPage, sizeChange])
 
-  console.log(page, totalPage,  ' line 32')
+  // console.log(page, totalPage,  ' line 32')
 
     const handleNext = async () => {
 
@@ -53,12 +57,16 @@ function BreedsResult({size, sizeChange, totalPage}) {
 
       // console.log(dogs2, 'dogs after pressing Prev line 46')
   }
+  console.log(likeID, 'likeID list line 58')
 
-  const likeDogs = (id) => {
-    // console.log(id, 'id')
-    if(!likeID.includes(id)) {
-       setLikeID((prev)=> [...prev, id])
+  const likeDogs = async (dog) => {
+    console.log(dog, 'like dogs line 61')
+    if(!likeID.includes(dog.id)) {
+       setLikeID((prev)=> [...prev, dog.id])
+       await dispatch(addLikeDog(dog))
+
     }
+
 
   }
   // console.log(likeID, 'likeId')
@@ -78,10 +86,21 @@ function BreedsResult({size, sizeChange, totalPage}) {
     // console.log(dogData, 'dogData')
 
   }
-//
+  let removeLike = async (id) => {
+    await dispatch(removeLikeDog(id))
+  }
 
   return (
     <>
+    <div>Your Selected Favorites:</div>
+    <div className='selectedDogsList'>
+      {likeList.map((dog)=>
+    <div key={dog.id} className='selectedDogsSet'>
+      <div><img src={dog.img} className='dogImageSelected'/> </div>
+      <div>{dog.name} {dog.age}</div>
+      <div><button  onClick={()=>removeLike(dog.id)}>Remove</button></div>
+     </div>
+    )}</div>
     <div className='topRow'>
     <div className='totalFinds'>Total Finds: {total}</div>
     <div className='nexPrevButtons'>
@@ -93,13 +112,16 @@ function BreedsResult({size, sizeChange, totalPage}) {
     <div><button onClick={()=>{setPage(page+1);handleNext()}} disabled={!nextUrl || page === totalPage }>Next &gt;</button></div>
 
     </div>
-    <div><button onClick={()=>match(likeID)} disabled={details.length===0}>Match</button></div>
+    <div><button onClick={()=>match(likeID)} disabled={details.length===0}><OpenModalButton
+                buttonText={<div className='getMatch'>Match</div>}
+                modalComponent={<Match />}/>
+                </button></div>
     </div>
 
     {details.length>0 ? (
         <div className='resultDisplayed'>
           {details?.map(dog =>
-            <button key={dog.id} className='dogSet' onClick={()=>likeDogs(dog.id)}>
+            <button key={dog.id} className='dogSet' onClick={()=>likeDogs(dog)}>
                 <div><img src={dog.img} className='dogImage'/> </div>
                 <div>Name: {dog.name}</div>
                 <div>Age: {dog.age}</div>
@@ -108,7 +130,10 @@ function BreedsResult({size, sizeChange, totalPage}) {
         )}
         </div>
     ):(
+      <div>
+      <div>There Are No Results... </div>
       <div className='waitingDogDiv'><img src={dogWaiting} className='waitingDogImg'/></div>
+      </div>
     )}
 
     </>

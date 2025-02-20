@@ -62,17 +62,9 @@ ul.resultList {
   margin-right: 10%;
 }
 
-.searchButton {
-    height: 46px;
-    width: 50px;
-    border-left: none;
-    border-radius: 0px 10px 10px 0px;
-    padding-left: 10px;
-    background-color: rgb(128, 231, 134);
-    text-align: left;
-    /* font-weight: bold; */
-    cursor: pointer;
-}
+
+
+
 
 .addButton {
   height: 46px;
@@ -174,12 +166,15 @@ ul.resultList {
     height: 18px;
     width: 30px;
     border-right: none;
-    background-color: rgb(189, 231, 192);
+
   }
 
   .updateButton {
     height: 24px;
     cursor: pointer;
+    background-color: rgb(240, 240, 154);
+    color: red;
+    font-weight: bold;
   }
 
 
@@ -213,7 +208,7 @@ ul.resultList {
 
   .breedChoices {
     position:absolute;
-    left: 125px;
+    right: 240px;
     /* margin-left: 30px; */
     width: 250px;
     padding:10px;
@@ -247,7 +242,7 @@ ul.resultList {
 
   }
 
-  .search2 {
+  .searchBreed {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -258,13 +253,12 @@ ul.resultList {
 
   }
 
-  .search2Button {
+  .searchBreedButton {
     width: 600px;
     height: 50px;
     background-color: rgb(128, 231, 134);
     cursor: pointer;
-    border-radius: 10px;
-
+    border-radius: 10px 0px 0px 10px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -272,6 +266,17 @@ ul.resultList {
     font-size: 18px;
     font-weight: bold;
     border: none;
+  }
+
+  .clearAllButton {
+    height: 50px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: red;
+    border: none;
+    border-radius: 0px 10px 10px 0px;
+    cursor: pointer;
   }
 
   .ascPic, .descPic {
@@ -320,4 +325,3 @@ ul.resultList {
 .breedResult {
  text-align: center;
 }
-

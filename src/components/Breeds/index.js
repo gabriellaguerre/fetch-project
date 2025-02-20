@@ -5,7 +5,7 @@ import {useNavigate} from 'react-router';
 import { logout } from "../../redux/usersSlice";
 import Profile from '../Profile';
 import BreedsResult from "../BreedsResult";
-import {breeds, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, dogMatch } from '../../redux/dogsSlice';
+import {breeds, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, clearAllData, dogMatch } from '../../redux/dogsSlice';
 import './Breeds.css';
 import searchImg from '../../assets/search.png';
 import plusImg from '../../assets/orange-plus.png'
@@ -77,11 +77,11 @@ function Breeds() {
       setSize(25);
       return;
     }
-    
+
     // let thisSize = true
-   
+
     //  console.log(size, size.length, 'size and size length line 74')
-    
+
     // if(size) {
     //   setSizeChange(thisSize)
     // } else {
@@ -93,6 +93,7 @@ function Breeds() {
 
     if(selected.length === 0) {
       setError("Enter a Breed For Your Search")
+      setUpdateButton(true);
       return;
     }
 
@@ -100,7 +101,7 @@ function Breeds() {
        setError("Choose 1 Sort Method")
        return;
     }
-  
+
     if((breed && !breedAsc && !breedDesc) || (name && !nameAsc && !nameDesc) || (age && !ageAsc && !ageDesc)) {
       setError("Choose an Ascending or Descending Type for your Sort")
       return;
@@ -218,6 +219,11 @@ function Breeds() {
 
       const clearFilters = () =>{
         setMinimumAge(false); setMaximumAge(false);setLocation(false);
+      }
+
+      const clearAll = async ()=> {
+        setSelected([]);
+        await dispatch(clearAllData());
       }
 
       const breedError = 'breedErrors' + (error ? "": "hidden")
@@ -398,7 +404,8 @@ function Breeds() {
         </div>
       </div>
 
-        <div className='search2'><button className='search2Button' onClick={()=>{search(searching);setMenu(false);setFrom(0)}} disabled={updateButton}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg'/></button></div>
+        <div className='searchBreed'><button className='searchBreedButton' onClick={()=>{search(searching);setMenu(false);setFrom(0)}} disabled={updateButton}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg'/></button>
+        <button className='clearAllButton' onClick={clearAll}>Clear All</button></div>
          <div className='breedResult'><BreedsResult size={size} sizeChange={sizeChange} totalPage={Math.ceil(Number(searchResult.total)/Number(size))}/></div>
       </>
   );

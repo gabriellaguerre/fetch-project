@@ -11,6 +11,7 @@ const initialState = {
     search: {},
     dogsDetail: [],
     match: {},
+    likeDogs: [],
 }
 
 // *******************GET /dogs/breeds ***********************************/
@@ -108,7 +109,25 @@ export const dogMatch = createAsyncThunk('dogs/MATCH', async (match) => {
 const dogsSlice = createSlice({
     name: 'dogs',
     initialState,
-    reducers: {},
+    reducers: {
+        clearAllData(state){
+            state.search = {}
+            state.dogsDetail = []
+            state.match = {}
+            state. likeDogs = []
+        },
+
+        addLikeDog(state, action) {
+            state.likeDogs = [...state.likeDogs, action.payload]
+        },
+
+        removeLikeDog(state, action) {
+            console.log(action.payload,'action in dogslice line 125')
+            state.likeDogs = state.likeDogs.filter(dog => dog.id !== action.payload)
+
+        }
+
+    },
     extraReducers(builder) {
         builder
             .addCase(breeds.fulfilled, (state, action)=> {
@@ -132,7 +151,7 @@ const dogsSlice = createSlice({
             })
 
             .addCase(nextPrevList.fulfilled, (state, action)=> {
-              
+
                 state.search = action.payload;
                 console.log(action.payload)
                 state.status = 'succeeded';
@@ -152,7 +171,7 @@ const dogsSlice = createSlice({
 export const getDogBreed = (state) => state.dogs.breed;
 export const getSearches = (state) => state.dogs.search;
 export const getDogDetails = (state) => state.dogs.dogsDetail;
-
-export const { addBreeds, addSearch  } = dogsSlice.actions
+export const getLikeDogs = (state) => state.dogs.likeDogs
+export const { clearAllData, addLikeDog, removeLikeDog  } = dogsSlice.actions
 
 export default dogsSlice.reducer
