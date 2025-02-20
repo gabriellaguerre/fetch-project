@@ -91,6 +91,8 @@ export const postSearchDog = createAsyncThunk('dogs/DOG_DETAILS', async (searchA
 //*************************POST /dogs/match ************************************** */
 
 export const dogMatch = createAsyncThunk('dogs/MATCH', async (match) => {
+    console.log(match, 'match line 94 in dogslice')
+
     const response = await fetch(dogMatchrUrl, {
         method: 'POST',
         headers: {"Content-Type": "application/json"},
@@ -98,9 +100,10 @@ export const dogMatch = createAsyncThunk('dogs/MATCH', async (match) => {
         credentials: 'include',
     })
 
+    console.log(response, 'response line 103')
     if(response.ok){
         const data = response.json()
-        // console.log(data, 'data in dogMatch in dogSlice line 95')
+        console.log(data, 'data in dogMatch in dogSlice line 104')
         return data;
     }
 })
@@ -159,7 +162,7 @@ const dogsSlice = createSlice({
             })
             .addCase(dogMatch.fulfilled, (state, action)=> {
                 state.match = action.payload;
-                console.log(action.payload)
+                // console.log(action.payload)
                 state.status = 'succeeded';
                 state.error = null;
             })
@@ -172,6 +175,8 @@ export const getDogBreed = (state) => state.dogs.breed;
 export const getSearches = (state) => state.dogs.search;
 export const getDogDetails = (state) => state.dogs.dogsDetail;
 export const getLikeDogs = (state) => state.dogs.likeDogs
+export const getMatched = (state) => state.dogs.match
+
 export const { clearAllData, addLikeDog, removeLikeDog  } = dogsSlice.actions
 
 export default dogsSlice.reducer

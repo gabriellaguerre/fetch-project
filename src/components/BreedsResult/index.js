@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {addLikeDog, getSearches, getLikeDogs, getDogDetails, postSearchDog, nextPrevList, dogMatch,removeLikeDog } from '../../redux/dogsSlice';
+import {addLikeDog, getSearches, getLikeDogs, getDogDetails, postSearchDog, nextPrevList, dogMatch,removeLikeDog, getMatched } from '../../redux/dogsSlice';
 import OpenModalButton from '../OpenModalButton';
 import Match from '../Match';
 import './BreedsResult.css'
@@ -13,6 +13,7 @@ function BreedsResult({size, sizeChange, totalPage}) {
   const details = useSelector(getDogDetails);
   const searchResult = useSelector(getSearches)
   const likeList = useSelector(getLikeDogs)
+  const matchedWithDog = useSelector(getMatched)
 
   let total = searchResult.total;
   let nextUrl = searchResult.next;
@@ -23,10 +24,11 @@ function BreedsResult({size, sizeChange, totalPage}) {
   const [likeID, setLikeID] = useState([]);
   const [page, setPage] = useState(1)
   const [goToPage, setGoToPage] = useState("")
-  const [matchedDog, setMatchedDog] = useState(null);
+  // const [matchedDog, setMatchedDog] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [notEmpty, setNotEmpty] = useState(true)
 
+  let matchedDog
   // console.log(size, totalPage, sizeChange, 'size, totalPages, sizeChange line 26')
 
   useEffect(()=> {
@@ -78,9 +80,10 @@ function BreedsResult({size, sizeChange, totalPage}) {
     // console.log(details, 'details in match function')
     let dogData = details.filter(dog => dog.id === foundDog.payload.match)
 
+
     if(dogData) {
-      console.log('inside if statement with dogdata')
-      setMatchedDog(dogData);
+
+      // setMatchedDog(dogData);
       setIsModalOpen(true)
     }
     // console.log(dogData, 'dogData')
@@ -90,6 +93,8 @@ function BreedsResult({size, sizeChange, totalPage}) {
     await dispatch(removeLikeDog(id))
   }
 
+
+
   return (
     <>
     <div>Your Selected Favorites:</div>
@@ -98,7 +103,7 @@ function BreedsResult({size, sizeChange, totalPage}) {
     <div key={dog.id} className='selectedDogsSet'>
       <div><img src={dog.img} className='dogImageSelected'/> </div>
       <div>{dog.name} {dog.age}</div>
-      <div><button  onClick={()=>removeLike(dog.id)}>Remove</button></div>
+      <div><button className='removeDogFromList' onClick={()=>removeLike(dog.id)}>Remove</button></div>
      </div>
     )}</div>
     <div className='topRow'>
@@ -114,7 +119,7 @@ function BreedsResult({size, sizeChange, totalPage}) {
     </div>
     <div><button onClick={()=>match(likeID)} disabled={details.length===0}><OpenModalButton
                 buttonText={<div className='getMatch'>Match</div>}
-                modalComponent={<Match />}/>
+                modalComponent={<Match matched={matchedDog}/>}/>
                 </button></div>
     </div>
 
