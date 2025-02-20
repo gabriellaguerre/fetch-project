@@ -62,7 +62,7 @@ function Breeds() {
     const [menu, setMenu] = useState(false);
     const [error, setError] = useState("");
 
-    const [page, setPage] = useState(1)
+    const [sizeChange, setSizeChange] = useState(false)
 
 
     let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
@@ -71,7 +71,7 @@ function Breeds() {
     const search = async () => {
     const urlFrontend = new URL(dogSearchUrl);
 
-  
+
     let searchParams = {};
 
     if(selected.length === 0) {
@@ -83,8 +83,8 @@ function Breeds() {
        setError("Choose 1 Sort Method")
        return;
     }
-
-    if((breed && !breedAsc) || (breed && !breedDesc) || (name && !nameAsc) || (name && !nameDesc) || (age && !ageAsc) || (age && !ageDesc)) {
+  
+    if((breed && !breedAsc && !breedDesc) || (name && !nameAsc && !nameDesc) || (age && !ageAsc && !ageDesc)) {
       setError("Choose an Ascending or Descending Type for your Sort")
       return;
     }
@@ -103,11 +103,11 @@ function Breeds() {
     searchParams.breeds = selected;
     searchParams.breeds.forEach(breed => urlFrontend.searchParams.append('breeds', breed));
 
-    
+
     searchParams.size = size;
     urlFrontend.searchParams.append('size', searchParams.size)
 
-    
+
     searchParams.from = from;
     urlFrontend.searchParams.append('from', searchParams.from)
 
@@ -154,6 +154,7 @@ function Breeds() {
      }
 
      setError("")
+     setSizeChange(false);
     let searchDogResults = await dispatch(searchDog(urlFrontend));
     let searchArray = searchDogResults.payload.resultIds
     // console.log(searchArray, 'searchArray line 124')
@@ -206,7 +207,7 @@ function Breeds() {
    return (
     <>
      <Profile user={user}/>
-     
+
      <div className={breedError}>{error}</div>
 
      <div className='searchAndFilterBreed'>
@@ -232,7 +233,7 @@ function Breeds() {
 
           <div className='searchDiv'>
           <button className='addButton' onClick={()=>{addBreed(searching);setMenu(false);setSearching("")}}><img src={plusImg} className="searchPic" alt='plusimg'/></button></div>
-            
+
             </div>
 
         <div className='gridArea1-2'>
@@ -243,18 +244,15 @@ function Breeds() {
               className='sizeInput'
               type="number"
               value={size}
-              // placeholder="Enter a maximum age"
+              onFocus={() => setSizeChange(true)}
               onChange={(e) => setSize(e.target.value)}/></div>
-        
-
-
 
           <div><button className='filterButton' onClick={()=>{clearSort();setSort(!sort);setError("")}}><img src={sortImg} className="filterPic" alt='sortimg'/>Sort By</button></div>
 
               </div>
 
        <div className='gridArea2-1'>
-           
+
           <div className='breedChoices'>Breeds selected:
           {selected.map((breed, index) =>(
             <div key={index} className='chosenBreeds'>{breed}
@@ -380,9 +378,9 @@ function Breeds() {
         )}
         </div>
       </div>
-    
-        <div className='search2'><button className='search2Button' onClick={()=>{search(searching);setMenu(false);setFrom(0);setPage(1)}}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg'/></button></div>
-         <div className='breedResult'><BreedsResult thisPage={page} totalPage={Math.ceil(Number(searchResult.total)/Number(size))}/></div>
+
+        <div className='search2'><button className='search2Button' onClick={()=>{search(searching);setMenu(false);setFrom(0)}}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg'/></button></div>
+         <div className='breedResult'><BreedsResult sizeChange={sizeChange} totalPage={Math.ceil(Number(searchResult.total)/Number(size))}/></div>
       </>
   );
 }

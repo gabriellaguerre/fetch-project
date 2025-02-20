@@ -5,9 +5,9 @@ import './BreedsResult.css'
 import dogWaiting from '../../assets/dogwaiting-pic.png'
 
 
-function BreedsResult({thisPage, totalPage}) {
+function BreedsResult({sizeChange, totalPage}) {
   const dispatch = useDispatch();
-  console.log(thisPage, totalPage, 'thisPage, totalPages')
+
   const details = useSelector(getDogDetails);
   const searchResult = useSelector(getSearches)
 
@@ -21,30 +21,36 @@ function BreedsResult({thisPage, totalPage}) {
   const [goToPage, setGoToPage] = useState("")
   const [matchedDog, setMatchedDog] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
-  
-  
-  console.log(page, 'page line 25')
- 
+  const [notEmpty, setNotEmpty] = useState(true)
+
+  console.log(sizeChange, totalPage,notEmpty, 'sizeChange, totalPages, notEmpty')
+
+  useEffect(()=> {
+    if(sizeChange) setPage(1)
+    if(totalPage === Infinity) setNotEmpty(false)
+  }, [sizeChange, totalPage])
+
+  // console.log(page, 'page line 25')
+
     const handleNext = async () => {
-      
+
       let getNextList = await dispatch(nextPrevList(nextUrl));
       // console.log(getNextList, 'getNextList line 33')
-  
+
       let dogs2 = await dispatch(postSearchDog(getNextList.payload.resultIds))
-  
+
       // console.log(dogs2, 'dogs after pressing Next line 36')
     }
 
     const handlePrevious = async () => {
-      
+
       // console.log(previousUrl, 'prev line 40')
- 
+
       let getPrevList = await dispatch(nextPrevList(previousUrl));
       // console.log(getPrevList, 'getNextList line 33')
- 
+
       let dogs2 = await dispatch(postSearchDog(getPrevList.payload.resultIds))
-  
+
       // console.log(dogs2, 'dogs after pressing Prev line 46')
   }
 
@@ -72,20 +78,20 @@ function BreedsResult({thisPage, totalPage}) {
     // console.log(dogData, 'dogData')
 
   }
-// 
+//
 
   return (
     <>
     <div className='topRow'>
     <div className='totalFinds'>Total Finds: {total}</div>
     <div className='nexPrevButtons'>
-    {(details.length>0 && totalPage) && (
+    {(details.length>0 && totalPage && notEmpty) && (
       <div>page {page} of {totalPage} pages</div>
     )}
-  
+
     <div><button onClick={()=>{setPage(page-1);handlePrevious()}} disabled={!previousUrl || page === 0}>&lt; Previous</button></div>
     <div><button onClick={()=>{setPage(page+1);handleNext()}} disabled={!nextUrl || page === totalPage }>Next &gt;</button></div>
-   
+
     </div>
     <div><button onClick={()=>match(likeID)} disabled={details.length===0}>Match</button></div>
     </div>
@@ -104,7 +110,7 @@ function BreedsResult({thisPage, totalPage}) {
     ):(
       <div className='waitingDogDiv'><img src={dogWaiting} className='waitingDogImg'/></div>
     )}
-    
+
     </>
   )
 }
