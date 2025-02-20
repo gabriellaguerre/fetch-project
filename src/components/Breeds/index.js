@@ -63,14 +63,31 @@ function Breeds() {
     const [error, setError] = useState("");
 
     const [sizeChange, setSizeChange] = useState(false)
+    const [updateButton, setUpdateButton] = useState(false)
 
 
     let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
-
+    console.log(size, 'size line 69')
 
     const search = async () => {
     const urlFrontend = new URL(dogSearchUrl);
 
+    if(size<0) {
+      setError("Enter a Valid Number of Dogs To Display")
+      setSize(25);
+      return;
+    }
+    
+    // let thisSize = true
+   
+    //  console.log(size, size.length, 'size and size length line 74')
+    
+    // if(size) {
+    //   setSizeChange(thisSize)
+    // } else {
+    //   setError("Enter the number of Dogs per page you want displayed")
+    //   return;
+    // }
 
     let searchParams = {};
 
@@ -155,6 +172,7 @@ function Breeds() {
 
      setError("")
      setSizeChange(false);
+     setUpdateButton(false);
     let searchDogResults = await dispatch(searchDog(urlFrontend));
     let searchArray = searchDogResults.payload.resultIds
     // console.log(searchArray, 'searchArray line 124')
@@ -244,8 +262,9 @@ function Breeds() {
               className='sizeInput'
               type="number"
               value={size}
-              onFocus={() => setSizeChange(true)}
-              onChange={(e) => setSize(e.target.value)}/></div>
+              onFocus={() => {setSizeChange(true);setUpdateButton(true)}}
+              onChange={(e) => {setSize(e.target.value);setSizeChange(true)}}/>
+              <button onClick={()=>search(searching)} disabled={!updateButton}>Update</button></div>
 
           <div><button className='filterButton' onClick={()=>{clearSort();setSort(!sort);setError("")}}><img src={sortImg} className="filterPic" alt='sortimg'/>Sort By</button></div>
 
@@ -379,8 +398,8 @@ function Breeds() {
         </div>
       </div>
 
-        <div className='search2'><button className='search2Button' onClick={()=>{search(searching);setMenu(false);setFrom(0)}}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg'/></button></div>
-         <div className='breedResult'><BreedsResult sizeChange={sizeChange} totalPage={Math.ceil(Number(searchResult.total)/Number(size))}/></div>
+        <div className='search2'><button className='search2Button' onClick={()=>{search(searching);setMenu(false);setFrom(0)}} disabled={updateButton}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg'/></button></div>
+         <div className='breedResult'><BreedsResult size={size} sizeChange={sizeChange} totalPage={Math.ceil(Number(searchResult.total)/Number(size))}/></div>
       </>
   );
 }

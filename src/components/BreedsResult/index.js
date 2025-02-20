@@ -5,7 +5,7 @@ import './BreedsResult.css'
 import dogWaiting from '../../assets/dogwaiting-pic.png'
 
 
-function BreedsResult({sizeChange, totalPage}) {
+function BreedsResult({size, sizeChange, totalPage}) {
   const dispatch = useDispatch();
 
   const details = useSelector(getDogDetails);
@@ -23,14 +23,14 @@ function BreedsResult({sizeChange, totalPage}) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [notEmpty, setNotEmpty] = useState(true)
 
-  console.log(sizeChange, totalPage,notEmpty, 'sizeChange, totalPages, notEmpty')
+  console.log(size, totalPage, sizeChange, 'size, totalPages, sizeChange line 26')
 
   useEffect(()=> {
+    if(totalPage === Infinity || totalPage<0) totalPage = 0
     if(sizeChange) setPage(1)
-    if(totalPage === Infinity) setNotEmpty(false)
-  }, [sizeChange, totalPage])
+  }, [totalPage, sizeChange])
 
-  // console.log(page, 'page line 25')
+  console.log(page, totalPage,  ' line 32')
 
     const handleNext = async () => {
 
@@ -85,7 +85,7 @@ function BreedsResult({sizeChange, totalPage}) {
     <div className='topRow'>
     <div className='totalFinds'>Total Finds: {total}</div>
     <div className='nexPrevButtons'>
-    {(details.length>0 && totalPage && notEmpty) && (
+    {(details.length>0 && totalPage && size) && (
       <div>page {page} of {totalPage} pages</div>
     )}
 
