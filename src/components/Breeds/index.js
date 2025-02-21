@@ -1,8 +1,6 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {useSelector, useDispatch} from 'react-redux';
 import {selectUser} from '../../redux/usersSlice';
-import {useNavigate} from 'react-router';
-import { logout } from "../../redux/usersSlice";
 import Profile from '../Profile';
 import BreedsResult from "../BreedsResult";
 import {breeds, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, clearAllData, dogMatch } from '../../redux/dogsSlice';
@@ -18,6 +16,11 @@ import descImg from '../../assets/desc.png';
 
 function Breeds() {
     const dispatch = useDispatch();
+
+     useEffect(() => {
+          dispatch(breeds());
+        }, [dispatch]);
+  
     const user = useSelector(selectUser);
     const doggyBreeds = useSelector(getDogBreed)
     const searchResult = useSelector(getSearches)
@@ -128,6 +131,9 @@ function Breeds() {
 
     searchParams.from = from;
     urlFrontend.searchParams.append('from', searchParams.from)
+
+    searchParams.sort = 'breed:asc'
+    urlFrontend.searchParams.append('sort', searchParams.sort)
 
 
     if(location && zipCode) {
@@ -403,7 +409,7 @@ function Breeds() {
         )}
         </div>
       </div>
-
+        <div className='searchByLocation'>Search By Location</div>
         <div className='searchBreed'><button className='searchBreedButton' onClick={()=>{search(searching);setMenu(false);setFrom(0)}} disabled={updateButton}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg'/></button>
         <button className='clearAllButton' onClick={clearAll}>Clear All</button></div>
          <div className='breedResult'><BreedsResult size={size} sizeChange={sizeChange} totalPage={Math.ceil(Number(searchResult.total)/Number(size))}/></div>

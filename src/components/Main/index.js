@@ -1,52 +1,52 @@
-import React, {useEffect, useState} from "react";
-import {useSelector, useDispatch} from 'react-redux';
-import {selectUser} from '../../redux/usersSlice';
-import {useNavigate} from 'react-router';
-import { logout } from "../../redux/usersSlice";
-import OpenModalButton from '../OpenModalButton';
-import Profile from '../Profile';
-import Breeds from '../Breeds';
-import BreedsResult from "../BreedsResult";
-import {breeds, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, dogMatch } from '../../redux/dogsSlice';
-import './Main.css';
-import breedImg from '../../assets/breed_pic-main.png'
-import locationImg from '../../assets/location_pic-main.png'
+// import React, {useEffect, useState} from "react";
+// import {useSelector, useDispatch} from 'react-redux';
+// import {selectUser} from '../../redux/usersSlice';
+// import {useNavigate} from 'react-router';
+// import { logout } from "../../redux/usersSlice";
+// import OpenModalButton from '../OpenModalButton';
+// import Profile from '../Profile';
+// import Breeds from '../Breeds';
+// import BreedsResult from "../BreedsResult";
+// import {breeds, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, dogMatch } from '../../redux/dogsSlice';
+// import './Main.css';
+// import breedImg from '../../assets/breed_pic-main.png'
+// import locationImg from '../../assets/location_pic-main.png'
 
 
-function Main() {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+// function Main() {
+//     const dispatch = useDispatch();
+//     const navigate = useNavigate();
 
-    useEffect(() => {
-      dispatch(breeds());
-    }, [dispatch]);
+//     useEffect(() => {
+//       dispatch(breeds());
+//     }, [dispatch]);
 
-   const user = useSelector(selectUser);
-   const doggyBreeds = useSelector(getDogBreed)
+//    const user = useSelector(selectUser);
+//    const doggyBreeds = useSelector(getDogBreed)
 
-   const goToBreeds = () => {
-    navigate('/breeds');
-   }
+//    const goToBreeds = () => {
+//     navigate('/breeds');
+//    }
 
-   const goToLocations = () => {
-    navigate('/locations');
-   }
+//    const goToLocations = () => {
+//     navigate('/locations');
+//    }
 
 
-   return (
-    <>
+//    return (
+//     <>
 
-         <Profile user={user}/>
+//          <Profile user={user}/>
 
-        <div className="firstMessage">We have {doggyBreeds?.length || "0"}  breeds of dogs ready to be matched!</div>
-        <div className='searchButtons'>
-        <div className='breedButtonDiv'><button className='breedButton' onClick={goToBreeds}><img src={breedImg} className="breedPic"/>Search By Breed </button></div>
-        <div className='locationButtonDiv'><button className='locationButton' onClick={goToLocations}><img src={locationImg} className="locationPic"/>Search By Location</button></div>
-        </div>
+//         <div className="firstMessage">We have {doggyBreeds?.length || "0"}  breeds of dogs ready to be matched!</div>
+//         <div className='searchButtons'>
+//         <div className='breedButtonDiv'><button className='breedButton' onClick={goToBreeds}><img src={breedImg} className="breedPic"/>Search By Breed </button></div>
+//         <div className='locationButtonDiv'><button className='locationButton' onClick={goToLocations}><img src={locationImg} className="locationPic"/>Search By Location</button></div>
+//         </div>
 
-      </>
+//       </>
 
-  );
-}
+//   );
+// }
 
-export default Main;
+// export default Main;
