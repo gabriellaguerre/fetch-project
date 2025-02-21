@@ -1,0 +1,8 @@
+.matchModalContainer {
+    background-color: white;
+    width: 400px;
+    height: 420px;
+    border-radius: 20px;
+    padding: 25px;
+    border: 10px solid #5986a8;
+}

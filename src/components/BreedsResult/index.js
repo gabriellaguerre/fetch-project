@@ -5,6 +5,7 @@ import OpenModalButton from '../OpenModalButton';
 import Match from '../Match';
 import './BreedsResult.css'
 import dogWaiting from '../../assets/dogwaiting-pic.png'
+import deleteImg from '../../assets/x.png';
 
 
 function BreedsResult({size, sizeChange, totalPage}) {
@@ -23,12 +24,13 @@ function BreedsResult({size, sizeChange, totalPage}) {
 
   const [likeID, setLikeID] = useState([]);
   const [page, setPage] = useState(1)
-  const [goToPage, setGoToPage] = useState("")
-  // const [matchedDog, setMatchedDog] = useState(null);
+  const [selectedDogs, setSelectedDogs] = useState(new Set());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [notEmpty, setNotEmpty] = useState(true)
 
-  let matchedDog
+  let dogData;
+  console.log(dogData, 'dogData line 32')
+  console.log(matchedWithDog?.match, 'matchedWithDog line 33')
   // console.log(size, totalPage, sizeChange, 'size, totalPages, sizeChange line 26')
 
   useEffect(()=> {
@@ -59,16 +61,23 @@ function BreedsResult({size, sizeChange, totalPage}) {
 
       // console.log(dogs2, 'dogs after pressing Prev line 46')
   }
-  console.log(likeID, 'likeID list line 58')
+  // console.log(likeID, 'likeID list line 58')
 
   const likeDogs = async (dog) => {
     console.log(dog, 'like dogs line 61')
     if(!likeID.includes(dog.id)) {
        setLikeID((prev)=> [...prev, dog.id])
        await dispatch(addLikeDog(dog))
-
     }
-
+    setSelectedDogs((prevSelectedDogs) => {
+      const newSelectedDogs = new Set(prevSelectedDogs);
+      if (newSelectedDogs.has(dog.id)) {
+        newSelectedDogs.delete(dog.id); // Deselect if already selected
+      } else {
+        newSelectedDogs.add(dog.id); // Select if not selected
+      }
+      return newSelectedDogs;
+    });
 
   }
   // console.log(likeID, 'likeId')
@@ -78,12 +87,11 @@ function BreedsResult({size, sizeChange, totalPage}) {
     let foundDog = await dispatch(dogMatch(likeID));
     // console.log(foundDog.payload.match, 'foundDog')
     // console.log(details, 'details in match function')
-    let dogData = details.filter(dog => dog.id === foundDog.payload.match)
-
+    dogData = details.filter(dog => dog.id === foundDog.payload.match)
+    console.log(dogData, 'dogData line 89')
 
     if(dogData) {
-
-      // setMatchedDog(dogData);
+      
       setIsModalOpen(true)
     }
     // console.log(dogData, 'dogData')
@@ -91,42 +99,51 @@ function BreedsResult({size, sizeChange, totalPage}) {
   }
   let removeLike = async (id) => {
     await dispatch(removeLikeDog(id))
+    setSelectedDogs((prevSelectedDogs) => {
+      const newSelectedDogs = new Set(prevSelectedDogs);
+      newSelectedDogs.delete(id); 
+      return newSelectedDogs;
+    });
+
   }
 
-
+  let matched = likeList.filter(dog => dog.id === matchedWithDog?.match)
+  console.log(matchedWithDog?.match, matched, likeList, 'matched line 111')
 
   return (
     <>
-    <div>Your Selected Favorites:</div>
+    <div className='selectedFavorites'>
+      
+    <div>Your selected favorites will show here, when you are done selecting, click</div><div className='matchButtonDiv'><button className='matchButton' onClick={()=>match(likeID)} disabled={likeList.length===0}><OpenModalButton
+                buttonText={<div className='getMatch'>Match</div>}
+                modalComponent={<Match />}/>
+                </button></div><div> to get matched with one of your favorites:</div>
+      
+      </div>
     <div className='selectedDogsList'>
       {likeList.map((dog)=>
     <div key={dog.id} className='selectedDogsSet'>
       <div><img src={dog.img} className='dogImageSelected'/> </div>
       <div>{dog.name} {dog.age}</div>
-      <div><button className='removeDogFromList' onClick={()=>removeLike(dog.id)}>Remove</button></div>
+      <div><button className='removeDogFromList' onClick={()=>removeLike(dog.id)}><img src={deleteImg} className="deletePic" alt='deleteimg'/></button></div>
      </div>
     )}</div>
     <div className='topRow'>
     <div className='totalFinds'>Total Finds: {total}</div>
     <div className='nexPrevButtons'>
-    {(details.length>0 && totalPage && size) && (
-      <div>page {page} of {totalPage} pages</div>
-    )}
-
     <div><button onClick={()=>{setPage(page-1);handlePrevious()}} disabled={!previousUrl || page === 0}>&lt; Previous</button></div>
     <div><button onClick={()=>{setPage(page+1);handleNext()}} disabled={!nextUrl || page === totalPage }>Next &gt;</button></div>
 
+    {(details.length>0 && totalPage && size) && (
+      <div className="pageInfo">page {page} of {totalPage} pages</div>
+    )} 
     </div>
-    <div><button onClick={()=>match(likeID)} disabled={details.length===0}><OpenModalButton
-                buttonText={<div className='getMatch'>Match</div>}
-                modalComponent={<Match matched={matchedDog}/>}/>
-                </button></div>
     </div>
 
     {details.length>0 ? (
         <div className='resultDisplayed'>
           {details?.map(dog =>
-            <button key={dog.id} className='dogSet' onClick={()=>likeDogs(dog)}>
+            <button key={dog.id} className={`dogSet ${selectedDogs.has(dog.id) ? "selected" : ""}`} onClick={()=>likeDogs(dog)}>
                 <div><img src={dog.img} className='dogImage'/> </div>
                 <div>Name: {dog.name}</div>
                 <div>Age: {dog.age}</div>

@@ -107,7 +107,7 @@ function Breeds() {
       return;
     }
 
-    if((location && zipCode.length === 0) || (location && zipCode.length>0)) {
+    if((location && zipCode.length === 0) || (location && zipCode.length>5)) {
       setError("Enter a Valid Zip Code")
       return;
     }
@@ -249,7 +249,7 @@ function Breeds() {
          className='inputBox'
          type="text"
          value={searching}
-         placeholder="Type to search our available breeds"
+         placeholder="Type to search our available breeds then click the + button"
          onFocus={() => {setMenu(true);setError("")}}
          onChange={(e) => setSearching(e.target.value)}
          /> </div>
