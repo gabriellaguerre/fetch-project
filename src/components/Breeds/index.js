@@ -28,7 +28,7 @@ function Breeds() {
     // const user = "asfd";
     const dogSearchUrl = 'https://frontend-take-home-service.fetch.com/dogs/search?';
 
-
+    const [allFilterButtons, setAllFilterButtons] = useState(false);
     const [selected, setSelected] = useState([]);
 
     const [breed, setBreed] = useState(false);
@@ -267,9 +267,12 @@ function Breeds() {
             </div>
 
         <div className='gridArea1-2'>
+         <button className='allFilterButton'onClick={()=>{setAllFilterButtons(!allFilterButtons);setFilters(false);setSort(false)}}> Filters</button>
+         {allFilterButtons && (
+          <div className='allFilterItems'>
           <button className='filterButton' onClick={()=>{clearFilters();setFilters(!filters);setError("")}}><img src={filterImg} className="filterPic" alt='filterimg'/>Filters</button>
 
-        <div className='sizeBreed'>Dogs per page:
+           <div className='sizeBreed'>Dogs per page:
           <input
               className='sizeInputBreed'
               type="number"
@@ -279,7 +282,9 @@ function Breeds() {
               <button className='updateButton' onClick={()=>search(searching)} disabled={!updateButton}>Update</button></div>
 
           <div><button className='filterButton' onClick={()=>{clearSort();setSort(!sort);setError("")}}><img src={sortImg} className="filterPic" alt='sortimg'/>Sort By</button></div>
-
+          </div>
+         )}
+        
               </div>
 
        <div className='gridArea2-1'>
@@ -295,6 +300,7 @@ function Breeds() {
         </div>
 
         <div className='gridArea2-2'>
+        
         {filters &&  (
         <>
         <div className='filters-breed'>
@@ -407,9 +413,10 @@ function Breeds() {
        </div>
         </>
         )}
+        <div className='searchByLocation'>Search By Location</div>
         </div>
       </div>
-        <div className='searchByLocation'>Search By Location</div>
+        
         <div className='searchBreed'><button className='searchBreedButton' onClick={()=>{search(searching);setMenu(false);setFrom(0)}} disabled={updateButton}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg'/></button>
         <button className='clearAllButton' onClick={clearAll}>Clear All</button></div>
          <div className='breedResult'><BreedsResult size={size} sizeChange={sizeChange} totalPage={Math.ceil(Number(searchResult.total)/Number(size))}/></div>

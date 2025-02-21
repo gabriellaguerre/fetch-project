@@ -56,13 +56,12 @@ ul.resultList {
   display: grid;
   grid-template-columns: repeat(2,1fr);
   grid-template-rows: repeat(2,1fr);
-  height: 50px;
+  height: 200px;
   margin-top: 40px;
   margin-left: 10%;
   margin-right: 10%;
-  border-top: 1px solid black;
-  border-right: 1px solid black;
-  border-left: 1px solid black;
+ 
+  margin-bottom: 400px;
 }
 
 
@@ -108,9 +107,9 @@ ul.resultList {
 .gridArea1-2 {
     grid-area: 1/2;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    justify-content: left;
+    justify-content: center;
     width: 100%;
     height: 50px;
    
@@ -124,7 +123,7 @@ ul.resultList {
     justify-content:start;
     width: 100%;
     height: 100px;
-    border-left: 1px solid black;
+    
 
 
 }
@@ -134,7 +133,7 @@ ul.resultList {
     position: relative;
     width: 100%;
     height: 100px;
-    border-right: 1px solid black;
+   
    
 }
 
@@ -340,4 +339,26 @@ ul.resultList {
   margin-left: 50%;
   margin-right: 10%;
   border: 1px solid black;
+  border-radius: 10px;
+}
+
+.allFilterButton {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.allFilterButton.open {
+    background-color: #f0f0f0;
+}
+
+.allFilterItems {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
 }
