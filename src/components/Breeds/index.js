@@ -20,7 +20,7 @@ function Breeds() {
      useEffect(() => {
           dispatch(breeds());
         }, [dispatch]);
-  
+
     const user = useSelector(selectUser);
     const doggyBreeds = useSelector(getDogBreed)
     const searchResult = useSelector(getSearches)
@@ -57,6 +57,7 @@ function Breeds() {
 
     const [location, setLocation] = useState(false);
     const [zipCode, setZipCode] = useState("");
+    const [selectedZipCode, setSelectedZipCode] = useState([])
 
     const [size, setSize] = useState(25)
     const [from, setFrom] = useState(0);
@@ -70,7 +71,7 @@ function Breeds() {
 
 
     let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
-    console.log(size.length, 'size line 69')
+
 
     const search = async () => {
     const urlFrontend = new URL(dogSearchUrl);
@@ -81,16 +82,6 @@ function Breeds() {
       return;
     }
 
-    // let thisSize = true
-
-    //  console.log(size, size.length, 'size and size length line 74')
-
-    // if(size) {
-    //   setSizeChange(thisSize)
-    // } else {
-    //   setError("Enter the number of Dogs per page you want displayed")
-    //   return;
-    // }
 
     let searchParams = {};
 
@@ -137,7 +128,7 @@ function Breeds() {
 
 
     if(location && zipCode) {
-      searchParams.zipCodes = [zipCode];
+      searchParams.zipCodes = zipCode;
       searchParams.zipCodes.forEach(zipCode => urlFrontend.searchParams.append('zipCodes', zipCode));
     }
 
@@ -209,6 +200,30 @@ function Breeds() {
         setSelected(newArray)
       }
 
+      let addZipCode = (zipCode) => {
+        if(zipCode.length < 5 || zipCode.length > 5) {
+          setError("Enter a Valid Zip Code")
+          return
+        }
+        if(!selectedZipCode.includes(zipCode)) {
+          setSelectedZipCode(prevSelected => {const updatedSelection = [...prevSelected, zipCode];
+            return updatedSelection;
+          })
+
+        } else {
+          setError("This Zip Code is Already in Your List")
+          return
+        }
+      }
+
+      let removeZip = (zipCode) => {
+        let newArray = selectedZipCode.filter((zip)=>zip !== zipCode)
+        setSelectedZipCode(newArray)
+      }
+
+      console.log(selectedZipCode, 'selectedzipCode line 210')
+
+
       const ascBreed = `breed ${breedAsc ? "asc" : ""}`
       const descBreed = `breed ${breedDesc ? "desc" : ""}`
       const ascName = `name ${nameAsc ? "asc" : ""}`
@@ -229,6 +244,7 @@ function Breeds() {
 
       const clearAll = async ()=> {
         setSelected([]);
+        setSelectedZipCode([])
         await dispatch(clearAllData());
       }
 
@@ -268,23 +284,8 @@ function Breeds() {
 
         <div className='gridArea1-2'>
          <button className='allFilterButton'onClick={()=>{setAllFilterButtons(!allFilterButtons);setFilters(false);setSort(false)}}> Filters</button>
-         {allFilterButtons && (
-          <div className='allFilterItems'>
-          <button className='filterButton' onClick={()=>{clearFilters();setFilters(!filters);setError("")}}><img src={filterImg} className="filterPic" alt='filterimg'/>Filters</button>
+         <button className='searchByLocationButton'>Search By Location</button>
 
-           <div className='sizeBreed'>Dogs per page:
-          <input
-              className='sizeInputBreed'
-              type="number"
-              value={size}
-              onFocus={() => {setSizeChange(true);setUpdateButton(true);setError("")}}
-              onChange={(e) => {setSize(e.target.value);setSizeChange(true)}}/>
-              <button className='updateButton' onClick={()=>search(searching)} disabled={!updateButton}>Update</button></div>
-
-          <div><button className='filterButton' onClick={()=>{clearSort();setSort(!sort);setError("")}}><img src={sortImg} className="filterPic" alt='sortimg'/>Sort By</button></div>
-          </div>
-         )}
-        
               </div>
 
        <div className='gridArea2-1'>
@@ -300,7 +301,23 @@ function Breeds() {
         </div>
 
         <div className='gridArea2-2'>
-        
+          {allFilterButtons && (
+          <div className='allFilterItems'>
+          <button className='filterButton' onClick={()=>{clearFilters();setFilters(!filters);setError("")}}><img src={filterImg} className="filterPic" alt='filterimg'/>Filters</button>
+
+           <div className='sizeBreed'>Dogs per page:
+          <input
+              className='sizeInputBreed'
+              type="number"
+              value={size}
+              onFocus={() => {setSizeChange(true);setUpdateButton(true);setError("")}}
+              onChange={(e) => {setSize(e.target.value);setSizeChange(true)}}/>
+              <button className='updateButton' onClick={()=>search(searching)} disabled={!updateButton}>Update</button></div>
+
+          <div><button className='filterButton' onClick={()=>{clearSort();setSort(!sort);setError("")}}><img src={sortImg} className="filterPic" alt='sortimg'/>Sort By</button></div>
+          </div>
+         )}
+
         {filters &&  (
         <>
         <div className='filters-breed'>
@@ -348,12 +365,16 @@ function Breeds() {
           onChange={()=>setLocation(!location)}
           />Zip Code: </label>
           {location && (
+          <div>
           <input
             className="zip-location-input-breed"
             type="number"
             value={zipCode}
-            // placeholder="Enter a zip code"
+            onFocus={()=>setError("")}
             onChange={(e) => setZipCode(e.target.value)}/>
+             <button className='addZipButton'  disabled={!location} onClick={()=>{addZipCode(zipCode);setZipCode("")}}><img src={plusImg} className="addZip" alt='plusimg'/></button>
+
+            </div>
           )}
        </div>
        </div>
@@ -413,10 +434,31 @@ function Breeds() {
        </div>
         </>
         )}
-        <div className='searchByLocation'>Search By Location</div>
+
         </div>
+        <div className='gridArea3-1'>
+
+          <div>
+
+        </div>
+
+        </div>
+
+        <div className='gridArea3-2'>
+        {location && (
+          <div className='zipChoices'>Zip Codes Selected:
+         {selectedZipCode.map((zipcode, index) =>(
+            <div key={index} className='chosenZips'>{zipcode}
+            <button className='removeZipButton' onClick={()=>removeZip(zipcode)}><img src={deleteImg} className="deleteZipPic" alt='deleteimg'/></button>
+            </div>
+          ))}
+
+          </div>
+        )}
+        </div>
+
       </div>
-        
+
         <div className='searchBreed'><button className='searchBreedButton' onClick={()=>{search(searching);setMenu(false);setFrom(0)}} disabled={updateButton}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg'/></button>
         <button className='clearAllButton' onClick={clearAll}>Clear All</button></div>
          <div className='breedResult'><BreedsResult size={size} sizeChange={sizeChange} totalPage={Math.ceil(Number(searchResult.total)/Number(size))}/></div>

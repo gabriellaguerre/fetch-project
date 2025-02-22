@@ -20,7 +20,7 @@ function BreedsResult({size, sizeChange, totalPage}) {
   let nextUrl = searchResult.next;
   let previousUrl = searchResult.prev
   let list = searchResult.resultIds
-  console.log(likeList, 'likeList line 19')
+  // console.log(likeList, 'likeList line 19')
 
   const [likeID, setLikeID] = useState([]);
   const [page, setPage] = useState(1)
@@ -29,8 +29,8 @@ function BreedsResult({size, sizeChange, totalPage}) {
   const [notEmpty, setNotEmpty] = useState(true)
 
   let dogData;
-  console.log(dogData, 'dogData line 32')
-  console.log(matchedWithDog?.match, 'matchedWithDog line 33')
+  // console.log(dogData, 'dogData line 32')
+  // console.log(matchedWithDog?.match, 'matchedWithDog line 33')
   // console.log(size, totalPage, sizeChange, 'size, totalPages, sizeChange line 26')
 
   useEffect(()=> {
@@ -91,7 +91,7 @@ function BreedsResult({size, sizeChange, totalPage}) {
     console.log(dogData, 'dogData line 89')
 
     if(dogData) {
-      
+
       setIsModalOpen(true)
     }
     // console.log(dogData, 'dogData')
@@ -101,24 +101,24 @@ function BreedsResult({size, sizeChange, totalPage}) {
     await dispatch(removeLikeDog(id))
     setSelectedDogs((prevSelectedDogs) => {
       const newSelectedDogs = new Set(prevSelectedDogs);
-      newSelectedDogs.delete(id); 
+      newSelectedDogs.delete(id);
       return newSelectedDogs;
     });
 
   }
 
   let matched = likeList.filter(dog => dog.id === matchedWithDog?.match)
-  console.log(matchedWithDog?.match, matched, likeList, 'matched line 111')
+  // console.log(matchedWithDog?.match, matched, likeList, 'matched line 111')
 
   return (
     <>
     <div className='selectedFavorites'>
-      
+
     <div>Your selected favorites will show here, when you are done selecting, click</div><div className='matchButtonDiv'><button className='matchButton' onClick={()=>match(likeID)} disabled={likeList.length===0}><OpenModalButton
                 buttonText={<div className='getMatch'>Match</div>}
                 modalComponent={<Match />}/>
                 </button></div><div> to get matched with one of your favorites:</div>
-      
+
       </div>
     <div className='selectedDogsList'>
       {likeList.map((dog)=>
@@ -136,7 +136,7 @@ function BreedsResult({size, sizeChange, totalPage}) {
 
     {(details.length>0 && totalPage && size) && (
       <div className="pageInfo">page {page} of {totalPage} pages</div>
-    )} 
+    )}
     </div>
     </div>
 
