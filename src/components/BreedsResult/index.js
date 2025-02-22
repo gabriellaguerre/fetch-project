@@ -20,7 +20,7 @@ function BreedsResult({size, sizeChange, totalPage}) {
   let nextUrl = searchResult.next;
   let previousUrl = searchResult.prev
   let list = searchResult.resultIds
-  // console.log(likeList, 'likeList line 19')
+
 
   const [likeID, setLikeID] = useState([]);
   const [page, setPage] = useState(1)
@@ -29,39 +29,24 @@ function BreedsResult({size, sizeChange, totalPage}) {
   const [notEmpty, setNotEmpty] = useState(true)
 
   let dogData;
-  // console.log(dogData, 'dogData line 32')
-  // console.log(matchedWithDog?.match, 'matchedWithDog line 33')
-  // console.log(size, totalPage, sizeChange, 'size, totalPages, sizeChange line 26')
 
   useEffect(()=> {
     if(totalPage === Infinity || totalPage<0) totalPage = 0
     if(sizeChange) setPage(1)
   }, [totalPage, sizeChange])
 
-  // console.log(page, totalPage,  ' line 32')
 
     const handleNext = async () => {
-
       let getNextList = await dispatch(nextPrevList(nextUrl));
-      // console.log(getNextList, 'getNextList line 33')
-
       let dogs2 = await dispatch(postSearchDog(getNextList.payload.resultIds))
-
-      // console.log(dogs2, 'dogs after pressing Next line 36')
     }
 
     const handlePrevious = async () => {
 
-      // console.log(previousUrl, 'prev line 40')
-
       let getPrevList = await dispatch(nextPrevList(previousUrl));
-      // console.log(getPrevList, 'getNextList line 33')
-
       let dogs2 = await dispatch(postSearchDog(getPrevList.payload.resultIds))
-
-      // console.log(dogs2, 'dogs after pressing Prev line 46')
   }
-  // console.log(likeID, 'likeID list line 58')
+
 
   const likeDogs = async (dog) => {
     console.log(dog, 'like dogs line 61')
@@ -80,23 +65,18 @@ function BreedsResult({size, sizeChange, totalPage}) {
     });
 
   }
-  // console.log(likeID, 'likeId')
 
   const match = async (likeID) => {
-    // console.log('inside match function')
+
     let foundDog = await dispatch(dogMatch(likeID));
-    // console.log(foundDog.payload.match, 'foundDog')
-    // console.log(details, 'details in match function')
     dogData = details.filter(dog => dog.id === foundDog.payload.match)
     console.log(dogData, 'dogData line 89')
 
     if(dogData) {
-
       setIsModalOpen(true)
     }
-    // console.log(dogData, 'dogData')
-
   }
+
   let removeLike = async (id) => {
     await dispatch(removeLikeDog(id))
     setSelectedDogs((prevSelectedDogs) => {
@@ -108,7 +88,7 @@ function BreedsResult({size, sizeChange, totalPage}) {
   }
 
   let matched = likeList.filter(dog => dog.id === matchedWithDog?.match)
-  // console.log(matchedWithDog?.match, matched, likeList, 'matched line 111')
+
 
   return (
     <>
@@ -132,7 +112,7 @@ function BreedsResult({size, sizeChange, totalPage}) {
     <div className='totalFinds'>Total Finds: {total}</div>
     <div className='nexPrevButtons'>
     <div><button onClick={()=>{setPage(page-1);handlePrevious()}} disabled={!previousUrl || page === 0}>&lt; Previous</button></div>
-    <div><button onClick={()=>{setPage(page+1);handleNext()}} disabled={!nextUrl || page === totalPage }>Next &gt;</button></div>
+    <div><button onClick={()=>{setPage(page+1);handleNext()}} disabled={(!nextUrl || list.length === 0) || page === totalPage }>Next &gt;</button></div>
 
     {(details.length>0 && totalPage && size) && (
       <div className="pageInfo">page {page} of {totalPage} pages</div>
@@ -148,6 +128,7 @@ function BreedsResult({size, sizeChange, totalPage}) {
                 <div>Name: {dog.name}</div>
                 <div>Age: {dog.age}</div>
                 <div>Breed: {dog.breed}</div>
+                <div>Zip Code: {dog.zip_code}</div>
              </button>
         )}
         </div>

@@ -87,11 +87,11 @@
   display: flex;
   gap: 10px;
   flex: 1;
-  justify-content: center; 
+  justify-content: center;
 }
 
 .pageInfo {
-  flex: 1; 
+  flex: 1;
   text-align: right;
   margin-right: 10px;
 }

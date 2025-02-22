@@ -27,7 +27,7 @@ function Locations() {
 
     console.log(bodyParams, 'bodyParams line 27')
     let geoChoices = bodyParams.geoBoundingBox ? Object.keys(bodyParams.geoBoundingBox) : [];
-    const [selected, setSelected] = useState([]);
+    const [selectedLocation, setSelectedLocation] = useState([]);
 
     const[filters, setFilters] = useState(false);
 
@@ -54,11 +54,11 @@ function Locations() {
 
   const searchZipCodes = async () => {
 
-  
+
        await dispatch(clearGeoBounding())
        await dispatch(clearLocationsSearch())
        await dispatch(postLocations(selected))
-       
+
   }
 
   const searchForLocations = async () => {
@@ -94,8 +94,8 @@ function Locations() {
 
     }
 
-    if(!selected.includes(selectedLocation) && selectedLocation.length === 2) {
-        setSelected(prevSelected => {const updatedSelection = [...prevSelected, allCapsState];
+    if(!selectedLocation.includes(selectedLocation) && selectedLocation.length === 2) {
+        setSelectedLocation(prevSelected => {const updatedSelection = [...prevSelected, allCapsState];
         setError("")
         return updatedSelection;
 
@@ -183,7 +183,7 @@ function Locations() {
           <div className='gridArea2-1-Location'>
           {filters ? (
              <div className='locationChoices'>States selected:
-             {selected.map((places, index) =>(
+             {selectedLocation.map((places, index) =>(
                <div key={index} className='chosenLocations'>{places}
                <button className='removeButton' onClick={()=>removeLocation(places)}><img src={deleteImg} className="deletePic" alt='deleteimg'/></button>
                </div>
@@ -192,7 +192,7 @@ function Locations() {
           ):(
 
           <div className='locationChoices'>Zip Codes selected:
-          {selected.map((places, index) =>(
+          {selectedLocation.map((places, index) =>(
             <div key={index} className='chosenLocations'>{places}
             <button className='removeButton' onClick={()=>removeLocation(places)}><img src={deleteImg} className="deletePic" alt='plusimg'/></button>
             </div>

@@ -75,7 +75,7 @@ ul.resultList {
 }
 
 .filterButton {
-  display: flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     height: 40px;
@@ -194,7 +194,8 @@ ul.resultList {
 
   input.zip-location-input-breed::-webkit-inner-spin-button,
   input.filter-input-breed::-webkit-inner-spin-button,
-  input.sizeInputBreed::-webkit-inner-spin-button {
+  input.sizeInputBreed::-webkit-inner-spin-button,
+  input.inputBoxLocation::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
@@ -215,6 +216,13 @@ ul.resultList {
     border-radius: 0px 5px 5px 0px;
     cursor: pointer;
   }
+
+  .inputBoxLocation {
+    height: 23px;
+    width: 150px;
+    border-radius: 5px 0px 0px 5px;
+    padding-left: 10px;
+}
 
   .filterPic {
     height: 20px;
@@ -408,4 +416,59 @@ ul.resultList {
   display: flex;
   flex-direction: row;
   margin-top: 10px;
+}
+
+.allLocationItems {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 10px;
+  gap: 20px;
+}
+
+.addStateButton{
+  position: relative;
+  height: 21px;
+  width: 35px;
+  left:5%;
+  border-left: none;
+  border-radius: 0px 5px 5px 0px;
+  border-width: 0.5px;
+  background-color: rgb(240, 240, 154);
+  text-align: center;
+  cursor: pointer;
+}
+
+.searchStatePic {
+  height: 15px;
+  width: 15px;
+}
+
+.chooseZipCodeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 150px;
+  border-radius: 10px;
+  background-color: white;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  gap: 5px;
+}
+
+.otherParametersButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 150px;
+  border-radius: 10px;
+  background-color: white;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  gap: 5px;
 }
