@@ -393,10 +393,40 @@ function Breeds() {
           )}
           {allLocationButtons && (
             <div className='allLocationItems'>
-              <button className='chooseZipCodeButton' onClick={() => setChooseZipCodeOnly(!chooseZipCodeOnly)}>Zip Code Only</button>
-              <div><button className='otherParametersButton' onClick={() => setOtherParameters(!otherParameters)}>Other Parameters</button></div>
+            <div className='zipCodeOnlyDiv'><button className='chooseZipCodeButton' onClick={() => setChooseZipCodeOnly(!chooseZipCodeOnly)}>Zip Code Only</button></div>
+              <div className='otherParamsDiv'><button className='otherParametersButton' onClick={() => setOtherParameters(!otherParameters)}>Other Parameters</button></div>
 
+              <div className='selectLocationInput'>
+              {chooseZipCodeOnly && allLocationButtons && (
+                <>
+                  <div className='inputDiv'>
+                    <input
+                      className='inputBoxLocation'
+                      disabled={filters}
+                      type="number"
+                      value={selectLocation}
+                      placeholder="Enter a zip code and press +"
+                    // onFocus={() => setMenu(true)}
+                    onChange={(e) => {setSelectLocation(e.target.value);setError("")}}
+                    /> </div>
 
+                  <div className='searchDiv'><button className='addZipButton' disabled={filters} onClick={()=>{addZipLocation(selectLocation);setSelectLocation("")}}><img src={plusImg} className="searchPic" alt='plusimg' /></button></div>
+                </>
+              )}
+              </div>
+            <div className='selectLocationArray'>
+            {allLocationButtons && chooseZipCodeOnly && (
+
+                <div className='locationChoices'>Zip Codes selected:
+                 {selectLocationArray.map((places, index) =>(
+                   <div key={index} className='chosenLocations'>{places}
+                      <button className='removeLocationButton' onClick={()=>removeLocation(places)}><img src={deleteImg} className="deleteLocationPic" alt='plusimg'/></button>
+                     </div>
+                     ))}
+                </div>
+                )}
+
+            </div>
 
               {otherParameters && (
                 <>
@@ -575,24 +605,6 @@ function Breeds() {
         </div>
 
         <div className='gridArea3-2'>
-        {chooseZipCodeOnly && allLocationButtons && (
-                <>
-                  <div className='inputDiv'>
-                    <input
-                      className='inputBoxLocation'
-                      disabled={filters}
-                      type="number"
-                      value={selectLocation}
-                      placeholder="add zip code and press +"
-                    // onFocus={() => setMenu(true)}
-                    onChange={(e) => {setSelectLocation(e.target.value);setError("")}}
-                    /> </div>
-
-                  <div className='searchDiv'><button className='addZipButton' disabled={filters} onClick={()=>{addZipLocation(selectLocation);setSelectLocation("")}}><img src={plusImg} className="searchPic" alt='plusimg' /></button></div>
-                </>
-              )}
-
-
           {location && filters && (
             <div className='zipChoices'>Zip Codes Selected:
               {selectedZipCode.map((zipcode, index) => (
@@ -604,23 +616,9 @@ function Breeds() {
             </div>
           )}
         </div>
-
-        <div className='gridArea4-1'></div>
-
-        <div className='gridArea4-2'>
-        {allLocationButtons && chooseZipCodeOnly && (
-
-         <div className='locationChoices'>Zip Codes selected:
-          {selectLocationArray.map((places, index) =>(
-            <div key={index} className='chosenLocations'>{places}
-            <button className='removeLocationButton' onClick={()=>removeLocation(places)}><img src={deleteImg} className="deletePic" alt='plusimg'/></button>
-            </div>
-          ))}
-          </div>
-        )}
         </div>
 
-      </div>
+     
 
       <div className='searchBreed'><button className='searchBreedButton' onClick={() => { search(searching); setMenu(false); setFrom(0) }} disabled={updateButton}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg' /></button>
         <button className='clearAllButton' onClick={clearAll}>Clear All</button></div>
