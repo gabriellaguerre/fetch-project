@@ -32,6 +32,9 @@ function Breeds() {
   const [allLocationButtons, setAllLocationButtons] = useState(false);
   const [selected, setSelected] = useState([]);
 
+  const [selectLocationArray, setSelectLocationArray] = useState([]);
+  const [selectLocation, setSelectLocation] = useState("")
+
   const [breed, setBreed] = useState(false);
   const [breedAsc, setBreedAsc] = useState(false);
   const [breedDesc, setBreedDesc] = useState(false);
@@ -261,6 +264,58 @@ function Breeds() {
 
   const breedError = 'breedErrors' + (error ? "" : "hidden")
 
+  let addLocation = (selectedLocation) => {
+    console.log(selectedLocation, 'selectedLocation')
+
+    if(selectedLocation.length < 5 || selectedLocation.length > 5) {
+      setError("Enter a Valid Zip Code")
+    }
+
+    if(selectedLocation.includes(selectedLocation)) {
+      setError("This Zip Code is Already in Your List")
+    }
+
+
+    if(!selectedLocation.includes(selectedLocation) && selectedLocation.length === 5) {
+        setSelected(prevSelected => {const updatedSelection = [...prevSelected,selectedLocation];
+        setError("")
+        return updatedSelection;
+      })
+
+    }
+  }
+
+  let removeLocation = (places) => {
+    let newArray = selectLocationArray.filter((place) => place !== places);
+    console.log(newArray, 'newArray')
+    setSelectLocationArray(newArray)
+  }
+
+  let addZipLocation = (selectLocation) => {
+    console.log(selectLocation, 'selectLocation line 294')
+
+    if(selectLocation.length < 5 || selectLocation.length > 5) {
+      setError("Enter a Valid Zip Code")
+      return
+    }
+
+    if(selectLocationArray.includes(selectLocation)) {
+      setError("This Zip Code is Already in Your List")
+      return
+    }
+
+
+    if(!selectLocationArray.includes(selectLocation)) {
+        setSelectLocationArray(prevSelected => {const updatedSelection = [...prevSelected,selectLocation];
+        setError("")
+        return updatedSelection;
+
+      })
+
+    }
+  }
+  console.log(selectLocationArray, 'selectedLocation line 314')
+
   return (
     <>
       <Profile user={user} />
@@ -303,7 +358,7 @@ function Breeds() {
               onChange={(e) => {setSize(e.target.value);setSizeChange(true)}}/>
               <button className='updateButton' onClick={()=>search(searching)} disabled={!updateButton}>Update</button></div> */}
           <button className='allFilterButton' onClick={() => { setAllFilterButtons(!allFilterButtons); setAllLocationButtons(false); setFilters(false); setSort(false) }}> Filters</button>
-          <button className='searchByLocationButton' onClick={() => { setAllLocationButtons(!allLocationButtons); setAllFilterButtons(false); setFilters(false); setSort(false) }}>Search By Location</button>
+          <button className='searchByLocationButton' onClick={() => { setAllLocationButtons(!allLocationButtons); setChooseZipCodeOnly(false);setAllFilterButtons(false); setFilters(false); setSort(false) }}>Search By Location</button>
 
         </div>
 
@@ -341,22 +396,7 @@ function Breeds() {
               <button className='chooseZipCodeButton' onClick={() => setChooseZipCodeOnly(!chooseZipCodeOnly)}>Zip Code Only</button>
               <div><button className='otherParametersButton' onClick={() => setOtherParameters(!otherParameters)}>Other Parameters</button></div>
 
-              {chooseZipCodeOnly && (
-                <>
-                  <div className='inputDiv'>
-                    <input
-                      className='inputBoxLocation'
-                      disabled={filters}
-                      type="number"
-                      // value={searching}
-                      placeholder="add zip code and press +"
-                    // onFocus={() => setMenu(true)}
-                    // onChange={(e) => {setSearching(e.target.value);setError("")}}
-                    /> </div>
 
-                  <div className='searchDiv'><button className='addZipButton' disabled={filters} ><img src={plusImg} className="searchPic" alt='plusimg' /></button></div>
-                </>
-              )}
 
               {otherParameters && (
                 <>
@@ -404,7 +444,8 @@ function Breeds() {
             </div>
 
           )}
-          {filters && (
+
+      {filters && (
             <>
               <div className='filters-breed'>
                 <div className="filter-option-breed">
@@ -466,6 +507,7 @@ function Breeds() {
               </div>
             </>
           )}
+
 
           {sort && (
             <>
@@ -533,7 +575,25 @@ function Breeds() {
         </div>
 
         <div className='gridArea3-2'>
-          {location && (
+        {chooseZipCodeOnly && allLocationButtons && (
+                <>
+                  <div className='inputDiv'>
+                    <input
+                      className='inputBoxLocation'
+                      disabled={filters}
+                      type="number"
+                      value={selectLocation}
+                      placeholder="add zip code and press +"
+                    // onFocus={() => setMenu(true)}
+                    onChange={(e) => {setSelectLocation(e.target.value);setError("")}}
+                    /> </div>
+
+                  <div className='searchDiv'><button className='addZipButton' disabled={filters} onClick={()=>{addZipLocation(selectLocation);setSelectLocation("")}}><img src={plusImg} className="searchPic" alt='plusimg' /></button></div>
+                </>
+              )}
+
+
+          {location && filters && (
             <div className='zipChoices'>Zip Codes Selected:
               {selectedZipCode.map((zipcode, index) => (
                 <div key={index} className='chosenZips'>{zipcode}
@@ -543,6 +603,21 @@ function Breeds() {
 
             </div>
           )}
+        </div>
+
+        <div className='gridArea4-1'></div>
+
+        <div className='gridArea4-2'>
+        {allLocationButtons && chooseZipCodeOnly && (
+
+         <div className='locationChoices'>Zip Codes selected:
+          {selectLocationArray.map((places, index) =>(
+            <div key={index} className='chosenLocations'>{places}
+            <button className='removeLocationButton' onClick={()=>removeLocation(places)}><img src={deleteImg} className="deletePic" alt='plusimg'/></button>
+            </div>
+          ))}
+          </div>
+        )}
         </div>
 
       </div>

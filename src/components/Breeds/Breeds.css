@@ -28,6 +28,7 @@ ul.resultList {
 }
 
 .filters-breed {
+
     position: absolute;
     margin-top: 40px;
     left: -15px;
@@ -55,7 +56,7 @@ ul.resultList {
 .searchAndFilterBreed {
   display: grid;
   grid-template-columns: repeat(2,1fr);
-  grid-template-rows: repeat(3,1fr);
+  grid-template-rows: repeat(4,1fr);
   height: 100px;
   margin-top: 40px;
   margin-left: 10%;
@@ -119,7 +120,7 @@ ul.resultList {
     position: relative;
     justify-content:start;
     width: 100%;
-    height: 150px;
+    height: 70px;
 }
 
 .gridArea2-2{
@@ -128,7 +129,7 @@ ul.resultList {
     grid-area: 2/2;
     position: relative;
     width: 100%;
-    height: 100px;
+    height: 150px;
 }
 
 .gridArea3-1 {
@@ -144,10 +145,26 @@ ul.resultList {
 
 .gridArea3-2{
   grid-area: 3/2;
+  display: flex;
   position: relative;
   width: 100%;
   height: 50px;
 }
+
+.gridArea4-1{
+  grid-area: 4/1;
+  position: relative;
+  width: 100%;
+  height: 50px;
+}
+
+.gridArea4-2{
+  grid-area: 4/2;
+  position: relative;
+  width: 100%;
+  height: 50px;
+}
+
 
 .filter-option-breed {
     display: flex;
@@ -263,10 +280,16 @@ ul.resultList {
 
   .chosenZips {
     display: flex;
-
   }
 
   .zipChoices {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .locationChoices {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -471,4 +494,21 @@ ul.resultList {
   cursor: pointer;
   border: 1px solid #ccc;
   gap: 5px;
+}
+
+
+.chosenLocations {
+  font-size: 16px;
+  font-weight: normal;
+  display: flex;
+  align-items: center;
+
+}
+
+.removeLocationButton {
+  border: none;
+  background-color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
 }
