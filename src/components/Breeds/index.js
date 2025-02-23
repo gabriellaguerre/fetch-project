@@ -3,8 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectUser } from '../../redux/usersSlice';
 import Profile from '../Profile';
 import BreedsResult from "../BreedsResult";
+import OpenModalButton from '../OpenModalButton';
 import { breeds, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, clearAllData, dogMatch } from '../../redux/dogsSlice';
+import {postLocations, geoBoundingData, postSearchLocations, clearZCLocations, clearLocationsSearch, clearGeoBounding} from '../../redux/locationsSlice'
 import './Breeds.css';
+import GeoBoundingBox from "../GeoBoundingBox";
 import searchImg from '../../assets/search.png';
 import plusImg from '../../assets/orange-plus.png'
 import filterImg from '../../assets/filter-pic.png'
@@ -12,6 +15,7 @@ import deleteImg from '../../assets/x.png';
 import sortImg from '../../assets/sort-by.png';
 import ascImg from '../../assets/asc.png';
 import descImg from '../../assets/desc.png';
+import editImg from '../../assets/edit.png'
 
 
 function Breeds() {
@@ -25,15 +29,19 @@ function Breeds() {
   const doggyBreeds = useSelector(getDogBreed)
   const searchResult = useSelector(getSearches)
   const details = useSelector(getDogDetails);
+    const bodyParams = useSelector(geoBoundingData);
   // const user = "asfd";
   const dogSearchUrl = 'https://frontend-take-home-service.fetch.com/dogs/search?';
 
-  const [allFilterButtons, setAllFilterButtons] = useState(false);
-  const [allLocationButtons, setAllLocationButtons] = useState(false);
-  const [selected, setSelected] = useState([]);
+  let geoChoices = bodyParams.geoBoundingBox ? Object.keys(bodyParams.geoBoundingBox) : [];
 
-  const [selectLocationArray, setSelectLocationArray] = useState([]);
-  const [selectLocation, setSelectLocation] = useState("")
+  const [allFilterButtons, setAllFilterButtons] = useState(false);
+  // const [allLocationButtons, setAllLocationButtons] = useState(false);
+  const [selected, setSelected] = useState([]);
+  const [breedSelected, setBreedSelected] = useState(false)
+
+  // const [selectLocationArray, setSelectLocationArray] = useState([]);
+  // const [selectLocation, setSelectLocation] = useState("")
 
   const [breed, setBreed] = useState(false);
   const [breedAsc, setBreedAsc] = useState(false);
@@ -76,10 +84,12 @@ function Breeds() {
   const [chooseCity, setChooseCity] = useState(false);
   const [city, setCity] = useState("");
   const [chooseStates, setChooseStates] = useState(false);
+  const [selectedState, setSelectedState] = useState("")
   const [states, setStates] = useState([]);
 
   const [chooseZipCodeOnly, setChooseZipCodeOnly] = useState(false)
   const [otherParameters, setOtherParameters] = useState(false)
+   const [chooseGeoBoundingBox, setChooseGeoBoundingBox] = useState(false);
 
 
   let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
@@ -113,10 +123,10 @@ function Breeds() {
       return;
     }
 
-    if ((location && selectedZipCode.length === 0)) {
-      setError("You Did not Enter Any Zip Codes")
-      return;
-    }
+    // if ((zipCode && selectedZipCode.length === 0)) {
+    //   setError("You Did not Enter Any Zip Codes")
+    //   return;
+    // }
 
     if (minAge < 0 || maxAge < 0) {
       setError("Please Enter a Valid Age")
@@ -230,7 +240,7 @@ function Breeds() {
     }
   }
 
-  let removeZip = (zipCode) => {
+  let removeZipCode = (zipCode) => {
     let newArray = selectedZipCode.filter((zip) => zip !== zipCode)
     setSelectedZipCode(newArray)
   }
@@ -253,7 +263,7 @@ function Breeds() {
   }
 
   const clearFilters = () => {
-    setMinimumAge(false); setMaximumAge(false); setLocation(false);
+    setMinimumAge(false); setMaximumAge(false);
   }
 
   const clearAll = async () => {
@@ -264,57 +274,37 @@ function Breeds() {
 
   const breedError = 'breedErrors' + (error ? "" : "hidden")
 
-  let addLocation = (selectedLocation) => {
-    console.log(selectedLocation, 'selectedLocation')
+  let addState = (selectedState) => {
+    console.log(selectedState.toUpperCase(), 'selectedState')
+    let allCapsState = selectedState.toUpperCase()
 
-    if(selectedLocation.length < 5 || selectedLocation.length > 5) {
-      setError("Enter a Valid Zip Code")
+    if(chooseStates && selectedState.length > 2) {
+      setError('Enter a two-letter state/territory abbreviations ')
+
     }
+    console.log(!states.includes(selectedState), selectedState.length === 2, 'line 277')
 
-    if(selectedLocation.includes(selectedLocation)) {
-      setError("This Zip Code is Already in Your List")
-    }
-
-
-    if(!selectedLocation.includes(selectedLocation) && selectedLocation.length === 5) {
-        setSelected(prevSelected => {const updatedSelection = [...prevSelected,selectedLocation];
+    if(!states.includes(selectedState) && selectedState.length === 2) {
+      console.log('inside if statement line 280')
+        setStates(prevSelected => {const updatedSelection = [...prevSelected, allCapsState];
         setError("")
         return updatedSelection;
+
       })
-
-    }
+      }
   }
-
-  let removeLocation = (places) => {
-    let newArray = selectLocationArray.filter((place) => place !== places);
+  let removeState = (state) => {
+    let newArray = states.filter((place) => place !== state);
     console.log(newArray, 'newArray')
-    setSelectLocationArray(newArray)
+    setStates(newArray)
   }
 
-  let addZipLocation = (selectLocation) => {
-    console.log(selectLocation, 'selectLocation line 294')
+  console.log(states, 'states line 287')
 
-    if(selectLocation.length < 5 || selectLocation.length > 5) {
-      setError("Enter a Valid Zip Code")
-      return
+    const deleteGeoChoices = async ()=>{
+      setChooseGeoBoundingBox(false)
+      await dispatch(clearGeoBounding())
     }
-
-    if(selectLocationArray.includes(selectLocation)) {
-      setError("This Zip Code is Already in Your List")
-      return
-    }
-
-
-    if(!selectLocationArray.includes(selectLocation)) {
-        setSelectLocationArray(prevSelected => {const updatedSelection = [...prevSelected,selectLocation];
-        setError("")
-        return updatedSelection;
-
-      })
-
-    }
-  }
-  console.log(selectLocationArray, 'selectedLocation line 314')
 
   return (
     <>
@@ -325,157 +315,163 @@ function Breeds() {
       <div className='searchAndFilterBreed'>
 
         <div className='gridArea1-1'>
-          {searching && results.length > 0 && menu ? (
-            <div className="results">
-              {results.map((word, index) => (
-                <ul key={index} className='resultList' onClick={() => { setSearching(word); setMenu(false) }}>{word}</ul>
-              ))}
-            </div>
-          ) : null}
-          <div className='inputDiv'>
-            <input
-              className='inputBox'
-              type="text"
-              value={searching}
-              placeholder="Type to search our available breeds then click the + button"
-              onFocus={() => { setMenu(true); setError("") }}
-              onChange={(e) => setSearching(e.target.value)}
-            /> </div>
+          <div className='gridArea11-r1'>
+            {searching && results.length > 0 && menu ? (
+              <div className="results">
+                {results.map((word, index) => (
+                  <ul key={index} className='resultList' onClick={() => { setSearching(word); setMenu(false) }}>{word}</ul>
+                ))}
+              </div>
+            ) : null}
+            <div className='inputDiv'>
+              <input
+                className='inputBox'
+                type="text"
+                value={searching}
+                placeholder="Type to search our available breeds then click the + button"
+                onFocus={() => { setMenu(true); setError(""); setBreedSelected(true) }}
+                onChange={(e) => setSearching(e.target.value)}
+              /> </div>
 
 
-          <div className='searchDiv'>
-            <button className='addButton' onClick={() => { addBreed(searching); setMenu(false); setSearching("") }}><img src={plusImg} className="searchPic" alt='plusimg' /></button></div>
+            <div className='searchDiv'>
+              <button className='addButton' onClick={() => { addBreed(searching); setMenu(false); setSearching("") }}><img src={plusImg} className="searchPic" alt='plusimg' /></button></div>
+          </div>
+
+          <div className='gridArea11-r2'>
+            {breedSelected && selected.length > 0 && (
+              <div className='breedChoices'>Breeds selected:
+                {selected.map((breed, index) => (
+                  <div key={index} className='chosenBreeds'>{breed}
+                    <button className='removeButton' onClick={() => removeBreed(breed)}><img src={deleteImg} className="deletePic" alt='deleteimg' /></button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+          </div>
 
         </div>
 
         <div className='gridArea1-2'>
-          {/* <div className='sizeBreed'>Dogs per page:
-          <input
-              className='sizeInputBreed'
-              type="number"
-              value={size}
-              onFocus={() => {setSizeChange(true);setUpdateButton(true);setError("")}}
-              onChange={(e) => {setSize(e.target.value);setSizeChange(true)}}/>
-              <button className='updateButton' onClick={()=>search(searching)} disabled={!updateButton}>Update</button></div> */}
-          <button className='allFilterButton' onClick={() => { setAllFilterButtons(!allFilterButtons); setAllLocationButtons(false); setFilters(false); setSort(false) }}> Filters</button>
-          <button className='searchByLocationButton' onClick={() => { setAllLocationButtons(!allLocationButtons); setChooseZipCodeOnly(false);setAllFilterButtons(false); setFilters(false); setSort(false) }}>Search By Location</button>
+          <div className='gridArea12-r1'>
+            <button className='allFilterButton' onClick={() => { setAllFilterButtons(!allFilterButtons); setOtherParameters(false); setFilters(false); setSort(false) }}>
+              <div><img src={filterImg} className="filterPic" alt='filterimg' /></div>
+              <div> Filters</div></button>
+            <button className='searchByLocationButton' onClick={() => { setOtherParameters(!otherParameters); setAllFilterButtons(false); setFilters(false); setSort(false);setChooseStates(false);setChooseCity(false) }}>Search By Location</button>
+
+          </div>
+
+          <div className='gridArea12-r2'>
+            {allFilterButtons && (
+              <div className='breedFilterChosen'>
+                <button className='filterButton' onClick={() => { clearFilters(); setFilters(!filters); setError("") }}>Age Filters</button>
+                <div><button className='filterButton' onClick={() => { clearSort(); setSort(!sort); setError("") }}><img src={sortImg} className="filterPic" alt='sortimg' />Sort By</button></div>
+              </div>
+            )}
+
+            {otherParameters && (
+              <div className='otherParametersChosen'>
+                <div className="filter-option">
+                  <label className='checkbox'>
+                    <input
+                      type="checkbox"
+                      value={chooseCity}
+                      onChange={() => setChooseCity(!chooseCity)}
+                    />City: </label>
+                  {chooseCity && (
+                    <input
+                      className="filter-input-city"
+                      type="text"
+                      value={city}
+                      // placeholder="Enter a minimum age"
+                      onChange={(e) => setCity(e.target.value)} />
+                  )}
+
+                </div>
+                <div className="filter-option-state">
+                  <label>
+                    <input
+                      type="checkbox"
+                      value={chooseStates}
+                      onChange={() => setChooseStates(!chooseStates)}
+                    />State: </label>
+                  {chooseStates && (
+                    <>
+                      <input
+                        className="filter-input-state"
+                        type="text"
+                        value={selectedState}
+                        // placeholder="Enter a maximum age"
+                        onFocus={() => setMenu(true)}
+                        onChange={(e) => setSelectedState(e.target.value)} />
+                      <span className='searchSpan'><button className='addStateButton' onClick={()=>{addState(selectedState);setSelectedState("")}} ><img src={plusImg} className="searchStatePic" alt='plusimg' /></button></span>
+                    </>
+                  )}
+                </div>
+                <div className='geoBoundingArea'>
+                  <button className='openModalButton' onClick={()=>setChooseGeoBoundingBox(true)} disabled={geoChoices.length>0}><OpenModalButton
+                    buttonText={<div className='geoBoundingBox'>Geo-Bounding Box</div>}
+                    modalComponent={<GeoBoundingBox />}
+                    /></button>
+                </div>
+
+          <div className='geoChoicesArea'>
+          {geoChoices.length>0 &&  (
+        <>
+      {geoChoices?.map((choice, index) => (
+          <div key={index} className='geoChoice' id={'s'+ index}>{choice}</div>
+      ))}
+      <div className='editGeoDiv'><button className='editGeoChoiceButton'>
+                    <OpenModalButton
+                    buttonText={<div className='geoBoundingBox'><img src={editImg} className="editPic" alt='editimg'/></div>}
+                    modalComponent={<GeoBoundingBox parameters={bodyParams} />} /></button></div>
+      <div className='deleteGeoDiv'><button className='deleteGeoChoiceButton'onClick={()=>{deleteGeoChoices()}} >
+        <img src={deleteImg} className="deleteGeoPic" alt='plusimg'/></button></div>
+      </>
+         )}
+         </div>
+
+
+              </div>
+            )}
+
+
+          </div>
+          {/* <button className='allFilterButton' onClick={() => { setAllFilterButtons(!allFilterButtons); setOtherParameters(false); setFilters(false); setSort(false) }}>
+            <div><img src={filterImg} className="filterPic" alt='filterimg' /></div>
+            <div> Filters</div></button>
+          <button className='searchByLocationButton' onClick={() => { setOtherParameters(!otherParameters);setAllFilterButtons(false); setFilters(false); setSort(false) }}>Search By Location</button> */}
 
         </div>
 
         <div className='gridArea2-1'>
 
-          <div className='breedChoices'>Breeds selected:
+          {/* <div className='breedChoices'>Breeds selected:
             {selected.map((breed, index) => (
               <div key={index} className='chosenBreeds'>{breed}
                 <button className='removeButton' onClick={() => removeBreed(breed)}><img src={deleteImg} className="deletePic" alt='deleteimg' /></button>
               </div>
             ))}
-          </div>
+          </div> */}
 
         </div>
 
         <div className='gridArea2-2'>
-          {allFilterButtons && (
-            <div className='allFilterItems'>
-              <button className='filterButton' onClick={() => { clearFilters(); setFilters(!filters); setError("") }}><img src={filterImg} className="filterPic" alt='filterimg' />Filters</button>
-
-              <div className='sizeBreed'>Dogs per page:
-                <input
-                  className='sizeInputBreed'
-                  type="number"
-                  value={size}
-                  onFocus={() => { setSizeChange(true); setUpdateButton(true); setError("") }}
-                  onChange={(e) => { setSize(e.target.value); setSizeChange(true) }} />
-                <button className='updateButton' onClick={() => search(searching)} disabled={!updateButton}>Update</button></div>
-
-              <div><button className='filterButton' onClick={() => { clearSort(); setSort(!sort); setError("") }}><img src={sortImg} className="filterPic" alt='sortimg' />Sort By</button></div>
-            </div>
-          )}
-          {allLocationButtons && (
-            <div className='allLocationItems'>
-            <div className='zipCodeOnlyDiv'><button className='chooseZipCodeButton' onClick={() => setChooseZipCodeOnly(!chooseZipCodeOnly)}>Zip Code Only</button></div>
-              <div className='otherParamsDiv'><button className='otherParametersButton' onClick={() => setOtherParameters(!otherParameters)}>Other Parameters</button></div>
-
-              <div className='selectLocationInput'>
-              {chooseZipCodeOnly && allLocationButtons && (
-                <>
-                  <div className='inputDiv'>
-                    <input
-                      className='inputBoxLocation'
-                      disabled={filters}
-                      type="number"
-                      value={selectLocation}
-                      placeholder="Enter a zip code and press +"
-                    // onFocus={() => setMenu(true)}
-                    onChange={(e) => {setSelectLocation(e.target.value);setError("")}}
-                    /> </div>
-
-                  <div className='searchDiv'><button className='addZipButton' disabled={filters} onClick={()=>{addZipLocation(selectLocation);setSelectLocation("")}}><img src={plusImg} className="searchPic" alt='plusimg' /></button></div>
-                </>
-              )}
-              </div>
-            <div className='selectLocationArray'>
-            {allLocationButtons && chooseZipCodeOnly && (
-
-                <div className='locationChoices'>Zip Codes selected:
-                 {selectLocationArray.map((places, index) =>(
-                   <div key={index} className='chosenLocations'>{places}
-                      <button className='removeLocationButton' onClick={()=>removeLocation(places)}><img src={deleteImg} className="deleteLocationPic" alt='plusimg'/></button>
-                     </div>
-                     ))}
-                </div>
-                )}
-
-            </div>
-
-              {otherParameters && (
-                <>
-                  <div className="filter-option">
-                    <label className='checkbox'>
-                      <input
-                        type="checkbox"
-                        value={chooseCity}
-                        onChange={() => setChooseCity(!chooseCity)}
-                      />City: </label>
-                    {chooseCity && (
-                      <input
-                        className="filter-input-city"
-                        type="text"
-                        value={city}
-                        // placeholder="Enter a minimum age"
-                        onChange={(e) => setCity(e.target.value)} />
-                    )}
-
-                  </div>
-                  <div className="filter-option-state">
-                    <label>
-                      <input
-                        type="checkbox"
-                        value={chooseStates}
-                        onChange={() => setChooseStates(!chooseStates)}
-                      />State: </label>
-                    {chooseStates && (
-                      <>
-                        <input
-                          className="filter-input-state"
-                          type="text"
-                          value={states}
-                          // placeholder="Enter a maximum age"
-                          onFocus={() => setMenu(true)}
-                          onChange={(e) => setStates(e.target.value)} />
-                        <span className='searchSpan'><button  ><img src={plusImg} className="searchStatePic" alt='plusimg' /></button></span>
-                      </>
-                    )}
-                  </div>
-                </>
-              )}
+        {chooseStates && states.length>0 && otherParameters && (
+             <div className='locationChoices'>States Selected:
+             {states.map((places, index) =>(
+               <div key={index} className='chosenLocations'>{places}
+               <button className='removeStateButton' onClick={()=>removeState(places)}><img src={deleteImg} className="deleteStatePic" alt='deleteimg'/></button>
+               </div>
+             ))}
+             </div>
+        )}
 
 
-            </div>
 
-          )}
 
-      {filters && (
+          {filters && (
             <>
               <div className='filters-breed'>
                 <div className="filter-option-breed">
@@ -514,7 +510,7 @@ function Breeds() {
                   )}
                 </div>
 
-                <div className="filter-option-breed">
+                {/* <div className="filter-option-breed">
                   <label>
                     <input
                       type="checkbox"
@@ -533,7 +529,8 @@ function Breeds() {
 
                     </div>
                   )}
-                </div>
+                </div> */}
+
               </div>
             </>
           )}
@@ -596,29 +593,51 @@ function Breeds() {
 
 
         </div>
-        <div className='gridArea3-1'>
 
-          <div>
 
-          </div>
+        <div className='gridArea3-2'>
+          <>
+            <div className='inputDiv'>
+              <input
+                className='inputBoxLocation'
+                type="number"
+                value={zipCode}
+                placeholder="Enter a zip code and press +"
+                onFocus={() => setLocation(true)}
+                onChange={(e) => { setZipCode(e.target.value); setError("") }}
+              /> </div>
+
+            <div className='searchDiv'><button className='addZipButton' onClick={() => { addZipCode(zipCode); setZipCode("") }}><img src={plusImg} className="searchPic" alt='plusimg' /></button></div>
+
+            <div className='sizeBreed'>Dogs per page:
+              <input
+                className='sizeInputBreed'
+                type="number"
+                value={size}
+                onFocus={() => { setSizeChange(true); setUpdateButton(true); setError("") }}
+                onChange={(e) => { setSize(e.target.value); setSizeChange(true) }} />
+              <button className='updateButton' onClick={() => search(searching)} disabled={!updateButton}>Update</button></div>
+          </>
 
         </div>
 
-        <div className='gridArea3-2'>
-          {location && filters && (
+        <div className='gridArea4-2'>
+          {location && selectedZipCode.length > 0 && (
             <div className='zipChoices'>Zip Codes Selected:
               {selectedZipCode.map((zipcode, index) => (
                 <div key={index} className='chosenZips'>{zipcode}
-                  <button className='removeZipButton' onClick={() => removeZip(zipcode)}><img src={deleteImg} className="deleteZipPic" alt='deleteimg' /></button>
+                  <button className='removeZipButton' onClick={() => removeZipCode(zipcode)}><img src={deleteImg} className="deleteZipPic" alt='deleteimg' /></button>
                 </div>
               ))}
-
             </div>
           )}
         </div>
-        </div>
 
-     
+
+      </div>
+
+
+
 
       <div className='searchBreed'><button className='searchBreedButton' onClick={() => { search(searching); setMenu(false); setFrom(0) }} disabled={updateButton}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg' /></button>
         <button className='clearAllButton' onClick={clearAll}>Clear All</button></div>

@@ -28,18 +28,15 @@ ul.resultList {
 }
 
 .filters-breed {
-
     position: absolute;
-    margin-top: 40px;
-    left: -15px;
+    left: 50px;
     width: 250px;
     padding: 10px;
   }
 
   .sort {
     position: absolute;
-    margin-top: 45px;
-    left: 385px;
+    left: 350px;
     width: 250px;
     padding: 10px;
 
@@ -56,7 +53,7 @@ ul.resultList {
 .searchAndFilterBreed {
   display: grid;
   grid-template-columns: repeat(2,1fr);
-  grid-template-rows: auto auto auto;
+  grid-template-rows: repeat(4,1fr);
   height: 100px;
   margin-top: 40px;
   margin-left: 10%;
@@ -92,25 +89,86 @@ ul.resultList {
 
 .gridArea1-1{
     grid-area: 1/1;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    grid-template-rows: repeat(2,1fr);
     width: 100%;
-    height: 50px;
+    height: 110px;
+}
+
+.gridArea11-r1 {
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.gridArea11-r2 {
+  display:flex;
 }
 
 .gridArea1-2 {
     grid-area: 1/2;
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    grid-template-rows: repeat(2,1fr);
     width: 100%;
-    height: 50px;
+    /* height: 100px; */
 }
 
+.gridArea12-r1 {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.gridArea12-r2 {
+  display: grid;
+  position: relative;
+  top: 5px;
+}
+
+.breedFilterChosen {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.otherParametersChosen {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  grid-template-rows: repeat(2,1fr);
+  width: 100%;
+}
+
+.filter-option-state {
+  grid-area: 2/1;
+}
+
+.filter-input-city {
+  width: 152px;
+  height: 18px;
+  border-radius: 5px;
+  margin-left: 5px;
+  border-width: 0.5px;
+}
+
+.filter-input-state {
+  width: 30px;
+  height: 17px;
+  margin-left: 5px;
+  border-radius: 5px 0px 0px 5px;
+  border-width: 0.5px;
+  padding-left: 5px;
+}
+
+.searchStatePic {
+  height: 15px;
+  width: 15px;
+}
 
 
 .gridArea2-1{
@@ -129,7 +187,7 @@ ul.resultList {
     grid-area: 2/2;
     position: relative;
     width: 100%;
-    height: 150px;
+    height: 100px;
 }
 
 .gridArea3-1 {
@@ -263,12 +321,14 @@ ul.resultList {
   .breedChoices {
     position:absolute;
     /* right: 240px; */
-    margin-left: 17%;
+    /* margin-left: 17%;
     margin-right: 46%;
     width: 250px;
-    padding:10px;
+    padding:10px; */
+    margin-left: 30px;
     font-weight: bold;
     font-size: 20px;
+    z-index: 7;
 
 
   }
@@ -290,6 +350,7 @@ ul.resultList {
     flex-direction: row;
     align-items: center;
     gap: 8px;
+    margin-top: 5px;
   }
 
   .locationChoices {
@@ -298,6 +359,8 @@ ul.resultList {
     flex-wrap: wrap;
     align-items: center;
     gap: 8px;
+    position: relative;
+    top: 5px;
   }
 
   .removeButton {
@@ -309,8 +372,15 @@ ul.resultList {
     align-items: center;
   }
 
-  .removeZipButton {
+  .removeStateButton {
+    border: none;
+    background-color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
 
+  .removeZipButton {
     border: none;
     background-color: white;
     cursor: pointer;
@@ -323,6 +393,11 @@ ul.resultList {
   .deletePic {
     height: 20px;
     width: 20px;
+  }
+
+  .deleteStatePic {
+    height: 15px;
+    width: 15px;
   }
 
   .deleteZipPic {
@@ -430,7 +505,14 @@ ul.resultList {
   border-radius: 10px;
 }
 
+.allFilterButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .allFilterButton, .searchByLocationButton {
+
   width: 100%;
   height: 100%;
   cursor: pointer;
@@ -444,12 +526,6 @@ ul.resultList {
     background-color: #f0f0f0;
 }
 
-.allFilterItems {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  margin-top: 10px;
-}
 
 .allLocationItems {
   position: relative;
@@ -496,13 +572,18 @@ ul.resultList {
   position: relative;
   height: 21px;
   width: 35px;
-  left:5%;
   border-left: none;
   border-radius: 0px 5px 5px 0px;
   border-width: 0.5px;
   background-color: rgb(240, 240, 154);
   text-align: center;
   cursor: pointer;
+}
+
+.searchSpan{
+  position: relative;
+  right: 2px;
+  top: 2px;
 }
 
 .searchStatePic {
@@ -553,4 +634,77 @@ ul.resultList {
   cursor: pointer;
   display: flex;
   align-items: center;
+}
+
+.filter-option, .filter-option-state {
+
+  height: 25px;
+}
+
+.openModalButton {
+  width: 150px;
+  height: 25px;
+  font-size: 16px;
+  border-radius: 10px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.geoBoundingArea {
+  grid-area: 1/2;
+  display: flex;
+  justify-content:center;
+}
+
+.geoChoicesArea {
+  grid-area: 2/2;
+  display: flex;
+  justify-content:start;
+}
+
+.geoChoice {
+  display: flex;
+  margin-left: 10px;
+  /* width: 200px; */
+  height: 25px;
+  justify-content:center;
+  align-items: center;
+  border-radius: 10px;
+}
+
+.editGeoDiv{
+  margin-left: 10px;
+}
+.editGeoChoiceButton, .deleteGeoChoiceButton{
+  height: 25px;
+}
+
+.editPic, .deleteGeoPic {
+  height: 20px;
+  width: 20px;
+}
+
+.editGeoChoiceButton, .deleteGeoChoiceButton {
+  background-color: white;
+  border:none;
+  cursor:pointer;
+}
+#s0, #s2  {
+  background-color: green;
+  color:white;
+  font-style:oblique;
+  font-weight: bold;
+  padding-right: 3px;
+  padding-left: 3px;
+}
+
+#s1, #s3 {
+  background-color: orange;
+  color:white;
+  font-style:oblique;
+  font-weight: bold;
+  padding-right: 3px;
+  padding-left: 3px;
 }
