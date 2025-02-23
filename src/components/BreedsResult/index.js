@@ -21,7 +21,7 @@ function BreedsResult({size, sizeChange, totalPage}) {
   let previousUrl = searchResult.prev
   let list = searchResult.resultIds
 
-
+  console.log(searchResult, 'searchResult line 24')
   const [likeID, setLikeID] = useState([]);
   const [page, setPage] = useState(1)
   const [selectedDogs, setSelectedDogs] = useState(new Set());
@@ -107,7 +107,9 @@ function BreedsResult({size, sizeChange, totalPage}) {
       <div>{dog.name} {dog.age}</div>
       <div><button className='removeDogFromList' onClick={()=>removeLike(dog.id)}><img src={deleteImg} className="deletePic" alt='deleteimg'/></button></div>
      </div>
-    )}</div>
+         )}
+    </div>
+    
     <div className='topRow'>
     <div className='totalFinds'>Total Finds: {total}</div>
     <div className='nexPrevButtons'>

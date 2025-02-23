@@ -53,12 +53,9 @@ function Locations() {
     // console.log(geoChoices, 'geoChoices')
 
   const searchZipCodes = async () => {
-
-
        await dispatch(clearGeoBounding())
        await dispatch(clearLocationsSearch())
        await dispatch(postLocations(selected))
-
   }
 
   const searchForLocations = async () => {

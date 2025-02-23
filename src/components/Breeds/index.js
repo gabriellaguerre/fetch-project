@@ -5,7 +5,7 @@ import Profile from '../Profile';
 import BreedsResult from "../BreedsResult";
 import OpenModalButton from '../OpenModalButton';
 import { breeds, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, clearAllData, dogMatch } from '../../redux/dogsSlice';
-import {postLocations, geoBoundingData, postSearchLocations, clearZCLocations, clearLocationsSearch, clearGeoBounding} from '../../redux/locationsSlice'
+import {postLocations, geoBoundingData, allLocations, postSearchLocations, clearZCLocations, clearLocationsSearch, clearGeoBounding} from '../../redux/locationsSlice'
 import './Breeds.css';
 import GeoBoundingBox from "../GeoBoundingBox";
 import searchImg from '../../assets/search.png';
@@ -29,11 +29,14 @@ function Breeds() {
   const doggyBreeds = useSelector(getDogBreed)
   const searchResult = useSelector(getSearches)
   const details = useSelector(getDogDetails);
-    const bodyParams = useSelector(geoBoundingData);
+  const bodyParams = useSelector(geoBoundingData);
+  const locationsList = useSelector(allLocations);
   // const user = "asfd";
   const dogSearchUrl = 'https://frontend-take-home-service.fetch.com/dogs/search?';
 
   let geoChoices = bodyParams.geoBoundingBox ? Object.keys(bodyParams.geoBoundingBox) : [];
+
+  console.log(locationsList, 'locations LIst line 39')
 
   const [allFilterButtons, setAllFilterButtons] = useState(false);
   // const [allLocationButtons, setAllLocationButtons] = useState(false);
@@ -107,11 +110,11 @@ function Breeds() {
 
     let searchParams = {};
 
-    if (selected.length === 0) {
-      setError("Enter a Breed For Your Search")
-      setUpdateButton(true);
-      return;
-    }
+    // if (selected.length === 0) {
+    //   setError("Enter a Breed For Your Search")
+    //   setUpdateButton(true);
+    //   return;
+    // }
 
     if ((breed && name) || (breed && age) || (name && age)) {
       setError("Choose 1 Sort Method")
@@ -145,8 +148,7 @@ function Breeds() {
     searchParams.from = from;
     urlFrontend.searchParams.append('from', searchParams.from)
 
-    searchParams.sort = 'breed:asc'
-    urlFrontend.searchParams.append('sort', searchParams.sort)
+
 
 
     if (location && selectedZipCode.length > 0) {
@@ -189,6 +191,12 @@ function Breeds() {
       searchParams.sort = 'age:desc'
       urlFrontend.searchParams.append('sort', searchParams.sort)
     }
+
+    if(!breed && !name && !age) {
+      searchParams.sort = 'breed:asc'
+      urlFrontend.searchParams.append('sort', searchParams.sort)
+    }
+
 
     setError("")
     setSizeChange(false);
@@ -305,6 +313,12 @@ function Breeds() {
       setChooseGeoBoundingBox(false)
       await dispatch(clearGeoBounding())
     }
+
+    const searchZipCodes = async () => {
+           await dispatch(clearGeoBounding())
+           await dispatch(clearLocationsSearch())
+           await dispatch(postLocations(selectedZipCode))
+      }
 
   return (
     <>
@@ -636,11 +650,9 @@ function Breeds() {
 
       </div>
 
-
-
-
-      <div className='searchBreed'><button className='searchBreedButton' onClick={() => { search(searching); setMenu(false); setFrom(0) }} disabled={updateButton}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg' /></button>
+        <div className='searchBreed'><button className='searchBreedButton' onClick={() => { search(searching); setMenu(false); setFrom(0) }}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg' /></button>
         <button className='clearAllButton' onClick={clearAll}>Clear All</button></div>
+
       <div className='breedResult'><BreedsResult size={size} sizeChange={sizeChange} totalPage={Math.ceil(Number(searchResult.total) / Number(size))} /></div>
     </>
   );
