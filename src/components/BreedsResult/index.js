@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {addLikeDog, getSearches, getLikeDogs, getDogDetails, postSearchDog, nextPrevList, dogMatch,removeLikeDog, getMatched } from '../../redux/dogsSlice';
+import {searchLocations, allLocations, geoBoundingData} from '../../redux/locationsSlice'
 import OpenModalButton from '../OpenModalButton';
 import Match from '../Match';
 import './BreedsResult.css'
@@ -14,19 +15,47 @@ function BreedsResult({size, sizeChange, totalPage}) {
   const details = useSelector(getDogDetails);
   const searchResult = useSelector(getSearches)
   const likeList = useSelector(getLikeDogs)
+  const locationsList = useSelector(allLocations);
+  const searchLocationsList = useSelector(searchLocations)
   const matchedWithDog = useSelector(getMatched)
 
   let total = searchResult.total;
   let nextUrl = searchResult.next;
   let previousUrl = searchResult.prev
   let list = searchResult.resultIds
+  let updated;
+  let mergedData;
 
-  console.log(searchResult, 'searchResult line 24')
+  let searchByLocation = searchLocationsList.results
+  console.log(searchByLocation, 'searchByLocation line 27')
+  console.log(locationsList, 'locationsList line 31')
+  console.log(details, 'details line 32')
+
+
+  useEffect(()=> {
+    console.log(searchByLocation?.length>0, 'inside useeffect line 34')
+    
+      console.log('inside else if line 51')
+      mergedData = details.map(dog => {
+      const locationData = locationsList.find(location => location.zip_code === dog.zip_code);
+      console.log(locationData, 'locationData line 98')
+      if(locationData) {
+        updated = {... dog, locationData}
+        return updated 
+      } else {
+        updated = dog
+        return updated 
+      }
+    })   
+    setUpdatedArray(mergedData)
+
+  }, [details, locationsList])
+
   const [likeID, setLikeID] = useState([]);
   const [page, setPage] = useState(1)
   const [selectedDogs, setSelectedDogs] = useState(new Set());
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [notEmpty, setNotEmpty] = useState(true)
+  const [updatedArray, setUpdatedArray] = useState([])
 
   let dogData;
 
@@ -89,7 +118,9 @@ function BreedsResult({size, sizeChange, totalPage}) {
 
   let matched = likeList.filter(dog => dog.id === matchedWithDog?.match)
 
+  console.log(updatedArray, 'updatedArray line 94')
 
+ 
   return (
     <>
     <div className='selectedFavorites'>
@@ -124,13 +155,22 @@ function BreedsResult({size, sizeChange, totalPage}) {
 
     {details.length>0 ? (
         <div className='resultDisplayed'>
-          {details?.map(dog =>
-            <button key={dog.id} className={`dogSet ${selectedDogs.has(dog.id) ? "selected" : ""}`} onClick={()=>likeDogs(dog)}>
-                <div><img src={dog.img} className='dogImage'/> </div>
-                <div>Name: {dog.name}</div>
-                <div>Age: {dog.age}</div>
-                <div>Breed: {dog.breed}</div>
-                <div>Zip Code: {dog.zip_code}</div>
+          {updatedArray?.map(dog =>
+            <button key={dog?.id} className={`dogSet ${selectedDogs.has(dog?.id) ? "selected" : ""}`} onClick={()=>likeDogs(dog)}>
+                <div>{dog?.breed}</div>
+                <div><img src={dog?.img} className='dogImage'/> </div>
+                <div>Name: {dog?.name}</div>
+                <div>Age: {dog?.age}</div>
+                {dog.locationData && (
+                  <>
+                  <div>City: {dog?.locationData?.city}</div>
+                  <div>State: {dog?.locationData?.state}</div>
+                  <div>County: {dog?.locationData?.county}</div>
+                  </>
+                )}
+                <div>Zip Code: {dog?.zip_code}</div>
+                
+                
              </button>
         )}
         </div>

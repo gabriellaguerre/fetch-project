@@ -13,7 +13,7 @@
 
 .dogSet{
   width: 180px;
-  height: 250px;
+  height: auto;
   border-radius: 5px;
   margin: 10px;
   cursor:pointer;

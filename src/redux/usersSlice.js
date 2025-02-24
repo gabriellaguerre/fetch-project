@@ -12,7 +12,7 @@ const initialState = {
   }
 
   export const login = createAsyncThunk('user/LOGIN_USER', async ({name}) => {
-    console.log(name, "name")
+    // console.log(name, "name")
     const response = await fetch(loginUsersURL, {
     method: 'POST',
     headers: {"Content-Type": "application/json",},

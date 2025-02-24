@@ -36,7 +36,7 @@ function Breeds() {
 
   let geoChoices = bodyParams.geoBoundingBox ? Object.keys(bodyParams.geoBoundingBox) : [];
 
-  console.log(locationsList, 'locations LIst line 39')
+ 
 
   const [allFilterButtons, setAllFilterButtons] = useState(false);
   // const [allLocationButtons, setAllLocationButtons] = useState(false);
@@ -92,13 +92,17 @@ function Breeds() {
 
   const [chooseZipCodeOnly, setChooseZipCodeOnly] = useState(false)
   const [otherParameters, setOtherParameters] = useState(false)
-   const [chooseGeoBoundingBox, setChooseGeoBoundingBox] = useState(false);
+  const [chooseGeoBoundingBox, setChooseGeoBoundingBox] = useState(false);
+  const [data, setData] = useState({})
 
 
   let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
 
 
   const search = async () => {
+    
+   
+
     const urlFrontend = new URL(dogSearchUrl);
 
     if (size <= 0) {
@@ -110,12 +114,6 @@ function Breeds() {
 
     let searchParams = {};
 
-    // if (selected.length === 0) {
-    //   setError("Enter a Breed For Your Search")
-    //   setUpdateButton(true);
-    //   return;
-    // }
-
     if ((breed && name) || (breed && age) || (name && age)) {
       setError("Choose 1 Sort Method")
       return;
@@ -126,30 +124,19 @@ function Breeds() {
       return;
     }
 
-    // if ((zipCode && selectedZipCode.length === 0)) {
-    //   setError("You Did not Enter Any Zip Codes")
-    //   return;
-    // }
-
     if (minAge < 0 || maxAge < 0) {
       setError("Please Enter a Valid Age")
       return
     }
 
-
     searchParams.breeds = selected;
     searchParams.breeds.forEach(breed => urlFrontend.searchParams.append('breeds', breed));
-
 
     searchParams.size = size;
     urlFrontend.searchParams.append('size', searchParams.size)
 
-
     searchParams.from = from;
     urlFrontend.searchParams.append('from', searchParams.from)
-
-
-
 
     if (location && selectedZipCode.length > 0) {
       searchParams.zipCodes = selectedZipCode;
@@ -207,6 +194,39 @@ function Breeds() {
     await dispatch(postSearchDog(searchArray))
     // let dogs = await dispatch(postSearchDog(searchArray))
     // console.log(dogs, 'dogs')
+    
+   console.log(otherParameters && !chooseCity && !chooseStates, 'line 198')
+    if(otherParameters && !chooseCity && !chooseStates) {
+      await dispatch(clearGeoBounding())
+      await dispatch(clearLocationsSearch())
+      await dispatch(postLocations(selectedZipCode))
+    }
+
+    console.log(otherParameters && (chooseCity || chooseStates || chooseGeoBoundingBox), 'line 205')
+    if(otherParameters && (chooseCity || chooseStates || chooseGeoBoundingBox)) {
+
+      console.log('inside searchForLocations function line 207')
+      await dispatch(clearZCLocations())
+      
+      
+      let params = {}
+      
+      // console.log((chooseStates), selected, 'selected line 82')
+      
+      if(chooseCity && city) params.city = city
+      if(chooseStates || states.length > 0) params.states = states
+      
+      if(Object.keys(bodyParams).length>0) params.geoBoundingBox = bodyParams.geoBoundingBox
+      
+      params.size = 10000;
+      params.from = from ? from : '0';
+      
+      console.log(params, 'params')
+      setData(params)
+      
+      await dispatch(postSearchLocations(params))
+       
+    }
 
   }
 
@@ -290,7 +310,7 @@ function Breeds() {
       setError('Enter a two-letter state/territory abbreviations ')
 
     }
-    console.log(!states.includes(selectedState), selectedState.length === 2, 'line 277')
+    // console.log(!states.includes(selectedState), selectedState.length === 2, 'line 277')
 
     if(!states.includes(selectedState) && selectedState.length === 2) {
       console.log('inside if statement line 280')
@@ -307,18 +327,18 @@ function Breeds() {
     setStates(newArray)
   }
 
-  console.log(states, 'states line 287')
+  // console.log(states, 'states line 287')
 
     const deleteGeoChoices = async ()=>{
       setChooseGeoBoundingBox(false)
       await dispatch(clearGeoBounding())
     }
 
-    const searchZipCodes = async () => {
-           await dispatch(clearGeoBounding())
-           await dispatch(clearLocationsSearch())
-           await dispatch(postLocations(selectedZipCode))
-      }
+    // const searchZipCodes = async () => {
+    //        await dispatch(clearGeoBounding())
+    //        await dispatch(clearLocationsSearch())
+    //        await dispatch(postLocations(selectedZipCode))
+    //   }
 
   return (
     <>
@@ -610,18 +630,24 @@ function Breeds() {
 
 
         <div className='gridArea3-2'>
-          <>
+         
+          {(allFilterButtons || otherParameters) && (
+             <div className='zipCodeEntry'>
             <div className='inputDiv'>
-              <input
-                className='inputBoxLocation'
-                type="number"
-                value={zipCode}
-                placeholder="Enter a zip code and press +"
-                onFocus={() => setLocation(true)}
-                onChange={(e) => { setZipCode(e.target.value); setError("") }}
-              /> </div>
+            <input
+              className='inputBoxLocation'
+              type="number"
+              value={zipCode}
+              disabled={(chooseCity || chooseStates)}
+              placeholder="Enter a zip code and press +"
+              onFocus={() => setLocation(true)}
+              onChange={(e) => { setZipCode(e.target.value); setError("") }}
+            /> </div>
 
-            <div className='searchDiv'><button className='addZipButton' onClick={() => { addZipCode(zipCode); setZipCode("") }}><img src={plusImg} className="searchPic" alt='plusimg' /></button></div>
+          <div className='searchDiv'><button className='addZipButton' onClick={() => { addZipCode(zipCode); setZipCode("") }} disabled={(chooseCity || chooseStates)}><img src={plusImg} className="searchPic" alt='plusimg' /></button></div>
+          </div>
+
+          )}
 
             <div className='sizeBreed'>Dogs per page:
               <input
@@ -631,7 +657,7 @@ function Breeds() {
                 onFocus={() => { setSizeChange(true); setUpdateButton(true); setError("") }}
                 onChange={(e) => { setSize(e.target.value); setSizeChange(true) }} />
               <button className='updateButton' onClick={() => search(searching)} disabled={!updateButton}>Update</button></div>
-          </>
+          
 
         </div>
 
@@ -650,7 +676,7 @@ function Breeds() {
 
       </div>
 
-        <div className='searchBreed'><button className='searchBreedButton' onClick={() => { search(searching); setMenu(false); setFrom(0) }}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg' /></button>
+        <div className='searchBreed'><button className='searchBreedButton' onClick={() => { search(); setMenu(false); setFrom(0) }}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg' /></button>
         <button className='clearAllButton' onClick={clearAll}>Clear All</button></div>
 
       <div className='breedResult'><BreedsResult size={size} sizeChange={sizeChange} totalPage={Math.ceil(Number(searchResult.total) / Number(size))} /></div>
