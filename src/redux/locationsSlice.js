@@ -24,7 +24,7 @@ export const postLocations = createAsyncThunk('locations/ZIP_CODES', async (sear
         body: JSON.stringify(searchArray),
         credentials: 'include',
     })
-    console.log(response, 'postLocations (zip codes only) response')
+    // console.log(response, 'postLocations (zip codes only) response')
     if(response.ok){
         const data = await response.json()
         console.log(data, 'locations')
@@ -45,7 +45,7 @@ export const postSearchLocations = createAsyncThunk('locations/ZIP_DETAILS', asy
     console.log(response, 'response in postsearchlocation function')
     if(response.ok){
         const data = await response.json()
-        console.log(data, 'data in locationSlice line 45')
+        // console.log(data, 'data in locationSlice line 45')
         return data;
     }
 })

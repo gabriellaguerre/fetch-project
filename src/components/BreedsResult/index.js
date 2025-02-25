@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {addLikeDog, getSearches, getLikeDogs, getDogDetails, postSearchDog, nextPrevList, dogMatch,removeLikeDog, getMatched,searchDog } from '../../redux/dogsSlice';
+import {searchDogForLocations, postSearchLocationDog, locationDogDetails, addLikeDog, getSearches, getLikeDogs, getDogDetails, postSearchDog, nextPrevList, dogMatch,removeLikeDog, getMatched,searchDog,locationSearchDogs, locationSearchNextList } from '../../redux/dogsSlice';
 import {searchLocations, allLocations, geoBoundingData} from '../../redux/locationsSlice'
 import OpenModalButton from '../OpenModalButton';
 import Match from '../Match';
@@ -19,6 +19,9 @@ function BreedsResult({size, sizeChange, totalPage, chooseCity, city}) {
   const searchLocationsList = useSelector(searchLocations)
   const matchedWithDog = useSelector(getMatched)
 
+  const locationSearchForDog = useSelector(locationSearchDogs)
+  const locationGetDogDetails = useSelector(locationDogDetails)
+
   const dogSearchUrl = 'https://frontend-take-home-service.fetch.com/dogs/search?';
   let total = searchResult.total;
   let nextUrl = searchResult.next;
@@ -27,14 +30,51 @@ function BreedsResult({size, sizeChange, totalPage, chooseCity, city}) {
   let updated;
   let mergedData;
 
+  const [likeID, setLikeID] = useState([]);
+  const [page, setPage] = useState(1)
+  const [selectedDogs, setSelectedDogs] = useState(new Set());
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [updatedArray, setUpdatedArray] = useState([])
+  const [mergedArray,  setMergedArray] = useState([])
+ 
+
   let searchByLocation = searchLocationsList.results
   let searchByLocationTotal = searchLocationsList.total
   // console.log(searchByLocation, searchByLocationTotal, 'searchByLocation and total line 27')
   // console.log(locationsList, 'locationsList line 31')
   // console.log(details, 'details line 32')
   // const urlFrontend = new URL(dogSearchUrl);
+  console.log(locationSearchForDog, 'locationSearchForDog line 36')
+  console.log(locationGetDogDetails, 'locationGetDogDetails line 37')
+  console.log(searchLocationsList, 'searchLocationsList line 41')
+
+ 
+ 
+ useEffect(()=> {
+  if(locationSearchForDog && searchLocationsList) {
+    const mergedLocationDogData = locationGetDogDetails.map(dog => {
+      const locationData = searchLocationsList.results.find(
+        location => String(location.zip_code) === String(dog.zip_code)
+      );
+      console.log(locationData, 'locationData line 59')
+      return locationData ? {...dog, locationData} : null
+    }).filter(dog => dog !== null)
+    
+    setMergedArray(prev => [...prev, mergedLocationDogData])
+  }
+
+  if(locationSearchForDog?.next) {
+     let searchForDogLocationsResult =  dispatch(locationSearchNextList(locationSearchForDog.next))
+     let getDogDetailsForTheSearch = searchForDogLocationsResult?.payload?.resultIds
+          // console.log(getDogDetailsForTheSearch, 'line 228')
+    
+      dispatch(postSearchLocationDog(getDogDetailsForTheSearch))
+  }
 
 
+ }, [locationSearchForDog, searchLocationsList])
+ 
+ 
   useEffect(()=> {
 
 
@@ -50,13 +90,9 @@ function BreedsResult({size, sizeChange, totalPage, chooseCity, city}) {
     })
     setUpdatedArray(mergedData)
 
-  }, [details, locationsList, city])
+  }, [details, locationsList])
 
-  const [likeID, setLikeID] = useState([]);
-  const [page, setPage] = useState(1)
-  const [selectedDogs, setSelectedDogs] = useState(new Set());
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [updatedArray, setUpdatedArray] = useState([])
+  
 
   let dogData;
 
@@ -119,6 +155,7 @@ function BreedsResult({size, sizeChange, totalPage, chooseCity, city}) {
 
   let matched = likeList.filter(dog => dog.id === matchedWithDog?.match)
 
+  console.log(mergedArray, 'mergedArray line 157')
   
 
 

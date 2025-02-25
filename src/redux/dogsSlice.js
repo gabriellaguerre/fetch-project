@@ -12,6 +12,8 @@ const initialState = {
     dogsDetail: [],
     match: {},
     likeDogs: [],
+    location_search: {},
+    location_dogsDetail: [],
 }
 
 // *******************GET /dogs/breeds ***********************************/
@@ -50,7 +52,45 @@ export const searchDog = createAsyncThunk('dogs/SEARCH', async (urlFrontend) => 
     }
 })
 
+
+
 export const nextPrevList = createAsyncThunk('dogs/NEXT_SEARCH', async (nextPrevUrl) => {
+    // console.log(nextUrl, 'nextList in dogSlice line 50')
+
+
+    const url = `https://frontend-take-home-service.fetch.com${nextPrevUrl}`;
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {"Content-Type": "application/json"},
+        credentials: 'include',
+    })
+    // console.log(response);
+    if(response.ok){
+        const data = await response.json()
+        // console.log(data, 'data in nextList in dogSlice line 63')
+        return data;
+    }
+})
+
+export const searchDogForLocations = createAsyncThunk('dogs/SEARCH_LOCATION', async (urlFrontend) => {
+    console.log(urlFrontend.href, 'searchDogForLocations in dogSlice line 34')
+
+    const response = await fetch(urlFrontend.href, {
+        method: 'GET',
+        headers: {"Content-Type": "application/json"},
+        credentials: 'include',
+    })
+    // console.log(response);
+    if(response.ok){
+        const data = await response.json()
+        // console.log(data, 'data in searchDog in dogSlice line 44')
+        return data;
+    }
+})
+
+
+export const locationSearchNextList = createAsyncThunk('dogs/NEXT_SEARCH_LOCATION', async (nextPrevUrl) => {
     // console.log(nextUrl, 'nextList in dogSlice line 50')
 
 
@@ -72,6 +112,22 @@ export const nextPrevList = createAsyncThunk('dogs/NEXT_SEARCH', async (nextPrev
 //*************************POST /dogs******************************************************* */
 
 export const postSearchDog = createAsyncThunk('dogs/DOG_DETAILS', async (searchArray) => {
+    // console.log(searchArray, 'postSearchDog in dogSlice line 69')
+    const response = await fetch(postDogURL, {
+        method: 'POST',
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(searchArray),
+        credentials: 'include',
+    })
+
+    if(response.ok){
+        const data = await response.json()
+        // console.log(data, 'data in postSearchDog in dogSlice line 79')
+        return data;
+    }
+})
+
+export const postSearchLocationDog = createAsyncThunk('dogs/DOG_DETAILS_LOCATION', async (searchArray) => {
     // console.log(searchArray, 'postSearchDog in dogSlice line 69')
     const response = await fetch(postDogURL, {
         method: 'POST',
@@ -146,6 +202,15 @@ const dogsSlice = createSlice({
                 state.error = null;
             })
 
+            .addCase(searchDogForLocations.fulfilled, (state, action)=> {
+                state.location_search = action.payload;
+                // console.log(action.payload, 'action payload for searchDog in dogSlice line 116')
+                state.status = 'succeeded';
+                state.error = null;
+            })
+
+
+
             .addCase(postSearchDog.fulfilled, (state, action)=> {
                 state.dogsDetail = action.payload;
                 // console.log(action.payload, 'action payload for postSearchDog in dogSlice line 123')
@@ -156,10 +221,25 @@ const dogsSlice = createSlice({
             .addCase(nextPrevList.fulfilled, (state, action)=> {
 
                 state.search = action.payload;
-                console.log(action.payload)
+                // console.log(action.payload)
                 state.status = 'succeeded';
                 state.error = null;
             })
+
+            .addCase(locationSearchNextList.fulfilled, (state, action)=> {
+                state.location_search = action.payload;
+                state.status = 'succeeded';
+                state.error = null;
+            })
+
+            .addCase(postSearchLocationDog.fulfilled, (state, action)=> {
+                state.location_dogsDetail = action.payload;
+                state.status = 'succeeded';
+                state.error = null;
+            })
+
+
+
             .addCase(dogMatch.fulfilled, (state, action)=> {
                 state.match = action.payload;
                 // console.log(action.payload)
@@ -176,6 +256,8 @@ export const getSearches = (state) => state.dogs.search;
 export const getDogDetails = (state) => state.dogs.dogsDetail;
 export const getLikeDogs = (state) => state.dogs.likeDogs
 export const getMatched = (state) => state.dogs.match
+export const locationSearchDogs = (state) => state.dogs.location_search
+export const locationDogDetails = (state) => state.dogs.location_dogsDetail
 
 export const { clearAllData, addLikeDog, removeLikeDog  } = dogsSlice.actions
 

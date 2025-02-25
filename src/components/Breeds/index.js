@@ -4,7 +4,7 @@ import { selectUser } from '../../redux/usersSlice';
 import Profile from '../Profile';
 import BreedsResult from "../BreedsResult";
 import OpenModalButton from '../OpenModalButton';
-import { breeds, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, clearAllData, dogMatch } from '../../redux/dogsSlice';
+import { breeds, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, clearAllData, searchDogForLocations,dogMatch, postSearchLocationDog } from '../../redux/dogsSlice';
 import {postLocations, geoBoundingData, allLocations, postSearchLocations, clearZCLocations, clearLocationsSearch, clearGeoBounding} from '../../redux/locationsSlice'
 import './Breeds.css';
 import GeoBoundingBox from "../GeoBoundingBox";
@@ -206,12 +206,29 @@ function Breeds() {
   //     await dispatch(postLocations(selectedZipCode))
   //   }
 
-    console.log(otherParameters && (chooseCity || chooseStates || chooseGeoBoundingBox), 'line 205')
+  
     if(otherParameters && (chooseCity || chooseStates || chooseGeoBoundingBox)) {
 
+      let searchForLocationParams = {}
+     
       console.log('inside searchForLocations function line 207')
+      const urlFrontend = new URL(dogSearchUrl);
+
+      searchForLocationParams.size = '100';
+      urlFrontend.searchParams.append('size', searchForLocationParams.size)
+
+      searchForLocationParams.from = '0';
+      urlFrontend.searchParams.append('from', searchForLocationParams.from)
+
+
       await dispatch(clearZCLocations())
 
+      let searchForDogLocationsResult = await dispatch(searchDogForLocations(urlFrontend))
+      let getDogDetailsForTheSearch = searchForDogLocationsResult.payload.resultIds
+    
+      // console.log(getDogDetailsForTheSearch, 'line 228')
+
+      await dispatch(postSearchLocationDog(getDogDetailsForTheSearch))
 
       let params = {}
 
@@ -222,7 +239,7 @@ function Breeds() {
 
       if(Object.keys(bodyParams).length>0) params.geoBoundingBox = bodyParams.geoBoundingBox
 
-      params.size = size;
+      params.size = '5000';
       params.from = from ? from : '0';
 
       console.log(params, 'params')
