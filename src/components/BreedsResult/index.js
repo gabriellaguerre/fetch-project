@@ -36,7 +36,7 @@ function BreedsResult({size, sizeChange, totalPage, chooseCity, city}) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [updatedArray, setUpdatedArray] = useState([])
   const [mergedArray,  setMergedArray] = useState([])
- 
+
 
   let searchByLocation = searchLocationsList.results
   let searchByLocationTotal = searchLocationsList.total
@@ -48,9 +48,7 @@ function BreedsResult({size, sizeChange, totalPage, chooseCity, city}) {
   console.log(locationGetDogDetails, 'locationGetDogDetails line 37')
   console.log(searchLocationsList, 'searchLocationsList line 41')
 
- 
- 
- useEffect(()=> {
+
   if(locationSearchForDog && searchLocationsList) {
     const mergedLocationDogData = locationGetDogDetails.map(dog => {
       const locationData = searchLocationsList.results.find(
@@ -59,26 +57,20 @@ function BreedsResult({size, sizeChange, totalPage, chooseCity, city}) {
       console.log(locationData, 'locationData line 59')
       return locationData ? {...dog, locationData} : null
     }).filter(dog => dog !== null)
-    
-    setMergedArray(prev => {const updated = [...prev, mergedLocationDogData]
-      return updated
-    })
+
+    console.log(mergedLocationDogData, 'mergedLocationDogData line 63')
+
+  //   if(locationSearchForDog?.next) {
+  //     let searchForDogLocationsResult =  dispatch(locationSearchNextList(locationSearchForDog.next))
+  //     let getDogDetailsForTheSearch = searchForDogLocationsResult?.payload?.resultIds
+  //          // console.log(getDogDetailsForTheSearch, 'line 228')
+
+  //      dispatch(postSearchLocationDog(getDogDetailsForTheSearch))
+  //  }
   }
 
-  if(locationSearchForDog?.next) {
-     let searchForDogLocationsResult =  dispatch(locationSearchNextList(locationSearchForDog.next))
-     let getDogDetailsForTheSearch = searchForDogLocationsResult?.payload?.resultIds
-          // console.log(getDogDetailsForTheSearch, 'line 228')
-    
-      dispatch(postSearchLocationDog(getDogDetailsForTheSearch))
-  }
 
-
- }, [locationSearchForDog, searchLocationsList])
- 
- 
   useEffect(()=> {
-
 
       mergedData = details.map(dog => {
       const locationData = locationsList.find(location => location.zip_code === dog.zip_code);
@@ -94,7 +86,7 @@ function BreedsResult({size, sizeChange, totalPage, chooseCity, city}) {
 
   }, [details, locationsList])
 
-  
+
 
   let dogData;
 
@@ -158,7 +150,7 @@ function BreedsResult({size, sizeChange, totalPage, chooseCity, city}) {
   let matched = likeList.filter(dog => dog.id === matchedWithDog?.match)
 
   console.log(mergedArray, 'mergedArray line 157')
-  
+
 
 
   return (
