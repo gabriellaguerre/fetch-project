@@ -60,7 +60,9 @@ function BreedsResult({size, sizeChange, totalPage, chooseCity, city}) {
       return locationData ? {...dog, locationData} : null
     }).filter(dog => dog !== null)
     
-    setMergedArray(prev => [...prev, mergedLocationDogData])
+    setMergedArray(prev => {const updated = [...prev, mergedLocationDogData]
+      return updated
+    })
   }
 
   if(locationSearchForDog?.next) {
