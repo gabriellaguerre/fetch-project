@@ -214,13 +214,15 @@ function Breeds() {
 
       if(Object.keys(bodyParams).length>0) params.geoBoundingBox = bodyParams.geoBoundingBox
 
-      params.size = '5000';
+      params.size = size;
       params.from = from ? from : '0';
 
       console.log(params, 'params')
       setData(params)
 
-      await dispatch(postSearchLocations(params))
+      let locationSearchData = await dispatch(postSearchLocations(params))
+      console.log(locationSearchData.payload, 'locationSearchData line 224')
+
 
     }
 

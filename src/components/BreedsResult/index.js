@@ -41,14 +41,21 @@ function BreedsResult({size, sizeChange, totalPage, chooseCity, city}) {
 
   // console.log(details, 'details line 41')
   // console.log(locationsList, 'location list line 42')
+
   let searchByLocation = searchLocationsList.results
   let searchByLocationTotal = searchLocationsList.total
+  console.log(searchLocationsList, 'searchLocationsList line 47')
+  console.log(searchByLocation, 'searchByLocation line 48')
+  console.log(searchByLocationTotal, 'searchByLocation line 49')
 
 
 
   useEffect(()=> {
+
+     if (!details || !locationsList.length) return;
+
       mergedData = details.map(dog => {
-      const locationData = locationsList.find(location => location.zip_code === dog.zip_code);
+      const locationData = locationsList?.find(location => location?.zip_code === dog.zip_code);
       if(locationData) {
         updated = {... dog, locationData}
         return updated
@@ -74,8 +81,11 @@ function BreedsResult({size, sizeChange, totalPage, chooseCity, city}) {
     const handleNext = async () => {
       let getNextList = await dispatch(nextPrevList(nextUrl));
       let dogData = await dispatch(postSearchDog(getNextList.payload.resultIds))
-      let zipCodes = dogData.payload.map(dog=>dog.zip_code)     
+      // console.log(dogData, 'dogData line 77')
+      let zipCodes = dogData.payload.map(dog=>dog.zip_code)
+      // console.log(zipCodes, 'zipCodes')     
       let getZipCodes = await dispatch(postLocations(zipCodes))
+      // console.log(getZipCodes, 'getZipCodes line 81')
     }
 
     const handlePrevious = async () => {
@@ -127,52 +137,7 @@ function BreedsResult({size, sizeChange, totalPage, chooseCity, city}) {
 
   let matched = likeList.filter(dog => dog.id === matchedWithDog?.match)
 
-  // const getAllDogs = async (from = 0, size = 100, accumulatedResults = []) => {
-  //      if(from === 1000) {
-  //          return
-  //       }
-  //      try {
-  //       // const dogSearchUrl = 'https://frontend-take-home-service.fetch.com/dogs/search?';
-  //       const urlFrontend2 = new URL('https://frontend-take-home-service.fetch.com/dogs/search?');
-  //       let searchParams = {}
-
-  //       console.log(urlFrontend2, 'line 158')
-
-  //       searchParams.size = size;
-  //       searchParams.from = from
-
-  //       urlFrontend2.searchParams.append('size', searchParams.size)
-  //       urlFrontend2.searchParams.append('from', searchParams.from)
-
-  //       console.log(urlFrontend2, searchParams, 'line 164')
-
-  //       let searchForDogLocationsResult = await dispatch(searchDogForLocations(urlFrontend2))
-  //       let getDogDetailsForTheSearch = searchForDogLocationsResult.payload.resultIds
-
-  //       let dogDetails = await dispatch(postSearchLocationDog(getDogDetailsForTheSearch))
-  //       // console.log(dogDetails, 'dogDetails line 176')
-
-  //       let newResults = [...accumulatedResults, ...dogDetails.payload];
-
-  //       if(searchForDogLocationsResult.payload?.next) {
-  //         return getAllDogs(from+size, size, newResults)
-  //       }
-
-       
-  //       console.log(newResults, 'newResults line 185')
-
-
-  //      } catch (error) {
-  //       console.error("Error fetching dogs:", error);
-  //      } 
-          
-  //   }
-
-  //   useEffect(()=> {
-  //     getAllDogs();
-  //   },[])
-    
-
+  
   return (
     <>
     <div className='selectedFavorites'>
