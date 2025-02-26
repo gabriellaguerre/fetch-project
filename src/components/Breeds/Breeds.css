@@ -326,7 +326,7 @@ ul.resultList {
   }
 
   .breedChoices {
-    position:absolute;
+    position:relative;
     /* right: 240px; */
     /* margin-left: 17%;
     margin-right: 46%;

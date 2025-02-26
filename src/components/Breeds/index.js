@@ -4,7 +4,7 @@ import { selectUser } from '../../redux/usersSlice';
 import Profile from '../Profile';
 import BreedsResult from "../BreedsResult";
 import OpenModalButton from '../OpenModalButton';
-import { breeds, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, clearAllData, searchDogForLocations,dogMatch, postSearchLocationDog } from '../../redux/dogsSlice';
+import { breeds, getAllDogs, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, clearAllData, searchDogForLocations,dogMatch, postSearchLocationDog } from '../../redux/dogsSlice';
 import {postLocations, geoBoundingData, allLocations, postSearchLocations, clearZCLocations, clearLocationsSearch, clearGeoBounding} from '../../redux/locationsSlice'
 import './Breeds.css';
 import GeoBoundingBox from "../GeoBoundingBox";
@@ -16,10 +16,16 @@ import sortImg from '../../assets/sort-by.png';
 import ascImg from '../../assets/asc.png';
 import descImg from '../../assets/desc.png';
 import editImg from '../../assets/edit.png'
+// import { getAllDogs } from "../../utils";
 
 
 function Breeds() {
+  
+  const dogSearchUrl = 'https://frontend-take-home-service.fetch.com/dogs/search?';
+  const urlFrontend = new URL(dogSearchUrl);
+
   const dispatch = useDispatch();
+
 
   useEffect(() => {
     dispatch(breeds());
@@ -32,10 +38,10 @@ function Breeds() {
   const bodyParams = useSelector(geoBoundingData);
   const locationsList = useSelector(allLocations);
   // const user = "asfd";
-  const dogSearchUrl = 'https://frontend-take-home-service.fetch.com/dogs/search?';
+  
 
   let geoChoices = bodyParams.geoBoundingBox ? Object.keys(bodyParams.geoBoundingBox) : [];
-
+  // console.log(allDogs, searchResult, 'allDogs line 51')
 
 
   const [allFilterButtons, setAllFilterButtons] = useState(false);
@@ -190,49 +196,18 @@ function Breeds() {
     let searchDogResults = await dispatch(searchDog(urlFrontend));
     let searchArray = searchDogResults.payload.resultIds
     // console.log(searchArray, 'searchArray line 124')
-    await dispatch(postSearchDog(searchArray))
-    console.log(selectedZipCode, 'selected zipcode line 195')
-    await dispatch(postLocations(selectedZipCode))
-    // let dogs = await dispatch(postSearchDog(searchArray))
-    // console.log(dogs, 'dogs')
-
-
-
-  //  console.log(otherParameters && !chooseCity && !chooseStates, 'line 198')
-  //   if(otherParameters && !chooseCity && !chooseStates) {
-  //     console.log('inside if statement line 202')
-  //     await dispatch(clearGeoBounding())
-  //     await dispatch(clearLocationsSearch())
-  //     await dispatch(postLocations(selectedZipCode))
-  //   }
-
+    let dogData = await dispatch(postSearchDog(searchArray))
+   
+    let zipCodes = dogData.payload.map(dog=>dog.zip_code)
+   
+    let getZipCodes = await dispatch(postLocations(zipCodes))
+   
   
     if(otherParameters && (chooseCity || chooseStates || chooseGeoBoundingBox)) {
 
-      let searchForLocationParams = {}
-     
-      console.log('inside searchForLocations function line 207')
-      const urlFrontend = new URL(dogSearchUrl);
-
-      searchForLocationParams.size = '100';
-      urlFrontend.searchParams.append('size', searchForLocationParams.size)
-
-      searchForLocationParams.from = '0';
-      urlFrontend.searchParams.append('from', searchForLocationParams.from)
-
-
       await dispatch(clearZCLocations())
 
-      let searchForDogLocationsResult = await dispatch(searchDogForLocations(urlFrontend))
-      let getDogDetailsForTheSearch = searchForDogLocationsResult.payload.resultIds
-    
-      // console.log(getDogDetailsForTheSearch, 'line 228')
-
-      await dispatch(postSearchLocationDog(getDogDetailsForTheSearch))
-
       let params = {}
-
-      // console.log((chooseStates), selected, 'selected line 82')
 
       if(chooseCity && city) params.city = city
       if(chooseStates || states.length > 0) params.states = states
@@ -253,7 +228,7 @@ function Breeds() {
 
 
   let results = doggyBreeds.filter((word) => word.includes(capitalLetterWord))
-  // console.log(searchResult, 'results obj')
+  
 
   let addBreed = (selectedBreed) => {
     if (!selected.includes(selectedBreed)) {

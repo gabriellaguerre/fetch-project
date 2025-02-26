@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {searchDogForLocations, postSearchLocationDog, locationDogDetails, addLikeDog, getSearches, getLikeDogs, getDogDetails, postSearchDog, nextPrevList, dogMatch,removeLikeDog, getMatched,searchDog,locationSearchDogs, locationSearchNextList } from '../../redux/dogsSlice';
-import {searchLocations, allLocations, geoBoundingData} from '../../redux/locationsSlice'
+import {getAllDogs, searchDogForLocations, postSearchLocationDog, locationDogDetails, addLikeDog, getSearches, getLikeDogs, getDogDetails, postSearchDog, nextPrevList, dogMatch,removeLikeDog, getMatched,searchDog,locationSearchDogs, locationSearchNextList } from '../../redux/dogsSlice';
+import {searchLocations, allLocations, postLocations, geoBoundingData} from '../../redux/locationsSlice'
 import OpenModalButton from '../OpenModalButton';
 import Match from '../Match';
 import './BreedsResult.css'
@@ -18,6 +18,7 @@ function BreedsResult({size, sizeChange, totalPage, chooseCity, city}) {
   const locationsList = useSelector(allLocations);
   const searchLocationsList = useSelector(searchLocations)
   const matchedWithDog = useSelector(getMatched)
+ 
 
   const locationSearchForDog = useSelector(locationSearchDogs)
   const locationGetDogDetails = useSelector(locationDogDetails)
@@ -36,42 +37,16 @@ function BreedsResult({size, sizeChange, totalPage, chooseCity, city}) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [updatedArray, setUpdatedArray] = useState([])
   const [mergedArray,  setMergedArray] = useState([])
+  const [locationsArray, setLocationsArray] = useState([])
 
-
+  // console.log(details, 'details line 41')
+  // console.log(locationsList, 'location list line 42')
   let searchByLocation = searchLocationsList.results
   let searchByLocationTotal = searchLocationsList.total
-  // console.log(searchByLocation, searchByLocationTotal, 'searchByLocation and total line 27')
-  // console.log(locationsList, 'locationsList line 31')
-  // console.log(details, 'details line 32')
-  // const urlFrontend = new URL(dogSearchUrl);
-  console.log(locationSearchForDog, 'locationSearchForDog line 36')
-  console.log(locationGetDogDetails, 'locationGetDogDetails line 37')
-  console.log(searchLocationsList, 'searchLocationsList line 41')
 
-
-  if(locationSearchForDog && searchLocationsList) {
-    const mergedLocationDogData = locationGetDogDetails.map(dog => {
-      const locationData = searchLocationsList.results.find(
-        location => String(location.zip_code) === String(dog.zip_code)
-      );
-      console.log(locationData, 'locationData line 59')
-      return locationData ? {...dog, locationData} : null
-    }).filter(dog => dog !== null)
-
-    console.log(mergedLocationDogData, 'mergedLocationDogData line 63')
-
-  //   if(locationSearchForDog?.next) {
-  //     let searchForDogLocationsResult =  dispatch(locationSearchNextList(locationSearchForDog.next))
-  //     let getDogDetailsForTheSearch = searchForDogLocationsResult?.payload?.resultIds
-  //          // console.log(getDogDetailsForTheSearch, 'line 228')
-
-  //      dispatch(postSearchLocationDog(getDogDetailsForTheSearch))
-  //  }
-  }
 
 
   useEffect(()=> {
-
       mergedData = details.map(dog => {
       const locationData = locationsList.find(location => location.zip_code === dog.zip_code);
       if(locationData) {
@@ -98,13 +73,16 @@ function BreedsResult({size, sizeChange, totalPage, chooseCity, city}) {
 
     const handleNext = async () => {
       let getNextList = await dispatch(nextPrevList(nextUrl));
-      let dogs2 = await dispatch(postSearchDog(getNextList.payload.resultIds))
+      let dogData = await dispatch(postSearchDog(getNextList.payload.resultIds))
+      let zipCodes = dogData.payload.map(dog=>dog.zip_code)     
+      let getZipCodes = await dispatch(postLocations(zipCodes))
     }
 
     const handlePrevious = async () => {
-
       let getPrevList = await dispatch(nextPrevList(previousUrl));
-      let dogs2 = await dispatch(postSearchDog(getPrevList.payload.resultIds))
+      let dogData = await dispatch(postSearchDog(getPrevList.payload.resultIds))
+      let zipCodes = dogData.payload.map(dog=>dog.zip_code)     
+      let getZipCodes = await dispatch(postLocations(zipCodes))
   }
 
 
@@ -149,9 +127,51 @@ function BreedsResult({size, sizeChange, totalPage, chooseCity, city}) {
 
   let matched = likeList.filter(dog => dog.id === matchedWithDog?.match)
 
-  console.log(mergedArray, 'mergedArray line 157')
+  // const getAllDogs = async (from = 0, size = 100, accumulatedResults = []) => {
+  //      if(from === 1000) {
+  //          return
+  //       }
+  //      try {
+  //       // const dogSearchUrl = 'https://frontend-take-home-service.fetch.com/dogs/search?';
+  //       const urlFrontend2 = new URL('https://frontend-take-home-service.fetch.com/dogs/search?');
+  //       let searchParams = {}
+
+  //       console.log(urlFrontend2, 'line 158')
+
+  //       searchParams.size = size;
+  //       searchParams.from = from
+
+  //       urlFrontend2.searchParams.append('size', searchParams.size)
+  //       urlFrontend2.searchParams.append('from', searchParams.from)
+
+  //       console.log(urlFrontend2, searchParams, 'line 164')
+
+  //       let searchForDogLocationsResult = await dispatch(searchDogForLocations(urlFrontend2))
+  //       let getDogDetailsForTheSearch = searchForDogLocationsResult.payload.resultIds
+
+  //       let dogDetails = await dispatch(postSearchLocationDog(getDogDetailsForTheSearch))
+  //       // console.log(dogDetails, 'dogDetails line 176')
+
+  //       let newResults = [...accumulatedResults, ...dogDetails.payload];
+
+  //       if(searchForDogLocationsResult.payload?.next) {
+  //         return getAllDogs(from+size, size, newResults)
+  //       }
+
+       
+  //       console.log(newResults, 'newResults line 185')
 
 
+  //      } catch (error) {
+  //       console.error("Error fetching dogs:", error);
+  //      } 
+          
+  //   }
+
+  //   useEffect(()=> {
+  //     getAllDogs();
+  //   },[])
+    
 
   return (
     <>
