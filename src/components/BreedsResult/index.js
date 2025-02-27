@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {getAllDogs, searchDogForLocations, postSearchLocationDog, locationDogDetails, addLikeDog, getSearches, getLikeDogs, getDogDetails, postSearchDog, nextPrevList, dogMatch,removeLikeDog, getMatched,searchDog,locationSearchDogs, locationSearchNextList } from '../../redux/dogsSlice';
-import {searchLocations, allLocations, postLocations, geoBoundingData} from '../../redux/locationsSlice'
+import {searchLocations, allLocations, postLocations, postSearchLocations, geoBoundingData} from '../../redux/locationsSlice'
 import OpenModalButton from '../OpenModalButton';
 import Match from '../Match';
 import './BreedsResult.css'
@@ -9,7 +9,7 @@ import dogWaiting from '../../assets/dogwaiting-pic.png'
 import deleteImg from '../../assets/x.png';
 
 
-function BreedsResult({size, sizeChange, totalPage, chooseCity, city}) {
+function BreedsResult({size, sizeChange, totalPage, zipcodesearch,allLocationsSearch}) {
   const dispatch = useDispatch();
 
   const details = useSelector(getDogDetails);
@@ -38,35 +38,45 @@ function BreedsResult({size, sizeChange, totalPage, chooseCity, city}) {
   const [updatedArray, setUpdatedArray] = useState([])
   const [mergedArray,  setMergedArray] = useState([])
   const [locationsArray, setLocationsArray] = useState([])
+  const [isFetching, setIsFetching] = useState(false)
 
   // console.log(details, 'details line 41')
   // console.log(locationsList, 'location list line 42')
 
   let searchByLocation = searchLocationsList.results
   let searchByLocationTotal = searchLocationsList.total
-  console.log(searchLocationsList, 'searchLocationsList line 47')
-  console.log(searchByLocation, 'searchByLocation line 48')
-  console.log(searchByLocationTotal, 'searchByLocation line 49')
+  // console.log(searchLocationsList, 'searchLocationsList line 47')
+  // console.log(searchByLocation, 'searchByLocation line 48')
+  // console.log(searchByLocationTotal, 'searchByLocation line 49')
+  let from;
 
-
-
+ 
+  
+ 
   useEffect(()=> {
 
-     if (!details || !locationsList.length) return;
+   
+    console.log(details, 'details line 63')
+    console.log(searchLocationsList, 'searchLocationsList line 64')
 
+    if(allLocationsSearch) {
+      mergedData = details.map(dog=> {
+        const locationData = searchLocationsList?.find(location=>location?.zip_code === dog.zip_code)
+        
+        return locationData ? {...dog, locationData} : null    
+      }).filter(dog=> dog !== null)
+   
+   
+    } else if(zipcodesearch) {
       mergedData = details.map(dog => {
       const locationData = locationsList?.find(location => location?.zip_code === dog.zip_code);
-      if(locationData) {
-        updated = {... dog, locationData}
-        return updated
-      } else {
-        updated = dog
-        return updated
-      }
-    })
+      return locationData ? {...dog, locationData} : null    
+    }).filter(dog=> dog !== null)
+  }
+   
     setUpdatedArray(mergedData)
 
-  }, [details, locationsList])
+  }, [details, zipcodesearch, allLocationsSearch])
 
 
 
@@ -136,7 +146,7 @@ function BreedsResult({size, sizeChange, totalPage, chooseCity, city}) {
   }
 
   let matched = likeList.filter(dog => dog.id === matchedWithDog?.match)
-
+ 
   
   return (
     <>
@@ -178,7 +188,7 @@ function BreedsResult({size, sizeChange, totalPage, chooseCity, city}) {
                 <div><img src={dog?.img} className='dogImage'/> </div>
                 <div>Name: {dog?.name}</div>
                 <div>Age: {dog?.age}</div>
-                {dog.locationData && (
+                {dog?.locationData && (
                   <>
                   <div>City: {dog?.locationData?.city}</div>
                   <div>State: {dog?.locationData?.state}</div>

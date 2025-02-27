@@ -171,7 +171,7 @@ const dogsSlice = createSlice({
             state.search = {}
             state.dogsDetail = []
             state.match = {}
-            state. likeDogs = []
+            state.likeDogs = []
         },
 
         addLikeDog(state, action) {

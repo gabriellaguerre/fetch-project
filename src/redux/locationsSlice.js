@@ -8,7 +8,7 @@ export const googleMapsApiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
 const initialState = {
     locations: [],
-    locationsSearch: {},
+    locationsSearch: [],
     geoBounding: {},
     status: 'idle',
     error: null,
@@ -62,7 +62,7 @@ const locationsSlice = createSlice({
             state.locations = []
          },
          clearLocationsSearch(state) {
-            state.locationsSearch = {}
+            state.locationsSearch = []
          },
          clearGeoBounding(state){
             state.geoBounding = {}
@@ -78,8 +78,8 @@ const locationsSlice = createSlice({
             })
 
             .addCase(postSearchLocations.fulfilled, (state, action)=> {
-                state.locationsSearch = action.payload;
-                // console.log(action.payload, 'in postSearchLocations')
+                state.locationsSearch.push(...action.payload.results);
+                // console.log(action.payload.results, 'in postSearchLocations')
                 state.status = 'succeeded';
                 state.error = null;
             })

@@ -22,7 +22,7 @@ import editImg from '../../assets/edit.png'
 function Breeds() {
   
   const dogSearchUrl = 'https://frontend-take-home-service.fetch.com/dogs/search?';
-  const urlFrontend = new URL(dogSearchUrl);
+  
 
   const dispatch = useDispatch();
 
@@ -100,6 +100,8 @@ function Breeds() {
   const [otherParameters, setOtherParameters] = useState(false)
   const [chooseGeoBoundingBox, setChooseGeoBoundingBox] = useState(false);
   const [data, setData] = useState({})
+  const [isSearchingAllLocations, setIsSearchingAllLocations] = useState(false)
+  const [isSearchingZipCodes, setIsSearchingZipCodes] = useState(false)
 
 
   let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
@@ -201,29 +203,57 @@ function Breeds() {
     let zipCodes = dogData.payload.map(dog=>dog.zip_code)
    
     let getZipCodes = await dispatch(postLocations(zipCodes))
-   
+    
+    setIsSearchingZipCodes(true)
+    setIsSearchingAllLocations(false)
+    await dispatch(clearLocationsSearch())
   
     if(otherParameters && (chooseCity || chooseStates || chooseGeoBoundingBox)) {
 
       await dispatch(clearZCLocations())
 
       let params = {}
+      let dogParams = {}
+      const dogSearchUrl = 'https://frontend-take-home-service.fetch.com/dogs/search?';
+      const urlDogFrontend = new URL(dogSearchUrl);
+
 
       if(chooseCity && city) params.city = city
       if(chooseStates || states.length > 0) params.states = states
 
       if(Object.keys(bodyParams).length>0) params.geoBoundingBox = bodyParams.geoBoundingBox
 
-      params.size = size;
+      params.size = '10000';
       params.from = from ? from : '0';
 
       console.log(params, 'params')
       setData(params)
 
+
       let locationSearchData = await dispatch(postSearchLocations(params))
-      console.log(locationSearchData.payload, 'locationSearchData line 224')
+      // console.log(locationSearchData.payload, 'locationSearchData line 224')
 
+      let justZipCodes  = locationSearchData.payload.results.map(location=>location.zip_code)
+      // console.log(justZipCodes, 'zip codes line 233')
 
+      dogParams.zipCodes = justZipCodes;
+      // console.log(dogParams.zipCodes, 'searchParams.zipCodes line 236')
+      dogParams.zipCodes.forEach(zipCode => urlDogFrontend.searchParams.append('zipCodes', zipCode));
+
+      dogParams.size = size;
+      urlDogFrontend.searchParams.append('size', dogParams.size)
+
+      // console.log(urlDogFrontend, 'line 237')
+      
+      let searchDogResults = await dispatch(searchDog(urlDogFrontend));
+      // console.log(searchDogResults, 'line 244')
+      let searchLocationArray = searchDogResults.payload.resultIds
+      // console.log(searchLocationArray, 'searchLocationArray line 251')
+      let dogData = await dispatch(postSearchDog(searchLocationArray))
+      // console.log(dogData, 'dogData line 253')
+
+      setIsSearchingZipCodes(false)
+      setIsSearchingAllLocations(true)
     }
 
   }
@@ -677,7 +707,7 @@ function Breeds() {
         <div className='searchBreed'><button className='searchBreedButton' onClick={() => { search(); setMenu(false); setFrom(0) }}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg' /></button>
         <button className='clearAllButton' onClick={clearAll}>Clear All</button></div>
 
-      <div className='breedResult'><BreedsResult size={size} sizeChange={sizeChange} totalPage={Math.ceil(Number(searchResult.total) / Number(size))} choosecity={chooseCity} city={city}/></div>
+      <div className='breedResult'><BreedsResult size={size} sizeChange={sizeChange} totalPage={Math.ceil(Number(searchResult.total) / Number(size))} zipcodesearch={isSearchingZipCodes} allLocationsSearch={isSearchingAllLocations}/></div>
     </>
   );
 }
