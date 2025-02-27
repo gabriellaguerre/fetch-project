@@ -203,16 +203,11 @@ function Breeds() {
     let zipCodes = dogData.payload.map(dog=>dog.zip_code)
 
     let getZipCodes = await dispatch(postLocations(zipCodes))
-<<<<<<< HEAD
     
     setIsSearchingZipCodes(true)
     setIsSearchingAllLocations(false)
     await dispatch(clearLocationsSearch())
   
-=======
-
-
->>>>>>> 1043fb88b2868c576d3e601ecada849a46b43050
     if(otherParameters && (chooseCity || chooseStates || chooseGeoBoundingBox)) {
 
       await dispatch(clearZCLocations())

@@ -56,27 +56,30 @@ function BreedsResult({size, sizeChange, totalPage, zipcodesearch,allLocationsSe
   useEffect(()=> {
 
    
-    console.log(details, 'details line 63')
-    console.log(searchLocationsList, 'searchLocationsList line 64')
-
-    if(allLocationsSearch) {
+    console.log(details, 'details line 59')
+    console.log(searchLocationsList, 'searchLocationsList line 60')
+    console.log(locationsList,'locationsList line 61')
+    console.log(searchResult, 'list line 62')
+   
+    if(searchLocationsList.length> 0) {
       mergedData = details.map(dog=> {
         const locationData = searchLocationsList?.find(location=>location?.zip_code === dog.zip_code)
-        
         return locationData ? {...dog, locationData} : null    
       }).filter(dog=> dog !== null)
-   
-   
-    } else if(zipcodesearch) {
+      
+    } 
+     
+     if(locationsList) {
       mergedData = details.map(dog => {
       const locationData = locationsList?.find(location => location?.zip_code === dog.zip_code);
       return locationData ? {...dog, locationData} : null    
     }).filter(dog=> dog !== null)
-  }
+     }
    
+    console.log(mergedData, 'mergedData line 79') 
     setUpdatedArray(mergedData)
 
-  }, [details, zipcodesearch, allLocationsSearch])
+  }, [details, locationsList, searchLocationsList])
 
 
 
@@ -91,11 +94,11 @@ function BreedsResult({size, sizeChange, totalPage, zipcodesearch,allLocationsSe
     const handleNext = async () => {
       let getNextList = await dispatch(nextPrevList(nextUrl));
       let dogData = await dispatch(postSearchDog(getNextList.payload.resultIds))
-      // console.log(dogData, 'dogData line 77')
+      console.log(dogData, 'dogData line 77')
       let zipCodes = dogData.payload.map(dog=>dog.zip_code)
-      // console.log(zipCodes, 'zipCodes')     
+      console.log(zipCodes, 'zipCodes')     
       let getZipCodes = await dispatch(postLocations(zipCodes))
-      // console.log(getZipCodes, 'getZipCodes line 81')
+      console.log(getZipCodes, 'getZipCodes line 81')
     }
 
     const handlePrevious = async () => {
@@ -146,7 +149,7 @@ function BreedsResult({size, sizeChange, totalPage, zipcodesearch,allLocationsSe
   }
 
   let matched = likeList.filter(dog => dog.id === matchedWithDog?.match)
- 
+  console.log(updatedArray, 'updatedArray line 151')
   
   return (
     <>
