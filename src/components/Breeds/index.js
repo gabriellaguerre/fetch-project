@@ -20,7 +20,7 @@ import editImg from '../../assets/edit.png'
 
 
 function Breeds() {
-  
+
   const dogSearchUrl = 'https://frontend-take-home-service.fetch.com/dogs/search?';
   
 
@@ -38,7 +38,7 @@ function Breeds() {
   const bodyParams = useSelector(geoBoundingData);
   const locationsList = useSelector(allLocations);
   // const user = "asfd";
-  
+
 
   let geoChoices = bodyParams.geoBoundingBox ? Object.keys(bodyParams.geoBoundingBox) : [];
   // console.log(allDogs, searchResult, 'allDogs line 51')
@@ -199,15 +199,20 @@ function Breeds() {
     let searchArray = searchDogResults.payload.resultIds
     // console.log(searchArray, 'searchArray line 124')
     let dogData = await dispatch(postSearchDog(searchArray))
-   
+
     let zipCodes = dogData.payload.map(dog=>dog.zip_code)
-   
+
     let getZipCodes = await dispatch(postLocations(zipCodes))
+<<<<<<< HEAD
     
     setIsSearchingZipCodes(true)
     setIsSearchingAllLocations(false)
     await dispatch(clearLocationsSearch())
   
+=======
+
+
+>>>>>>> 1043fb88b2868c576d3e601ecada849a46b43050
     if(otherParameters && (chooseCity || chooseStates || chooseGeoBoundingBox)) {
 
       await dispatch(clearZCLocations())
@@ -260,7 +265,7 @@ function Breeds() {
 
 
   let results = doggyBreeds.filter((word) => word.includes(capitalLetterWord))
-  
+
 
   let addBreed = (selectedBreed) => {
     if (!selected.includes(selectedBreed)) {
