@@ -18,7 +18,7 @@ function BreedsResult({size, sizeChange, totalPage, zipcodesearch,allLocationsSe
   const locationsList = useSelector(allLocations);
   const searchLocationsList = useSelector(searchLocations)
   const matchedWithDog = useSelector(getMatched)
- 
+
 
   const locationSearchForDog = useSelector(locationSearchDogs)
   const locationGetDogDetails = useSelector(locationDogDetails)
@@ -50,38 +50,45 @@ function BreedsResult({size, sizeChange, totalPage, zipcodesearch,allLocationsSe
   // console.log(searchByLocationTotal, 'searchByLocation line 49')
   let from;
 
- 
-  
- 
+
+
+
   useEffect(()=> {
 
-   
     console.log(details, 'details line 59')
     console.log(searchLocationsList, 'searchLocationsList line 60')
     console.log(locationsList,'locationsList line 61')
     console.log(searchResult, 'list line 62')
-   
-    if(searchLocationsList.length> 0) {
-      mergedData = details.map(dog=> {
-        const locationData = searchLocationsList?.find(location=>location?.zip_code === dog.zip_code)
-        return locationData ? {...dog, locationData} : null    
-      }).filter(dog=> dog !== null)
-      
-    } 
-     
-     if(locationsList) {
+
+
+
+     if(locationsList && zipcodesearch) {
       mergedData = details.map(dog => {
       const locationData = locationsList?.find(location => location?.zip_code === dog.zip_code);
-      return locationData ? {...dog, locationData} : null    
+      return locationData ? {...dog, locationData} : null
     }).filter(dog=> dog !== null)
      }
-   
-    console.log(mergedData, 'mergedData line 79') 
+
+    console.log(mergedData, 'mergedData line 72')
     setUpdatedArray(mergedData)
 
-  }, [details, locationsList, searchLocationsList])
+  }, [details, locationsList, zipcodesearch])
 
+  useEffect(()=> {
+    console.log(details, 'details line 78')
+    console.log(searchLocationsList, 'searchLocationsList line 79')
+    console.log(locationsList,'locationsList line 80')
+    console.log(searchResult, 'list line 81')
 
+    if(searchLocationsList.length> 0 && allLocationsSearch) {
+      mergedData = details.map(dog=> {
+        const locationData = searchLocationsList?.find(location=>location?.zip_code === dog.zip_code)
+        return locationData ? {...dog, locationData} : null
+      }).filter(dog=> dog !== null)
+      console.log(mergedData, 'mergedData line 88')
+      setUpdatedArray(mergedData)
+    }
+  },[details, searchLocationsList, allLocationsSearch])
 
   let dogData;
 
@@ -96,7 +103,7 @@ function BreedsResult({size, sizeChange, totalPage, zipcodesearch,allLocationsSe
       let dogData = await dispatch(postSearchDog(getNextList.payload.resultIds))
       console.log(dogData, 'dogData line 77')
       let zipCodes = dogData.payload.map(dog=>dog.zip_code)
-      console.log(zipCodes, 'zipCodes')     
+      console.log(zipCodes, 'zipCodes')
       let getZipCodes = await dispatch(postLocations(zipCodes))
       console.log(getZipCodes, 'getZipCodes line 81')
     }
@@ -104,7 +111,7 @@ function BreedsResult({size, sizeChange, totalPage, zipcodesearch,allLocationsSe
     const handlePrevious = async () => {
       let getPrevList = await dispatch(nextPrevList(previousUrl));
       let dogData = await dispatch(postSearchDog(getPrevList.payload.resultIds))
-      let zipCodes = dogData.payload.map(dog=>dog.zip_code)     
+      let zipCodes = dogData.payload.map(dog=>dog.zip_code)
       let getZipCodes = await dispatch(postLocations(zipCodes))
   }
 
@@ -150,7 +157,7 @@ function BreedsResult({size, sizeChange, totalPage, zipcodesearch,allLocationsSe
 
   let matched = likeList.filter(dog => dog.id === matchedWithDog?.match)
   console.log(updatedArray, 'updatedArray line 151')
-  
+
   return (
     <>
     <div className='selectedFavorites'>
