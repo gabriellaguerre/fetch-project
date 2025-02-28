@@ -326,6 +326,7 @@ function Breeds() {
   const clearAll = async () => {
     setSelected([]);
     setSelectedZipCode([])
+    
     await dispatch(clearAllData());
   }
 

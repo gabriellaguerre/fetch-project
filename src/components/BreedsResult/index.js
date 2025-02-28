@@ -42,6 +42,8 @@ function BreedsResult({size, sizeChange, totalPage, zipcodesearch,allLocationsSe
   const [isPrevDisabled, setIsPrevDisabled] = useState(false)
   const [isNextDisabled, setIsNextDisabled] = useState(false)
   const [viewingArray, setViewingArray] = useState([])
+  const [from, setFrom] = useState(size)
+  const [to, setTo] = useState(from+size)
 
   // console.log(details, 'details line 41')
   // console.log(locationsList, 'location list line 42')
@@ -51,14 +53,14 @@ function BreedsResult({size, sizeChange, totalPage, zipcodesearch,allLocationsSe
   // console.log(searchLocationsList, 'searchLocationsList line 47')
   // console.log(searchByLocation, 'searchByLocation line 48')
   // console.log(searchByLocationTotal, 'searchByLocation line 49')
-  let from;
-  let to;
-
+  // let from;
+  // let to;
 
 
 
   useEffect(()=> {
-    console.log('inside useEffect line 57')
+    setFrom(size)
+    setTo(from+size)
      if(locationsList && zipcodesearch) {
       mergedData = details.map(dog => {
       const locationData = locationsList?.find(location => location?.zip_code === dog.zip_code);
@@ -73,7 +75,8 @@ function BreedsResult({size, sizeChange, totalPage, zipcodesearch,allLocationsSe
   }, [details, locationsList, zipcodesearch])
 
   useEffect(()=> {
-    console.log('inside useEffect line 72')
+    setFrom(size)
+    setTo(from+size)
     if(searchLocationsList.length> 0 && allLocationsSearch) {
       mergedData = details.map(dog=> {
         const locationData = searchLocationsList?.find(location=>location?.zip_code === dog.zip_code)
@@ -98,19 +101,19 @@ function BreedsResult({size, sizeChange, totalPage, zipcodesearch,allLocationsSe
 
 
     const handleNext = async () => {
-       from = 0;
-       to = size;
+       
       if(allLocationsSearch || zipcodesearch) {
-        setIsPrevDisabled(true)
-        from = from + to
-        to = to + from
-        if(to <= total) {
+        // console.log('inside if line 104')
+        setIsPrevDisabled(true)     
+        console.log(from, to, total, (to <= total), 'line 106')
+        if(to < total) {
              let newArray = mergedArray.slice(from, to)
-          
-            setIsPrevDisabled(false)
+             setIsPrevDisabled(false)
              setUpdatedArray(newArray)
         } else {
           let newArray = mergedArray.slice(from)
+          setFrom(mergedArray.length)
+          setTo(from-size)
           
           setIsPrevDisabled(false)
           setUpdatedArray(newArray)
@@ -118,7 +121,7 @@ function BreedsResult({size, sizeChange, totalPage, zipcodesearch,allLocationsSe
         
       } else {
 
-      
+      console.log('in else line 121')
       let getNextList = await dispatch(nextPrevList(nextUrl));
       // console.log(nextUrl, 'nextUrl line 94')
       let dogData = await dispatch(postSearchDog(getNextList?.payload?.resultIds))
@@ -133,11 +136,13 @@ function BreedsResult({size, sizeChange, totalPage, zipcodesearch,allLocationsSe
     }
 
     const handlePrevious = async () => {
-      let newPage;
+      console.log(from, to, 'line 137')
      
       if(allLocationsSearch || zipcodesearch) {
-        console.log(viewingArray, 'mergedArray line 137')
-        setUpdatedArray(viewingArray)
+        // console.log(viewingArray, 'mergedArray line 137')
+        console.log(from, to, total, (to <= total), 'line 106')
+        let newArray = mergedArray.slice(to,from)
+        setUpdatedArray(newArray)
        
         // let lastElementofMergeArray = indexOf(mergedArray) 
 
@@ -150,9 +155,7 @@ function BreedsResult({size, sizeChange, totalPage, zipcodesearch,allLocationsSe
         // console.log(to, 'to line 104')
         // console.log(to < total, 'line 105')
         if(to === total) {
-          from = total;
-          to = total - from;
-          setIsNextDisabled(false)
+        
              
         } else {
           // from = to;
@@ -216,7 +219,7 @@ function BreedsResult({size, sizeChange, totalPage, zipcodesearch,allLocationsSe
   }
 
   let matched = likeList.filter(dog => dog.id === matchedWithDog?.match)
- console.log(!previousUrl, page === 0, allLocationsSearch, zipcodesearch, 'line 158')
+//  console.log(!previousUrl, page === 0, allLocationsSearch, zipcodesearch, 'line 158')
 
   return (
     <>
@@ -243,8 +246,8 @@ function BreedsResult({size, sizeChange, totalPage, zipcodesearch,allLocationsSe
     <div className='nexPrevButtons'>
     {(allLocationsSearch || zipcodesearch) ?  (
       <>
-    <div><button onClick={()=>{setPage(page-1);handlePrevious()}} disabled={isPrevDisabled || page === 1}>&lt; Previous</button></div>
-    <div><button onClick={()=>{setPage(page+1);handleNext()}} disabled={isNextDisabled || page === totalPage}>Next &gt;</button></div></>
+    <div><button onClick={()=>{setPage(page-1);setFrom(from-size);setTo(to-size);handlePrevious()}} disabled={isPrevDisabled || page === 1}>&lt; Previous</button></div>
+    <div><button onClick={()=>{setPage(page+1);setFrom(from+size);setTo(to+size);handleNext()}} disabled={isNextDisabled || page === totalPage}>Next &gt;</button></div></>
     ):(
       <>
     <div><button onClick={()=>{setPage(page-1);handlePrevious()}} disabled={!previousUrl || page === 0}>&lt; Previous</button></div>
