@@ -109,6 +109,7 @@ function Breeds() {
 
   const search = async () => {
 
+    if(!otherParameters) {
 
     const urlFrontend = new URL(dogSearchUrl);
 
@@ -208,7 +209,7 @@ function Breeds() {
     setIsSearchingAllLocations(false)
     await dispatch(clearLocationsSearch())
   
-    if(otherParameters && (chooseCity || chooseStates || chooseGeoBoundingBox)) {
+  } else if(otherParameters && (chooseCity || chooseStates || chooseGeoBoundingBox)) {
 
       await dispatch(clearZCLocations())
 
@@ -226,7 +227,7 @@ function Breeds() {
       params.size = '10000';
       params.from = from ? from : '0';
 
-      console.log(params, 'params')
+      // console.log(params, 'params')
       setData(params)
 
 
@@ -240,13 +241,13 @@ function Breeds() {
       // console.log(dogParams.zipCodes, 'searchParams.zipCodes line 236')
       dogParams.zipCodes.forEach(zipCode => urlDogFrontend.searchParams.append('zipCodes', zipCode));
 
-      dogParams.size = size;
+      dogParams.size = '10000';
       urlDogFrontend.searchParams.append('size', dogParams.size)
 
       // console.log(urlDogFrontend, 'line 237')
       
       let searchDogResults = await dispatch(searchDog(urlDogFrontend));
-      // console.log(searchDogResults, 'line 244')
+      // console.log(searchDogResults, 'in breeds line 249')
       let searchLocationArray = searchDogResults.payload.resultIds
       // console.log(searchLocationArray, 'searchLocationArray line 251')
       let dogData = await dispatch(postSearchDog(searchLocationArray))
@@ -707,7 +708,7 @@ function Breeds() {
         <div className='searchBreed'><button className='searchBreedButton' onClick={() => { search(); setMenu(false); setFrom(0) }}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg' /></button>
         <button className='clearAllButton' onClick={clearAll}>Clear All</button></div>
 
-      <div className='breedResult'><BreedsResult size={size} sizeChange={sizeChange} totalPage={Math.ceil(Number(searchResult.total) / Number(size))} zipcodesearch={isSearchingZipCodes} allLocationsSearch={isSearchingAllLocations}/></div>
+      <div className='breedResult'><BreedsResult size={size} sizeChange={sizeChange} totalPage={Math.ceil(Number(searchResult?.total) / Number(size))} zipcodesearch={isSearchingZipCodes} allLocationsSearch={isSearchingAllLocations}/></div>
     </>
   );
 }
