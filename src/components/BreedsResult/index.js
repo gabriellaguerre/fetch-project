@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
-import {getAllDogs, searchDogForLocations, postSearchLocationDog, locationDogDetails, addLikeDog, getSearches, getLikeDogs, getDogDetails, postSearchDog, nextPrevList, dogMatch,removeLikeDog, getMatched,searchDog,locationSearchDogs, locationSearchNextList } from '../../redux/dogsSlice';
-import {searchLocations, allLocations, postLocations, postSearchLocations, geoBoundingData} from '../../redux/locationsSlice'
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllDogs, searchDogForLocations, postSearchLocationDog, locationDogDetails, addLikeDog, getSearches, getLikeDogs, getDogDetails, postSearchDog, nextPrevList, dogMatch, removeLikeDog, getMatched, searchDog, locationSearchDogs, locationSearchNextList } from '../../redux/dogsSlice';
+import { searchLocations, allLocations, postLocations, postSearchLocations, geoBoundingData } from '../../redux/locationsSlice'
 import OpenModalButton from '../OpenModalButton';
 import Match from '../Match';
 import './BreedsResult.css'
@@ -9,7 +9,7 @@ import dogWaiting from '../../assets/dogwaiting-pic.png'
 import deleteImg from '../../assets/x.png';
 
 
-function BreedsResult({size, sizeChange, totalPage, zipcodesearch,allLocationsSearch}) {
+function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocationsSearch }) {
   const dispatch = useDispatch();
 
   const details = useSelector(getDogDetails);
@@ -36,14 +36,14 @@ function BreedsResult({size, sizeChange, totalPage, zipcodesearch,allLocationsSe
   const [selectedDogs, setSelectedDogs] = useState(new Set());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [updatedArray, setUpdatedArray] = useState([])
-  const [mergedArray,  setMergedArray] = useState([])
+  const [mergedArray, setMergedArray] = useState([])
   const [locationsArray, setLocationsArray] = useState([])
   const [isFetching, setIsFetching] = useState(false)
   const [isPrevDisabled, setIsPrevDisabled] = useState(false)
   const [isNextDisabled, setIsNextDisabled] = useState(false)
   const [viewingArray, setViewingArray] = useState([])
-  const [from, setFrom] = useState(size)
-  const [to, setTo] = useState(from+size)
+  const [from, setFrom] = useState(Number(size))
+  const [to, setTo] = useState(Number(from) + Number(size))
 
   // console.log(details, 'details line 41')
   // console.log(locationsList, 'location list line 42')
@@ -55,18 +55,19 @@ function BreedsResult({size, sizeChange, totalPage, zipcodesearch,allLocationsSe
   // console.log(searchByLocationTotal, 'searchByLocation line 49')
   // let from;
   // let to;
+  let from1;
+  let to1;
 
 
-
-  useEffect(()=> {
-    setFrom(size)
-    setTo(from+size)
-     if(locationsList && zipcodesearch) {
+  useEffect(() => {
+    // setFrom(size)
+    // setTo(Number(from) + Number(size))
+    if (locationsList && zipcodesearch) {
       mergedData = details.map(dog => {
-      const locationData = locationsList?.find(location => location?.zip_code === dog.zip_code);
-      return locationData ? {...dog, locationData} : null
-    }).filter(dog=> dog !== null)
-     }
+        const locationData = locationsList?.find(location => location?.zip_code === dog.zip_code);
+        return locationData ? { ...dog, locationData } : null
+      }).filter(dog => dog !== null)
+    }
 
     // console.log(mergedData, 'mergedData line 72')
     setUpdatedArray(mergedData)
@@ -74,116 +75,123 @@ function BreedsResult({size, sizeChange, totalPage, zipcodesearch,allLocationsSe
 
   }, [details, locationsList, zipcodesearch])
 
-  useEffect(()=> {
-    setFrom(size)
-    setTo(from+size)
-    if(searchLocationsList.length> 0 && allLocationsSearch) {
-      mergedData = details.map(dog=> {
-        const locationData = searchLocationsList?.find(location=>location?.zip_code === dog.zip_code)
-        return locationData ? {...dog, locationData} : null
-      }).filter(dog=> dog !== null)
+  useEffect(() => {
+    // setFrom(Number(size))
+    // setTo(Number(from) + Number(size))
+    if (searchLocationsList.length > 0 && allLocationsSearch) {
+      mergedData = details.map(dog => {
+        const locationData = searchLocationsList?.find(location => location?.zip_code === dog.zip_code)
+        return locationData ? { ...dog, locationData } : null
+      }).filter(dog => dog !== null)
       console.log(mergedData, 'mergedData line 88')
       setMergedArray(mergedData)
-      let newArray = mergedData.slice(0, size)
+      let newArray = mergedData.slice(0, Number(size))
       setUpdatedArray(newArray)
       setViewingArray(newArray)
       setPage(1)
       setIsPrevDisabled(true)
     }
-  },[details, searchLocationsList, allLocationsSearch])
+  }, [details, searchLocationsList, allLocationsSearch])
 
   let dogData;
 
-  useEffect(()=> {
-    if(totalPage === Infinity || totalPage<0) totalPage = 0
-    if(sizeChange) setPage(1)
+  useEffect(() => {
+    if (totalPage === Infinity || totalPage < 0) totalPage = 0
+    if (sizeChange) setPage(1)
   }, [totalPage, sizeChange])
 
 
-    const handleNext = async () => {
-       
-      if(allLocationsSearch || zipcodesearch) {
-        // console.log('inside if line 104')
-        setIsPrevDisabled(true)     
-        console.log(from, to, total, (to <= total), 'line 106')
-        if(to < total) {
-             let newArray = mergedArray.slice(from, to)
-             setIsPrevDisabled(false)
-             setUpdatedArray(newArray)
-        } else {
-          let newArray = mergedArray.slice(from)
-          setFrom(mergedArray.length)
-          setTo(from-size)
-          
-          setIsPrevDisabled(false)
-          setUpdatedArray(newArray)
-        }
-        
-      } else {
+  const handleNext = async () => {
+    console.log('from:',from, 'to:',to, 'line 105 first line handleNext')
+    if (allLocationsSearch || zipcodesearch) {
 
-      console.log('in else line 121')
+      setIsPrevDisabled(true)
+
+      if (to < total) {
+        console.log('handleNext line 110 from', from, 'to', to)
+        let newArray = mergedArray.slice(from, to)
+        setIsPrevDisabled(false)
+        setUpdatedArray(newArray)
+        from1 = from+size;
+        to1 = to+size;
+        setFrom(from1)
+        setTo(to1)
+        return
+      }
+        // console.log('handleNext line 114 from', from, 'to', to)
+        let newArray = mergedArray.slice(Number(from))
+        from1 = mergedArray.length - newArray.length
+        to1 = from1 - size
+        setFrom(from1)
+        setTo(to1)
+        setIsPrevDisabled(false)
+        setUpdatedArray(newArray)
+        console.log('handleNext last line 120 from', from, 'to', to)
+
+
+    } else {
+
+      console.log('in else line 124')
       let getNextList = await dispatch(nextPrevList(nextUrl));
       // console.log(nextUrl, 'nextUrl line 94')
       let dogData = await dispatch(postSearchDog(getNextList?.payload?.resultIds))
       // console.log(dogData, 'dogData line 77')
-      let zipCodes = dogData.payload.map(dog=>dog.zip_code)
+      let zipCodes = dogData.payload.map(dog => dog.zip_code)
       // console.log(zipCodes, 'zipCodes')
       let getZipCodes = await dispatch(postLocations(zipCodes))
       // console.log(getZipCodes, 'getZipCodes line 81')
-      }
-      
-
     }
 
-    const handlePrevious = async () => {
-      console.log(from, to, 'line 137')
-     
-      if(allLocationsSearch || zipcodesearch) {
-        // console.log(viewingArray, 'mergedArray line 137')
-        console.log(from, to, total, (to <= total), 'line 106')
-        let newArray = mergedArray.slice(to,from)
+
+  }
+
+  const handlePrevious = async () => {
+
+    console.log('from:',from, 'to:',to, 'line 149 first line handlePrev')
+    if (allLocationsSearch || zipcodesearch) {
+
+      if (to <= 0) {
+        console.log('to is less than or equal to zero',to)
+        let newArray = mergedArray.slice(Number(to), Number(from))
         setUpdatedArray(newArray)
-       
-        // let lastElementofMergeArray = indexOf(mergedArray) 
+        setFrom(Number(size))
+        setTo(Number(from)+Number(size))
+        setIsPrevDisabled(true)
+        setIsNextDisabled(false)
+        return
+      }
+        // console.log(viewingArray, 'mergedArray line 137')
+        console.log('from:',from, 'to:',to, 'line 163 handlePrev')
+        from1 = from-size;
+        to1 = to-size;
+        console.log('handlePrev line 166 from1', from1, 'to1', to1)
+        console.log('handlePrev line 167 from', from, 'to', to)
+        let newArray = mergedArray.slice(to, from)
+        setUpdatedArray(newArray)
 
+        setFrom(from1)
+        setTo(to1)
+        console.log('from:',from, 'to:',to, 'last line 172 handlePrev')
+        console.log('from1:',from1, 'to1:',to1, 'last line 172 handlePrev')
+        // setFrom(Number(from) - Number(size))
+        // setTo(Number(to) - Number(size))
+        // console.log('handlePrev line 161 from', from, 'to', to)
 
-        // console.log('inside if statement line 96')
-        // console.log(Number(size), total, 'size total line 97')
-       
-        // console.log(from, 'from line 102')
-       
-        // console.log(to, 'to line 104')
-        // console.log(to < total, 'line 105')
-        if(to === total) {
-        
-             
-        } else {
-          // from = to;
-          // to = to - from;
-          // console.log(from, 'from line 151')
-          // console.log(to, 'to line 152')
-          // let newArray = mergedArray.slice(from)
-          // console.log(updatedArray, 'newArray line 100')
-          setIsPrevDisabled(false)
-          setIsNextDisabled(false)
-          // setUpdatedArray(newArray)
-        }
-     
-      } else {
-        
+    } else {
+
       let getPrevList = await dispatch(nextPrevList(previousUrl));
       let dogData = await dispatch(postSearchDog(getPrevList.payload.resultIds))
-      let zipCodes = dogData.payload.map(dog=>dog.zip_code)
+      let zipCodes = dogData.payload.map(dog => dog.zip_code)
       let getZipCodes = await dispatch(postLocations(zipCodes))
-      }
+    }
   }
 
 
   const likeDogs = async (dog) => {
-    console.log(dog, 'like dogs line 61')
-    if(!likeID.includes(dog.id)) {
-       setLikeID((prev)=> [...prev, dog.id])
-       await dispatch(addLikeDog(dog))
+    console.log(dog, 'like dogs line168')
+    if (!likeID.includes(dog.id)) {
+      setLikeID((prev) => [...prev, dog.id])
+      await dispatch(addLikeDog(dog))
     }
     setSelectedDogs((prevSelectedDogs) => {
       const newSelectedDogs = new Set(prevSelectedDogs);
@@ -201,9 +209,9 @@ function BreedsResult({size, sizeChange, totalPage, zipcodesearch,allLocationsSe
 
     let foundDog = await dispatch(dogMatch(likeID));
     dogData = details.filter(dog => dog.id === foundDog.payload.match)
-    console.log(dogData, 'dogData line 89')
+    console.log(dogData, 'dogData line 189')
 
-    if(dogData) {
+    if (dogData) {
       setIsModalOpen(true)
     }
   }
@@ -219,75 +227,76 @@ function BreedsResult({size, sizeChange, totalPage, zipcodesearch,allLocationsSe
   }
 
   let matched = likeList.filter(dog => dog.id === matchedWithDog?.match)
-//  console.log(!previousUrl, page === 0, allLocationsSearch, zipcodesearch, 'line 158')
-
+  //  console.log(!previousUrl, page === 0, allLocationsSearch, zipcodesearch, 'line 158')
+  // setFrom(Number(from) + Number(size)); setTo(Number(to) + Number(size)); handleNext
+  //setFrom(Number(from) - Number(size)); setTo(Number(to) - Number(size)); handlePrev
   return (
     <>
-    <div className='selectedFavorites'>
+      <div className='selectedFavorites'>
 
-    <div>Your selected favorites will show here, when you are done selecting, click</div><div className='matchButtonDiv'><button className='matchButton' onClick={()=>match(likeID)} disabled={likeList.length===0}><OpenModalButton
-                buttonText={<div className='getMatch'>Match</div>}
-                modalComponent={<Match />}/>
-                </button></div><div> to get matched with one of your favorites:</div>
+        <div>Your selected favorites will show here, when you are done selecting, click</div><div className='matchButtonDiv'><button className='matchButton' onClick={() => match(likeID)} disabled={likeList.length === 0}><OpenModalButton
+          buttonText={<div className='getMatch'>Match</div>}
+          modalComponent={<Match />} />
+        </button></div><div> to get matched with one of your favorites:</div>
 
       </div>
-    <div className='selectedDogsList'>
-      {likeList.map((dog)=>
-    <div key={dog.id} className='selectedDogsSet'>
-      <div><img src={dog.img} className='dogImageSelected'/> </div>
-      <div>{dog.name} {dog.age}</div>
-      <div><button className='removeDogFromList' onClick={()=>removeLike(dog.id)}><img src={deleteImg} className="deletePic" alt='deleteimg'/></button></div>
-     </div>
-         )}
-    </div>
+      <div className='selectedDogsList'>
+        {likeList.map((dog) =>
+          <div key={dog.id} className='selectedDogsSet'>
+            <div><img src={dog.img} className='dogImageSelected' /> </div>
+            <div>{dog.name} {dog.age}</div>
+            <div><button className='removeDogFromList' onClick={() => removeLike(dog.id)}><img src={deleteImg} className="deletePic" alt='deleteimg' /></button></div>
+          </div>
+        )}
+      </div>
 
-    <div className='topRow'>
-    <div className='totalFinds'>Total Finds: {total}</div>
-    <div className='nexPrevButtons'>
-    {(allLocationsSearch || zipcodesearch) ?  (
-      <>
-    <div><button onClick={()=>{setPage(page-1);setFrom(from-size);setTo(to-size);handlePrevious()}} disabled={isPrevDisabled || page === 1}>&lt; Previous</button></div>
-    <div><button onClick={()=>{setPage(page+1);setFrom(from+size);setTo(to+size);handleNext()}} disabled={isNextDisabled || page === totalPage}>Next &gt;</button></div></>
-    ):(
-      <>
-    <div><button onClick={()=>{setPage(page-1);handlePrevious()}} disabled={!previousUrl || page === 0}>&lt; Previous</button></div>
-    <div><button onClick={()=>{setPage(page+1);handleNext()}} disabled={(!nextUrl || list.length === 0) || page === totalPage }>Next &gt;</button></div></>
-    )}
-   
+      <div className='topRow'>
+        <div className='totalFinds'>Total Finds: {total}</div>
+        <div className='nexPrevButtons'>
+          {(allLocationsSearch || zipcodesearch) ? (
+            <>
+              <div><button onClick={() => { setPage(page - 1); handlePrevious() }} disabled={isPrevDisabled || page === 1}>&lt; Previous</button></div>
+              <div><button onClick={() => { setPage(page + 1); handleNext() }} disabled={isNextDisabled || page === totalPage}>Next &gt;</button></div></>
+          ) : (
+            <>
+              <div><button onClick={() => { setPage(page - 1); handlePrevious() }} disabled={!previousUrl || page === 0}>&lt; Previous</button></div>
+              <div><button onClick={() => { setPage(page + 1); handleNext() }} disabled={(!nextUrl || list.length === 0) || page === totalPage}>Next &gt;</button></div></>
+          )}
 
-    {(details.length>0 && totalPage && size) && (
-      <div className="pageInfo">page {page} of {totalPage} pages</div>
-    )}
-    </div>
-    </div>
 
-    {details.length>0 ? (
+          {(details.length > 0 && totalPage && size) && (
+            <div className="pageInfo">page {page} of {totalPage} pages</div>
+          )}
+        </div>
+      </div>
+
+      {details.length > 0 ? (
         <div className='resultDisplayed'>
           {updatedArray?.map(dog =>
-            <button key={dog?.id} className={`dogSet ${selectedDogs.has(dog?.id) ? "selected" : ""}`} onClick={()=>likeDogs(dog)}>
-                <div>{dog?.breed}</div>
-                <div><img src={dog?.img} className='dogImage'/> </div>
-                <div>Name: {dog?.name}</div>
-                <div>Age: {dog?.age}</div>
-                {dog?.locationData && (
-                  <>
+            <button key={dog?.id} className={`dogSet ${selectedDogs.has(dog?.id) ? "selected" : ""}`} onClick={() => likeDogs(dog)}>
+              <div>{dog?.breed}</div>
+              <div><img src={dog?.img} className='dogImage' /> </div>
+              <div>Name: {dog?.name}</div>
+              <div>Age: {dog?.age}</div>
+              {dog?.locationData && (
+                <>
                   <div>City: {dog?.locationData?.city}</div>
                   <div>State: {dog?.locationData?.state}</div>
                   <div>County: {dog?.locationData?.county}</div>
-                  </>
-                )}
-                <div>Zip Code: {dog?.zip_code}</div>
+                </>
+              )}
+              <div>Zip Code: {dog?.zip_code}</div>
 
 
-             </button>
-        )}
+            </button>
+          )}
         </div>
-    ):(
-      <div>
-      <div>There Are No Results... </div>
-      <div className='waitingDogDiv'><img src={dogWaiting} className='waitingDogImg'/></div>
-      </div>
-    )}
+      ) : (
+        <div>
+          <div>There Are No Results... </div>
+          <div className='waitingDogDiv'><img src={dogWaiting} className='waitingDogImg' /></div>
+        </div>
+      )}
 
     </>
   )

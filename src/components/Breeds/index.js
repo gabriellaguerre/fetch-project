@@ -22,7 +22,7 @@ import editImg from '../../assets/edit.png'
 function Breeds() {
 
   const dogSearchUrl = 'https://frontend-take-home-service.fetch.com/dogs/search?';
-  
+
 
   const dispatch = useDispatch();
 
@@ -204,11 +204,11 @@ function Breeds() {
     let zipCodes = dogData.payload.map(dog=>dog.zip_code)
 
     let getZipCodes = await dispatch(postLocations(zipCodes))
-    
+
     setIsSearchingZipCodes(true)
     setIsSearchingAllLocations(false)
     await dispatch(clearLocationsSearch())
-  
+
   } else if(otherParameters && (chooseCity || chooseStates || chooseGeoBoundingBox)) {
 
       await dispatch(clearZCLocations())
@@ -245,7 +245,7 @@ function Breeds() {
       urlDogFrontend.searchParams.append('size', dogParams.size)
 
       // console.log(urlDogFrontend, 'line 237')
-      
+
       let searchDogResults = await dispatch(searchDog(urlDogFrontend));
       // console.log(searchDogResults, 'in breeds line 249')
       let searchLocationArray = searchDogResults.payload.resultIds
@@ -326,7 +326,7 @@ function Breeds() {
   const clearAll = async () => {
     setSelected([]);
     setSelectedZipCode([])
-    
+
     await dispatch(clearAllData());
   }
 
@@ -686,7 +686,7 @@ function Breeds() {
                 value={size}
                 onFocus={() => { setSizeChange(true); setUpdateButton(true); setError("") }}
                 onChange={(e) => { setSize(e.target.value); setSizeChange(true) }} />
-              <button className='updateButton' onClick={() => search(searching)} disabled={!updateButton}>Update</button></div>
+              <button className='updateButton' onClick={() => search()} disabled={!updateButton}>Update</button></div>
 
 
         </div>
