@@ -213,6 +213,10 @@ function Breeds() {
 
       await dispatch(clearZCLocations())
 
+      // let updatedSize = Number(size)
+      // console.log(updatedSize, 'size line 215')
+      // setSize(Number(updatedSize))
+
       let params = {}
       let dogParams = {}
       const dogSearchUrl = 'https://frontend-take-home-service.fetch.com/dogs/search?';
@@ -369,6 +373,14 @@ function Breeds() {
     //        await dispatch(clearLocationsSearch())
     //        await dispatch(postLocations(selectedZipCode))
     //   }
+    const searchAction = () => {
+      if(otherParameters) {
+        setSize(Number(size))
+        return
+       } else {
+         search()
+    }
+  }
 
   return (
     <>
@@ -686,7 +698,8 @@ function Breeds() {
                 value={size}
                 onFocus={() => { setSizeChange(true); setUpdateButton(true); setError("") }}
                 onChange={(e) => { setSize(e.target.value); setSizeChange(true) }} />
-              <button className='updateButton' onClick={() => search()} disabled={!updateButton}>Update</button></div>
+
+              <button className='updateButton' onClick={() => searchAction()} disabled={!updateButton}>Update</button></div>
 
 
         </div>

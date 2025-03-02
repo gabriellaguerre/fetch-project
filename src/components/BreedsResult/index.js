@@ -28,8 +28,8 @@ function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocations
   let nextUrl = searchResult?.next;
   let previousUrl = searchResult?.prev
   let list = searchResult?.resultIds
-  let updated;
   let mergedData;
+
 
   const [likeID, setLikeID] = useState([]);
   const [page, setPage] = useState(1)
@@ -42,26 +42,20 @@ function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocations
   const [isPrevDisabled, setIsPrevDisabled] = useState(false)
   const [isNextDisabled, setIsNextDisabled] = useState(false)
   const [viewingArray, setViewingArray] = useState([])
-  const [from, setFrom] = useState(Number(size))
-  const [to, setTo] = useState(Number(from) + Number(size))
+  const [from, setFrom] = useState(0)
+  const [to, setTo] = useState(size)
 
-  // console.log(details, 'details line 41')
-  // console.log(locationsList, 'location list line 42')
+
 
   let searchByLocation = searchLocationsList.results
   let searchByLocationTotal = searchLocationsList.total
-  // console.log(searchLocationsList, 'searchLocationsList line 47')
-  // console.log(searchByLocation, 'searchByLocation line 48')
-  // console.log(searchByLocationTotal, 'searchByLocation line 49')
-  // let from;
-  // let to;
+
   let from1;
   let to1;
 
 
   useEffect(() => {
-    // setFrom(size)
-    // setTo(Number(from) + Number(size))
+
     if (locationsList && zipcodesearch) {
       mergedData = details.map(dog => {
         const locationData = locationsList?.find(location => location?.zip_code === dog.zip_code);
@@ -69,15 +63,13 @@ function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocations
       }).filter(dog => dog !== null)
     }
 
-    // console.log(mergedData, 'mergedData line 72')
     setUpdatedArray(mergedData)
-    // setPage(1)
+
 
   }, [details, locationsList, zipcodesearch])
 
   useEffect(() => {
-    // setFrom(Number(size))
-    // setTo(Number(from) + Number(size))
+
     if (searchLocationsList.length > 0 && allLocationsSearch) {
       mergedData = details.map(dog => {
         const locationData = searchLocationsList?.find(location => location?.zip_code === dog.zip_code)
@@ -85,7 +77,8 @@ function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocations
       }).filter(dog => dog !== null)
       console.log(mergedData, 'mergedData line 88')
       setMergedArray(mergedData)
-      let newArray = mergedData.slice(0, Number(size))
+
+      let newArray = mergedData.slice(from, to)
       setUpdatedArray(newArray)
       setViewingArray(newArray)
       setPage(1)
@@ -97,28 +90,33 @@ function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocations
 
   useEffect(() => {
     if (totalPage === Infinity || totalPage < 0) totalPage = 0
-    if (sizeChange) setPage(1)
+    if (sizeChange) {
+      setPage(1)
+      setTo(Number(size))
+    }
   }, [totalPage, sizeChange])
 
 
   const handleNext = async () => {
-    console.log('from:',from, 'to:',to, 'line 105 first line handleNext')
+
     if (allLocationsSearch || zipcodesearch) {
+      let from1 = from + size
+
+      let to1 = to + size
 
       setIsPrevDisabled(true)
 
       if (to < total) {
-        console.log('handleNext line 110 from', from, 'to', to)
-        let newArray = mergedArray.slice(from, to)
+
+        let newArray = mergedArray.slice(from1, to1)
         setIsPrevDisabled(false)
         setUpdatedArray(newArray)
-        from1 = from+size;
-        to1 = to+size;
+
         setFrom(from1)
         setTo(to1)
         return
       }
-        // console.log('handleNext line 114 from', from, 'to', to)
+
         let newArray = mergedArray.slice(Number(from))
         from1 = mergedArray.length - newArray.length
         to1 = from1 - size
@@ -126,12 +124,9 @@ function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocations
         setTo(to1)
         setIsPrevDisabled(false)
         setUpdatedArray(newArray)
-        console.log('handleNext last line 120 from', from, 'to', to)
-
 
     } else {
 
-      console.log('in else line 124')
       let getNextList = await dispatch(nextPrevList(nextUrl));
       // console.log(nextUrl, 'nextUrl line 94')
       let dogData = await dispatch(postSearchDog(getNextList?.payload?.resultIds))
@@ -147,35 +142,27 @@ function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocations
 
   const handlePrevious = async () => {
 
-    console.log('from:',from, 'to:',to, 'line 149 first line handlePrev')
+
     if (allLocationsSearch || zipcodesearch) {
+      from1 = from - size
+      to1 = to - size
 
       if (to <= 0) {
-        console.log('to is less than or equal to zero',to)
-        let newArray = mergedArray.slice(Number(to), Number(from))
+        
+        let newArray = mergedArray.slice(to1, from1)
         setUpdatedArray(newArray)
-        setFrom(Number(size))
-        setTo(Number(from)+Number(size))
+        setFrom(size)
+        setTo(from+size)
         setIsPrevDisabled(true)
         setIsNextDisabled(false)
         return
       }
-        // console.log(viewingArray, 'mergedArray line 137')
-        console.log('from:',from, 'to:',to, 'line 163 handlePrev')
-        from1 = from-size;
-        to1 = to-size;
-        console.log('handlePrev line 166 from1', from1, 'to1', to1)
-        console.log('handlePrev line 167 from', from, 'to', to)
-        let newArray = mergedArray.slice(to, from)
+
+        let newArray = mergedArray.slice(from1, to1)
         setUpdatedArray(newArray)
 
         setFrom(from1)
         setTo(to1)
-        console.log('from:',from, 'to:',to, 'last line 172 handlePrev')
-        console.log('from1:',from1, 'to1:',to1, 'last line 172 handlePrev')
-        // setFrom(Number(from) - Number(size))
-        // setTo(Number(to) - Number(size))
-        // console.log('handlePrev line 161 from', from, 'to', to)
 
     } else {
 
@@ -227,9 +214,7 @@ function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocations
   }
 
   let matched = likeList.filter(dog => dog.id === matchedWithDog?.match)
-  //  console.log(!previousUrl, page === 0, allLocationsSearch, zipcodesearch, 'line 158')
-  // setFrom(Number(from) + Number(size)); setTo(Number(to) + Number(size)); handleNext
-  //setFrom(Number(from) - Number(size)); setTo(Number(to) - Number(size)); handlePrev
+
   return (
     <>
       <div className='selectedFavorites'>
