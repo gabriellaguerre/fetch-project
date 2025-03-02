@@ -95,6 +95,8 @@ function Breeds() {
   const [chooseStates, setChooseStates] = useState(false);
   const [selectedState, setSelectedState] = useState("")
   const [states, setStates] = useState([]);
+  const [cityChange, setCityChange] = useState(false)
+  const [stateChange, setStateChange] = useState((false))
 
   const [chooseZipCodeOnly, setChooseZipCodeOnly] = useState(false)
   const [otherParameters, setOtherParameters] = useState(false)
@@ -105,7 +107,17 @@ function Breeds() {
 
 
   let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
+  console.log('cityChange', cityChange, 'stateChange',stateChange)
 
+  // useEffect(()=> {
+  //   console.log(city, 'useEfect city')
+  //   setCityChange(true)
+  // },[city])
+
+  // useEffect(()=> {
+  //   console.log(states, 'useEfect states')
+  //   setStateChange(true)
+  // },[states.length])
 
   const search = async () => {
 
@@ -259,6 +271,8 @@ function Breeds() {
 
       setIsSearchingZipCodes(false)
       setIsSearchingAllLocations(true)
+      setCityChange(false)
+      setStateChange(false)
     }
 
   }
@@ -373,8 +387,11 @@ function Breeds() {
     //        await dispatch(clearLocationsSearch())
     //        await dispatch(postLocations(selectedZipCode))
     //   }
-    const searchAction = () => {
-      if(otherParameters) {
+    const searchAction = (size) => {
+      console.log(otherParameters,cityChange, stateChange, 'otherParameters, cityChange, stateChange, line 386')
+      if(otherParameters && !cityChange && !stateChange) {
+        console.log(size, sizeChange, 'size, sizeChange inside if line 387')
+        setSizeChange(true)
         setSize(Number(size))
         return
        } else {
@@ -460,7 +477,7 @@ function Breeds() {
                       className="filter-input-city"
                       type="text"
                       value={city}
-                      // placeholder="Enter a minimum age"
+                      onFocus={()=>setCityChange(true)}
                       onChange={(e) => setCity(e.target.value)} />
                   )}
 
@@ -478,8 +495,7 @@ function Breeds() {
                         className="filter-input-state"
                         type="text"
                         value={selectedState}
-                        // placeholder="Enter a maximum age"
-                        onFocus={() => setMenu(true)}
+                        onFocus={() => {setMenu(true);setStateChange(true)}}
                         onChange={(e) => setSelectedState(e.target.value)} />
                       <span className='searchSpan'><button className='addStateButton' onClick={()=>{addState(selectedState);setSelectedState("")}} ><img src={plusImg} className="searchStatePic" alt='plusimg' /></button></span>
                     </>
@@ -699,7 +715,7 @@ function Breeds() {
                 onFocus={() => { setSizeChange(true); setUpdateButton(true); setError("") }}
                 onChange={(e) => { setSize(e.target.value); setSizeChange(true) }} />
 
-              <button className='updateButton' onClick={() => searchAction()} disabled={!updateButton}>Update</button></div>
+              <button className='updateButton' onClick={() => searchAction(size)} disabled={!updateButton}>Update</button></div>
 
 
         </div>

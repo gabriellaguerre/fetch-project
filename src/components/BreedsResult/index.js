@@ -11,7 +11,7 @@ import deleteImg from '../../assets/x.png';
 
 function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocationsSearch }) {
   const dispatch = useDispatch();
-
+  console.log(size, sizeChange, 'size sizeChange in breedresult line 14')
   const details = useSelector(getDogDetails);
   const searchResult = useSelector(getSearches)
   const likeList = useSelector(getLikeDogs)
@@ -148,7 +148,7 @@ function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocations
       to1 = to - size
 
       if (to <= 0) {
-        
+
         let newArray = mergedArray.slice(to1, from1)
         setUpdatedArray(newArray)
         setFrom(size)
