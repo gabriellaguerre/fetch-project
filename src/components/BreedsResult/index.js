@@ -11,7 +11,7 @@ import deleteImg from '../../assets/x.png';
 
 function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocationsSearch }) {
   const dispatch = useDispatch();
-  console.log(size, sizeChange, 'size sizeChange in breedresult line 14')
+  // console.log(size, sizeChange, 'size sizeChange in breedresult line 14')
   const details = useSelector(getDogDetails);
   const searchResult = useSelector(getSearches)
   const likeList = useSelector(getLikeDogs)
@@ -23,7 +23,7 @@ function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocations
   const locationSearchForDog = useSelector(locationSearchDogs)
   const locationGetDogDetails = useSelector(locationDogDetails)
 
-  const dogSearchUrl = 'https://frontend-take-home-service.fetch.com/dogs/search?';
+  
   let total = searchResult?.total;
   let nextUrl = searchResult?.next;
   let previousUrl = searchResult?.prev
@@ -47,8 +47,9 @@ function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocations
 
 
 
-  let searchByLocation = searchLocationsList.results
+  let searchByLocation = searchLocationsList
   let searchByLocationTotal = searchLocationsList.total
+  // console.log(searchByLocation, 'searchResult line 26')
 
   let from1;
   let to1;
@@ -91,14 +92,19 @@ function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocations
   useEffect(() => {
     if (totalPage === Infinity || totalPage < 0) totalPage = 0
     if (sizeChange) {
+      let newArray = mergedArray.slice(0, Number(size))
+      setUpdatedArray(newArray)
       setPage(1)
       setTo(Number(size))
+      setFrom(0)
+   
     }
   }, [totalPage, sizeChange])
 
 
-  const handleNext = async () => {
 
+  const handleNext = async () => {
+    console.log(allLocationsSearch, zipcodesearch,'inside handlenext line 106')
     if (allLocationsSearch || zipcodesearch) {
       let from1 = from + size
 
@@ -126,7 +132,7 @@ function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocations
         setUpdatedArray(newArray)
 
     } else {
-
+      console.log('inside next function line 134')
       let getNextList = await dispatch(nextPrevList(nextUrl));
       // console.log(nextUrl, 'nextUrl line 94')
       let dogData = await dispatch(postSearchDog(getNextList?.payload?.resultIds))
@@ -245,7 +251,7 @@ function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocations
           ) : (
             <>
               <div><button onClick={() => { setPage(page - 1); handlePrevious() }} disabled={!previousUrl || page === 0}>&lt; Previous</button></div>
-              <div><button onClick={() => { setPage(page + 1); handleNext() }} disabled={(!nextUrl || list.length === 0) || page === totalPage}>Next &gt;</button></div></>
+              <div><button onClick={() => { setPage(page + 1); handleNext() }} disabled={(!nextUrl || list?.length === 0) || page === totalPage}>Next &gt;</button></div></>
           )}
 
 

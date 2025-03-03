@@ -107,7 +107,7 @@ function Breeds() {
 
 
   let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
-  console.log('cityChange', cityChange, 'stateChange',stateChange)
+  // console.log('cityChange', cityChange, 'stateChange',stateChange)
 
   // useEffect(()=> {
   //   console.log(city, 'useEfect city')
@@ -206,7 +206,7 @@ function Breeds() {
 
 
     setError("")
-    setSizeChange(false);
+    
     setUpdateButton(false);
     let searchDogResults = await dispatch(searchDog(urlFrontend));
     let searchArray = searchDogResults.payload.resultIds
@@ -240,7 +240,7 @@ function Breeds() {
 
       if(Object.keys(bodyParams).length>0) params.geoBoundingBox = bodyParams.geoBoundingBox
 
-      params.size = '10000';
+      params.size = '1000';
       params.from = from ? from : '0';
 
       // console.log(params, 'params')
@@ -248,13 +248,21 @@ function Breeds() {
 
 
       let locationSearchData = await dispatch(postSearchLocations(params))
-      // console.log(locationSearchData.payload, 'locationSearchData line 224')
+      console.log(locationSearchData.payload, 'locationSearchData line 224')
+      
 
       let justZipCodes  = locationSearchData.payload.results.map(location=>location.zip_code)
-      // console.log(justZipCodes, 'zip codes line 233')
+      console.log(justZipCodes, 'zip codes line 233')
+
+      // let start = 0;
+      // let batch = 100;
+
+
+      // let zipCodeBatch = justZipCodes.slice(start,batch)
+
 
       dogParams.zipCodes = justZipCodes;
-      // console.log(dogParams.zipCodes, 'searchParams.zipCodes line 236')
+      console.log(dogParams.zipCodes, 'searchParams.zipCodes line 236')
       dogParams.zipCodes.forEach(zipCode => urlDogFrontend.searchParams.append('zipCodes', zipCode));
 
       dogParams.size = '10000';
@@ -263,11 +271,13 @@ function Breeds() {
       // console.log(urlDogFrontend, 'line 237')
 
       let searchDogResults = await dispatch(searchDog(urlDogFrontend));
-      // console.log(searchDogResults, 'in breeds line 249')
-      let searchLocationArray = searchDogResults.payload.resultIds
-      // console.log(searchLocationArray, 'searchLocationArray line 251')
+      console.log(searchDogResults, 'in breeds line 249')
+     
+      let searchLocationArray = searchDogResults?.payload?.resultIds
+      console.log(searchLocationArray, 'searchLocationArray line 251')
+     
       let dogData = await dispatch(postSearchDog(searchLocationArray))
-      // console.log(dogData, 'dogData line 253')
+     
 
       setIsSearchingZipCodes(false)
       setIsSearchingAllLocations(true)
@@ -388,14 +398,15 @@ function Breeds() {
     //        await dispatch(postLocations(selectedZipCode))
     //   }
     const searchAction = (size) => {
-      console.log(otherParameters,cityChange, stateChange, 'otherParameters, cityChange, stateChange, line 386')
+      // console.log(otherParameters,cityChange, stateChange, 'otherParameters, cityChange, stateChange, line 386')
       if(otherParameters && !cityChange && !stateChange) {
-        console.log(size, sizeChange, 'size, sizeChange inside if line 387')
+        // console.log(size, sizeChange, 'size, sizeChange inside if line 387')
         setSizeChange(true)
         setSize(Number(size))
         return
        } else {
          search()
+         setSizeChange(false)
     }
   }
 

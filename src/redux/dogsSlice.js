@@ -35,14 +35,14 @@ const initialState = {
 //  *******************GET /dogs/search **************************************/
 
 export const searchDog = createAsyncThunk('dogs/SEARCH', async (urlFrontend) => {
-    console.log(urlFrontend.href, 'searchDog in dogSlice line 34')
+    // console.log(urlFrontend.href, 'searchDog in dogSlice line 34')
 
     const response = await fetch(urlFrontend.href, {
         method: 'GET',
         headers: {"Content-Type": "application/json"},
         credentials: 'include',
     })
-    // console.log(response);
+    console.log(response);
     if(response.ok){
         const data = await response.json()
         // console.log(data, 'data in searchDog in dogSlice line 44')
@@ -210,7 +210,7 @@ const dogsSlice = createSlice({
 
 
             .addCase(postSearchDog.fulfilled, (state, action)=> {
-                state.dogsDetail = action.payload;
+                state.dogsDetail.push(...action.payload);
                 // console.log(action.payload, 'action payload for postSearchDog in dogSlice line 123')
                 state.status = 'succeeded';
                 state.error = null;
