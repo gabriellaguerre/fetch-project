@@ -4,8 +4,8 @@ import { selectUser } from '../../redux/usersSlice';
 import Profile from '../Profile';
 import BreedsResult from "../BreedsResult";
 import OpenModalButton from '../OpenModalButton';
-import { breeds, getAllDogs, getDogBreed, getSearches, searchDog, getDogDetails, postSearchDog, clearAllData, searchDogForLocations,dogMatch, postSearchLocationDog } from '../../redux/dogsSlice';
-import {postLocations, geoBoundingData, allLocations, postSearchLocations, clearZCLocations, clearLocationsSearch, clearGeoBounding} from '../../redux/locationsSlice'
+import { breeds, getDogBreed, getSearches, searchDog, postSearchDog, clearAllData} from '../../redux/dogsSlice';
+import {postLocations, geoBoundingData, postSearchLocations, clearZCLocations, clearLocationsSearch, clearGeoBounding} from '../../redux/locationsSlice'
 import './Breeds.css';
 import GeoBoundingBox from "../GeoBoundingBox";
 import searchImg from '../../assets/search.png';
@@ -34,23 +34,18 @@ function Breeds() {
   const user = useSelector(selectUser);
   const doggyBreeds = useSelector(getDogBreed)
   const searchResult = useSelector(getSearches)
-  const details = useSelector(getDogDetails);
   const bodyParams = useSelector(geoBoundingData);
-  const locationsList = useSelector(allLocations);
-  // const user = "asfd";
-
-
+ 
   let geoChoices = bodyParams.geoBoundingBox ? Object.keys(bodyParams.geoBoundingBox) : [];
-  // console.log(allDogs, searchResult, 'allDogs line 51')
+
 
 
   const [allFilterButtons, setAllFilterButtons] = useState(false);
-  // const [allLocationButtons, setAllLocationButtons] = useState(false);
+ 
   const [selected, setSelected] = useState([]);
   const [breedSelected, setBreedSelected] = useState(false)
 
-  // const [selectLocationArray, setSelectLocationArray] = useState([]);
-  // const [selectLocation, setSelectLocation] = useState("")
+
 
   const [breed, setBreed] = useState(false);
   const [breedAsc, setBreedAsc] = useState(false);
@@ -98,27 +93,16 @@ function Breeds() {
   const [cityChange, setCityChange] = useState(false)
   const [stateChange, setStateChange] = useState((false))
 
-  const [chooseZipCodeOnly, setChooseZipCodeOnly] = useState(false)
+
   const [otherParameters, setOtherParameters] = useState(false)
   const [chooseGeoBoundingBox, setChooseGeoBoundingBox] = useState(false);
-  const [data, setData] = useState({})
+
   const [isSearchingAllLocations, setIsSearchingAllLocations] = useState(false)
-  const [isSearchingZipCodes, setIsSearchingZipCodes] = useState(false)
+  const [isSearchingBreed_ZipCodes, setIsSearchingBreed_ZipCodes] = useState(false)
 
 
   let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
-  // console.log('cityChange', cityChange, 'stateChange',stateChange)
-
-  // useEffect(()=> {
-  //   console.log(city, 'useEfect city')
-  //   setCityChange(true)
-  // },[city])
-
-  // useEffect(()=> {
-  //   console.log(states, 'useEfect states')
-  //   setStateChange(true)
-  // },[states.length])
-
+ 
   const search = async () => {
 
     if(!otherParameters) {
@@ -217,17 +201,13 @@ function Breeds() {
 
     let getZipCodes = await dispatch(postLocations(zipCodes))
 
-    setIsSearchingZipCodes(true)
+    setIsSearchingBreed_ZipCodes(true)
     setIsSearchingAllLocations(false)
     await dispatch(clearLocationsSearch())
 
   } else if(otherParameters && (chooseCity || chooseStates || chooseGeoBoundingBox)) {
 
       await dispatch(clearZCLocations())
-
-      // let updatedSize = Number(size)
-      // console.log(updatedSize, 'size line 215')
-      // setSize(Number(updatedSize))
 
       let params = {}
       let dogParams = {}
@@ -240,46 +220,40 @@ function Breeds() {
 
       if(Object.keys(bodyParams).length>0) params.geoBoundingBox = bodyParams.geoBoundingBox
 
-      params.size = '1000';
+      params.size = '10000';
       params.from = from ? from : '0';
 
-      // console.log(params, 'params')
-      setData(params)
-
-
+     
       let locationSearchData = await dispatch(postSearchLocations(params))
       console.log(locationSearchData.payload, 'locationSearchData line 224')
-      
 
       let justZipCodes  = locationSearchData.payload.results.map(location=>location.zip_code)
       console.log(justZipCodes, 'zip codes line 233')
 
-      // let start = 0;
-      // let batch = 100;
-
-
-      // let zipCodeBatch = justZipCodes.slice(start,batch)
-
-
+      if(justZipCodes.length>1000) {
+        justZipCodes = justZipCodes.slice(0,1000)
+      }
+     
       dogParams.zipCodes = justZipCodes;
-      console.log(dogParams.zipCodes, 'searchParams.zipCodes line 236')
+      // console.log(dogParams.zipCodes, 'searchParams.zipCodes line 236')
       dogParams.zipCodes.forEach(zipCode => urlDogFrontend.searchParams.append('zipCodes', zipCode));
 
-      dogParams.size = '10000';
+      dogParams.size = '1000';
       urlDogFrontend.searchParams.append('size', dogParams.size)
 
       // console.log(urlDogFrontend, 'line 237')
 
       let searchDogResults = await dispatch(searchDog(urlDogFrontend));
-      console.log(searchDogResults, 'in breeds line 249')
+      // console.log(searchDogResults, 'in breeds line 249')
      
       let searchLocationArray = searchDogResults?.payload?.resultIds
-      console.log(searchLocationArray, 'searchLocationArray line 251')
+      // console.log(searchLocationArray, 'searchLocationArray line 251')
      
       let dogData = await dispatch(postSearchDog(searchLocationArray))
+      // console.log(dogData, 'dogData line 280')
      
 
-      setIsSearchingZipCodes(false)
+      setIsSearchingBreed_ZipCodes(false)
       setIsSearchingAllLocations(true)
       setCityChange(false)
       setStateChange(false)
@@ -293,12 +267,12 @@ function Breeds() {
 
   let addBreed = (selectedBreed) => {
     if (!selected.includes(selectedBreed)) {
-
       setSelected(prevSelected => {
         const updatedSelection = [...prevSelected, selectedBreed];
         return updatedSelection;
       })
-
+    } else {
+      setError("This Breed is Already in Your List")
     }
   }
 
@@ -368,7 +342,7 @@ function Breeds() {
       setError('Enter a two-letter state/territory abbreviations ')
 
     }
-    // console.log(!states.includes(selectedState), selectedState.length === 2, 'line 277')
+ 
 
     if(!states.includes(selectedState) && selectedState.length === 2) {
       console.log('inside if statement line 280')
@@ -385,22 +359,17 @@ function Breeds() {
     setStates(newArray)
   }
 
-  // console.log(states, 'states line 287')
-
+ 
     const deleteGeoChoices = async ()=>{
       setChooseGeoBoundingBox(false)
       await dispatch(clearGeoBounding())
     }
 
-    // const searchZipCodes = async () => {
-    //        await dispatch(clearGeoBounding())
-    //        await dispatch(clearLocationsSearch())
-    //        await dispatch(postLocations(selectedZipCode))
-    //   }
+  
     const searchAction = (size) => {
-      // console.log(otherParameters,cityChange, stateChange, 'otherParameters, cityChange, stateChange, line 386')
+  
       if(otherParameters && !cityChange && !stateChange) {
-        // console.log(size, sizeChange, 'size, sizeChange inside if line 387')
+     
         setSizeChange(true)
         setSize(Number(size))
         return
@@ -433,7 +402,7 @@ function Breeds() {
                 type="text"
                 value={searching}
                 placeholder="Type to search our available breeds then click the + button"
-                onFocus={() => { setMenu(true); setError(""); setBreedSelected(true) }}
+                onFocus={() => { setMenu(true); setError(""); setBreedSelected(true);setOtherParameters(false) }}
                 onChange={(e) => setSearching(e.target.value)}
               /> </div>
 
@@ -749,7 +718,7 @@ function Breeds() {
         <div className='searchBreed'><button className='searchBreedButton' onClick={() => { search(); setMenu(false); setFrom(0) }}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg' /></button>
         <button className='clearAllButton' onClick={clearAll}>Clear All</button></div>
 
-      <div className='breedResult'><BreedsResult size={size} sizeChange={sizeChange} totalPage={Math.ceil(Number(searchResult?.total) / Number(size))} zipcodesearch={isSearchingZipCodes} allLocationsSearch={isSearchingAllLocations}/></div>
+      <div className='breedResult'><BreedsResult size={size} sizeChange={sizeChange} totalPage={Math.ceil(Number(searchResult?.total) / Number(size))} breedZipCodeSearch={isSearchingBreed_ZipCodes} allLocationsSearch={isSearchingAllLocations}/></div>
     </>
   );
 }

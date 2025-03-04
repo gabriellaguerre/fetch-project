@@ -24,10 +24,9 @@ export const postLocations = createAsyncThunk('locations/ZIP_CODES', async (sear
         body: JSON.stringify(searchArray),
         credentials: 'include',
     })
-    // console.log(response, 'postLocations (zip codes only) response')
+  
     if(response.ok){
         const data = await response.json()
-        // console.log(data, 'locations')
         return data;
     }
 })
@@ -42,10 +41,8 @@ export const postSearchLocations = createAsyncThunk('locations/ZIP_DETAILS', asy
         body: JSON.stringify(searchArray),
         credentials: 'include',
     })
-    // console.log(response, 'response in postsearchlocation function')
     if(response.ok){
         const data = await response.json()
-        // console.log(data, 'data in locationSlice line 45')
         return data;
     }
 })
@@ -79,7 +76,6 @@ const locationsSlice = createSlice({
 
             .addCase(postSearchLocations.fulfilled, (state, action)=> {
                 state.locationsSearch.push(...action.payload.results);
-                // console.log(action.payload.results, 'in postSearchLocations')
                 state.status = 'succeeded';
                 state.error = null;
             })

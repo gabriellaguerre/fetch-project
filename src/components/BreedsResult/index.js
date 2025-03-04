@@ -9,7 +9,7 @@ import dogWaiting from '../../assets/dogwaiting-pic.png'
 import deleteImg from '../../assets/x.png';
 
 
-function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocationsSearch }) {
+function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLocationsSearch }) {
   const dispatch = useDispatch();
   // console.log(size, sizeChange, 'size sizeChange in breedresult line 14')
   const details = useSelector(getDogDetails);
@@ -46,18 +46,14 @@ function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocations
   const [to, setTo] = useState(size)
 
 
-
-  let searchByLocation = searchLocationsList
-  let searchByLocationTotal = searchLocationsList.total
-  // console.log(searchByLocation, 'searchResult line 26')
-
   let from1;
   let to1;
 
 
   useEffect(() => {
 
-    if (locationsList && zipcodesearch) {
+    // if (locationsList && zipcodesearch) {
+    if (locationsList && breedZipCodeSearch) {
       mergedData = details.map(dog => {
         const locationData = locationsList?.find(location => location?.zip_code === dog.zip_code);
         return locationData ? { ...dog, locationData } : null
@@ -67,7 +63,7 @@ function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocations
     setUpdatedArray(mergedData)
 
 
-  }, [details, locationsList, zipcodesearch])
+  }, [details, locationsList, breedZipCodeSearch])
 
   useEffect(() => {
 
@@ -76,7 +72,7 @@ function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocations
         const locationData = searchLocationsList?.find(location => location?.zip_code === dog.zip_code)
         return locationData ? { ...dog, locationData } : null
       }).filter(dog => dog !== null)
-      console.log(mergedData, 'mergedData line 88')
+      
       setMergedArray(mergedData)
 
       let newArray = mergedData.slice(from, to)
@@ -104,12 +100,11 @@ function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocations
 
 
   const handleNext = async () => {
-    console.log(allLocationsSearch, zipcodesearch,'inside handlenext line 106')
-    if (allLocationsSearch || zipcodesearch) {
+  
+   if (allLocationsSearch) {
+     
       let from1 = from + size
-
       let to1 = to + size
-
       setIsPrevDisabled(true)
 
       if (to < total) {
@@ -131,10 +126,11 @@ function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocations
         setIsPrevDisabled(false)
         setUpdatedArray(newArray)
 
-    } else {
-      console.log('inside next function line 134')
+     } 
+     if(breedZipCodeSearch) {
+    
       let getNextList = await dispatch(nextPrevList(nextUrl));
-      // console.log(nextUrl, 'nextUrl line 94')
+     
       let dogData = await dispatch(postSearchDog(getNextList?.payload?.resultIds))
       // console.log(dogData, 'dogData line 77')
       let zipCodes = dogData.payload.map(dog => dog.zip_code)
@@ -149,7 +145,7 @@ function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocations
   const handlePrevious = async () => {
 
 
-    if (allLocationsSearch || zipcodesearch) {
+    if (allLocationsSearch) {
       from1 = from - size
       to1 = to - size
 
@@ -170,8 +166,8 @@ function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocations
         setFrom(from1)
         setTo(to1)
 
-    } else {
-
+    }
+    if(breedZipCodeSearch) {
       let getPrevList = await dispatch(nextPrevList(previousUrl));
       let dogData = await dispatch(postSearchDog(getPrevList.payload.resultIds))
       let zipCodes = dogData.payload.map(dog => dog.zip_code)
@@ -244,7 +240,7 @@ function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocations
       <div className='topRow'>
         <div className='totalFinds'>Total Finds: {total}</div>
         <div className='nexPrevButtons'>
-          {(allLocationsSearch || zipcodesearch) ? (
+          {(allLocationsSearch) ? (
             <>
               <div><button onClick={() => { setPage(page - 1); handlePrevious() }} disabled={isPrevDisabled || page === 1}>&lt; Previous</button></div>
               <div><button onClick={() => { setPage(page + 1); handleNext() }} disabled={isNextDisabled || page === totalPage}>Next &gt;</button></div></>
@@ -267,16 +263,16 @@ function BreedsResult({ size, sizeChange, totalPage, zipcodesearch, allLocations
             <button key={dog?.id} className={`dogSet ${selectedDogs.has(dog?.id) ? "selected" : ""}`} onClick={() => likeDogs(dog)}>
               <div>{dog?.breed}</div>
               <div><img src={dog?.img} className='dogImage' /> </div>
-              <div>Name: {dog?.name}</div>
+              <div>{dog?.name}</div>
               <div>Age: {dog?.age}</div>
               {dog?.locationData && (
                 <>
-                  <div>City: {dog?.locationData?.city}</div>
-                  <div>State: {dog?.locationData?.state}</div>
-                  <div>County: {dog?.locationData?.county}</div>
+                  <div>{dog?.locationData?.city} {dog?.locationData?.state} {dog?.locationData?.zip_code}</div>
+                  
+                  <div>{dog?.locationData?.county} County</div>
                 </>
               )}
-              <div>Zip Code: {dog?.zip_code}</div>
+              {/* <div>Zip Code: {dog?.zip_code}</div> */}
 
 
             </button>
