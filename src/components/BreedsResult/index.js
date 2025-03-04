@@ -267,7 +267,7 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
               <div>Age: {dog?.age}</div>
               {dog?.locationData && (
                 <>
-                  <div>{dog?.locationData?.city} {dog?.locationData?.state} {dog?.locationData?.zip_code}</div>
+                  <div>{dog?.locationData?.city}, {dog?.locationData?.state} {dog?.locationData?.zip_code}</div>
                   
                   <div>{dog?.locationData?.county} County</div>
                 </>
