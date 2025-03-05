@@ -242,12 +242,12 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
         <div className='nexPrevButtons'>
           {(allLocationsSearch) ? (
             <>
-              <div><button onClick={() => { setPage(page - 1); handlePrevious() }} disabled={isPrevDisabled || page === 1}>&lt; Previous</button></div>
-              <div><button onClick={() => { setPage(page + 1); handleNext() }} disabled={isNextDisabled || page === totalPage}>Next &gt;</button></div></>
+              <button className='prevButton' onClick={() => { setPage(page - 1); handlePrevious() }} disabled={isPrevDisabled || page === 1}>&lt; Previous</button>
+              <button className='nextButton' onClick={() => { setPage(page + 1); handleNext() }} disabled={isNextDisabled || page === totalPage}>Next &gt;</button></>
           ) : (
             <>
-              <div><button onClick={() => { setPage(page - 1); handlePrevious() }} disabled={!previousUrl || page === 0}>&lt; Previous</button></div>
-              <div><button onClick={() => { setPage(page + 1); handleNext() }} disabled={(!nextUrl || list?.length === 0) || page === totalPage}>Next &gt;</button></div></>
+              <button className='prevButton' onClick={() => { setPage(page - 1); handlePrevious() }} disabled={!previousUrl || page === 0}>&lt; Previous</button>
+              <button className='nextButton' onClick={() => { setPage(page + 1); handleNext() }} disabled={(!nextUrl || list?.length === 0) || page === totalPage}>Next &gt;</button></>
           )}
 
 
@@ -263,8 +263,8 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
             <button key={dog?.id} className={`dogSet ${selectedDogs.has(dog?.id) ? "selected" : ""}`} onClick={() => likeDogs(dog)}>
               <div>{dog?.breed}</div>
               <div><img src={dog?.img} className='dogImage' /> </div>
-              <div>{dog?.name}</div>
-              <div>Age: {dog?.age}</div>
+              <div>{dog?.name} {dog?.age} yrs</div>
+              {/* <div>Age: {dog?.age}</div> */}
               {dog?.locationData && (
                 <>
                   <div>{dog?.locationData?.city}, {dog?.locationData?.state} {dog?.locationData?.zip_code}</div>

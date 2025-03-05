@@ -220,6 +220,11 @@ function Breeds() {
 
       if(Object.keys(bodyParams).length>0) params.geoBoundingBox = bodyParams.geoBoundingBox
 
+      if(chooseStates && states.length>0 && !chooseCity && city.length===0) {
+        setError("Please Enter a City For Your Chosen States")
+        return
+      }
+
       params.size = '10000';
       params.from = from ? from : '0';
 
@@ -263,9 +268,13 @@ function Breeds() {
 
 
   let results = doggyBreeds.filter((word) => word.includes(capitalLetterWord))
-
+  // console.log(results, 'results line 266')
 
   let addBreed = (selectedBreed) => {
+    if(!results.includes(selectedBreed)){
+      setError("This Breed is Not in Our List")
+      return
+    }
     if (!selected.includes(selectedBreed)) {
       setSelected(prevSelected => {
         const updatedSelection = [...prevSelected, selectedBreed];
@@ -328,34 +337,47 @@ function Breeds() {
   const clearAll = async () => {
     setSelected([]);
     setSelectedZipCode([])
-
+    setOtherParameters(false)
+    setCity('')
+    setStates([])
+    setFilters(false)
+    setSort(false)
     await dispatch(clearAllData());
   }
 
   const breedError = 'breedErrors' + (error ? "" : "hidden")
 
   let addState = (selectedState) => {
-    console.log(selectedState.toUpperCase(), 'selectedState')
+   
     let allCapsState = selectedState.toUpperCase()
+    const stateRegex = /^(AL|AK|AZ|AR|CA|CO|CT|DE|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WA|WV|WI|WY)$/;
+   
+    
+    if(states.includes(allCapsState)) {
+      setError("This State is Already in Your List")
+      return
+    }
 
     if(chooseStates && selectedState.length > 2) {
-      setError('Enter a two-letter state/territory abbreviations ')
-
+      setError('Enter a two-letter state/territory abbreviations')
     }
- 
-
-    if(!states.includes(selectedState) && selectedState.length === 2) {
-      console.log('inside if statement line 280')
+    
+  
+    if(allCapsState.length === 2 && stateRegex.test(allCapsState)) {
+     
         setStates(prevSelected => {const updatedSelection = [...prevSelected, allCapsState];
         setError("")
         return updatedSelection;
-
       })
+      } else {
+        setError("Please Enter a Valid State")
+        return
       }
   }
+
+
   let removeState = (state) => {
     let newArray = states.filter((place) => place !== state);
-    console.log(newArray, 'newArray')
     setStates(newArray)
   }
 
@@ -413,7 +435,7 @@ function Breeds() {
 
           <div className='gridArea11-r2'>
             {breedSelected && selected.length > 0 && (
-              <div className='breedChoices'>Breeds selected:
+              <div className='breedChoices'><div className='breedsSelectedTitle'>Breeds selected:</div>
                 {selected.map((breed, index) => (
                   <div key={index} className='chosenBreeds'>{breed}
                     <button className='removeButton' onClick={() => removeBreed(breed)}><img src={deleteImg} className="deletePic" alt='deleteimg' /></button>
@@ -475,7 +497,7 @@ function Breeds() {
                         className="filter-input-state"
                         type="text"
                         value={selectedState}
-                        onFocus={() => {setMenu(true);setStateChange(true)}}
+                        onFocus={() => {setMenu(true);setStateChange(true);setError("")}}
                         onChange={(e) => setSelectedState(e.target.value)} />
                       <span className='searchSpan'><button className='addStateButton' onClick={()=>{addState(selectedState);setSelectedState("")}} ><img src={plusImg} className="searchStatePic" alt='plusimg' /></button></span>
                     </>
@@ -531,7 +553,7 @@ function Breeds() {
 
         <div className='gridArea2-2'>
         {chooseStates && states.length>0 && otherParameters && (
-             <div className='locationChoices'>States Selected:
+             <div className='locationChoices'><div className='statesSelectedTitle'>States Selected:</div>
              {states.map((places, index) =>(
                <div key={index} className='chosenLocations'>{places}
                <button className='removeStateButton' onClick={()=>removeState(places)}><img src={deleteImg} className="deleteStatePic" alt='deleteimg'/></button>

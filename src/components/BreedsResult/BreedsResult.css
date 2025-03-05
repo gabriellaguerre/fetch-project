@@ -144,3 +144,15 @@
   color: blue;
   font-weight: bold;
 }
+
+.prevButton, .nextButton {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.prevButton:hover, .nextButton:hover {
+  background-color: white;
+  border-radius: 5px;
+
+}
