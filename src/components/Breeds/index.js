@@ -35,13 +35,13 @@ function Breeds() {
   const doggyBreeds = useSelector(getDogBreed)
   const searchResult = useSelector(getSearches)
   const bodyParams = useSelector(geoBoundingData);
- 
+
   let geoChoices = bodyParams.geoBoundingBox ? Object.keys(bodyParams.geoBoundingBox) : [];
 
 
 
   const [allFilterButtons, setAllFilterButtons] = useState(false);
- 
+
   const [selected, setSelected] = useState([]);
   const [breedSelected, setBreedSelected] = useState(false)
 
@@ -102,7 +102,7 @@ function Breeds() {
 
 
   let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
- 
+
   const search = async () => {
 
     if(!otherParameters) {
@@ -190,7 +190,7 @@ function Breeds() {
 
 
     setError("")
-    
+
     setUpdateButton(false);
     let searchDogResults = await dispatch(searchDog(urlFrontend));
     let searchArray = searchDogResults.payload.resultIds
@@ -228,7 +228,7 @@ function Breeds() {
       params.size = '10000';
       params.from = from ? from : '0';
 
-     
+
       let locationSearchData = await dispatch(postSearchLocations(params))
       console.log(locationSearchData.payload, 'locationSearchData line 224')
 
@@ -239,75 +239,41 @@ function Breeds() {
       function delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
-    
-    async function fetchAllDogsForBatch(url) {
-        let allDogIds = [];
-    
-        while (url) {
-            console.log(`Fetching dogs from: ${url}`);
-            let response = await dispatch(searchDog(url));
-    
-            if (!response.payload) {
-                console.error("Error: No payload received.");
-                break;
-            }
-    
-            allDogIds.push(...response.payload.resultIds);
-    
-            if (response.payload.next) {
-                url = `https://frontend-take-home-service.fetch.com${response.payload.next}`;
-            } else {
-                url = null; // No more pages, exit loop
-            }
-        }
-    
-        console.log(`Fetched all ${allDogIds.length} dogs for this batch.`);
-    
-        // if (allDogIds.length > 0) {
-        //     await dispatch(postSearchDog(allDogIds)); // Send all fetched dog IDs
-        // }
+
+    async function fetchAllDogDetails() {
+
+
+
+        //     await dispatch(postSearchDog(allDogIds)); 
+
     }
-    
-    async function dispatchBatches() {
+
+    const dispatchBatches = async () => {
+        let allDogIds = []
         for (let index = 0; index < batches.length; index++) {
            let dogParams2 = {}
             const urlDogFrontend2 = new URL(dogSearchUrl2);
             let batch = batches[index];
-    
-            console.log(`Dispatching batch ${index + 1} with ${batch.length} zip codes`);
-            console.log(urlDogFrontend2, 'urlDogFrontend2 line 278')
-            // dogParams2.zipCodes = batch;
-            // batch.forEach(zipCode => urlDogFrontend2.searchParams.append('zipCodes', zipCode));
-            // dogParams2.size = 10000;
-            // urlDogFrontend2.searchParams.append('size', dogParams2.size);
-            // console.log(dogParams2.size, 'dogParams.size line 281')
-    
-            // Get first set of results
-            // let response = await dispatch(searchDog(urlDogFrontend2));
-            // console.log(response, 'response line 284')
-    
-            // if (!response.payload || !response.payload.resultIds) {
-            //     console.error("Error: No results for this batch.");
-                // continue; // Skip to next batch
-            // }
-    
-            // console.log(`Processing ${response.payload.total} total dogs before moving to next batch.`);
-    
-            // Fetch all dogs for this batch before moving on
-            // let firstNextUrl = response.payload.next ? `https://frontend-take-home-service.fetch.com${response.payload.next}` : null;
-            // let allDogIds = response.payload.resultIds;
-    
-            // if (firstNextUrl) {
-            //     await fetchAllDogsForBatch(firstNextUrl); // Fetch remaining pages for this batch
-            // }
-    
-            // await dispatch(postSearchDog(allDogIds)); // Send all collected dog IDs
-    
+
+            dogParams2.size = 10000;
+            urlDogFrontend2.searchParams.append('size', dogParams2.size);
+
+
+            dogParams2.zipCodes = batch;
+            batch.forEach(zipCode => urlDogFrontend2.searchParams.append('zipCodes', zipCode));
+
+            let response = await dispatch(searchDog(urlDogFrontend2));
+
+            allDogIds.push(...response.payload.resultIds);
+
+
+
             console.log(`✅ Finished processing batch ${index + 1}. Waiting before next batch...`);
             await delay(1000); // Prevents overwhelming the server
         }
+        return allDogIds;
     }
-    
+
     // **Prepare zip code batches**
     let batchSize = 1000;
     let batches = [];
@@ -315,15 +281,17 @@ function Breeds() {
         let zipCodeBatch = justZipCodes.slice(i, i + batchSize);
         batches.push(zipCodeBatch);
     }
-    
+
     // Start dispatching
-    dispatchBatches();
+    const idResults = await dispatchBatches();
+    console.log(idResults, 'idResults line 314')
+
 //*************************************END Experimental Code********************************************************* */
 //******************************************Start Settled Code******************************************************* */
       // if(justZipCodes.length>1000) {
       //   justZipCodes = justZipCodes.slice(0,1000)
       // }
-     
+
       // dogParams.zipCodes = justZipCodes;
       // // console.log(dogParams.zipCodes, 'searchParams.zipCodes line 236')
       // dogParams.zipCodes.forEach(zipCode => urlDogFrontend.searchParams.append('zipCodes', zipCode));
@@ -335,13 +303,13 @@ function Breeds() {
 
       // let searchDogResults = await dispatch(searchDog(urlDogFrontend));
       // // console.log(searchDogResults, 'in breeds line 249')
-     
+
       // let searchLocationArray = searchDogResults?.payload?.resultIds
       // // console.log(searchLocationArray, 'searchLocationArray line 251')
-     
+
       // let dogData = await dispatch(postSearchDog(searchLocationArray))
       // console.log(dogData, 'dogData line 280')
-     
+
 /**********************************************************END Settled Code */
       setIsSearchingBreed_ZipCodes(false)
       setIsSearchingAllLocations(true)
@@ -433,11 +401,11 @@ function Breeds() {
   const breedError = 'breedErrors' + (error ? "" : "hidden")
 
   let addState = (selectedState) => {
-   
+
     let allCapsState = selectedState.toUpperCase()
     const stateRegex = /^(AL|AK|AZ|AR|CA|CO|CT|DE|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WA|WV|WI|WY)$/;
-   
-    
+
+
     if(states.includes(allCapsState)) {
       setError("This State is Already in Your List")
       return
@@ -446,10 +414,10 @@ function Breeds() {
     if(chooseStates && selectedState.length > 2) {
       setError('Enter a two-letter state/territory abbreviations')
     }
-    
-  
+
+
     if(allCapsState.length === 2 && stateRegex.test(allCapsState)) {
-     
+
         setStates(prevSelected => {const updatedSelection = [...prevSelected, allCapsState];
         setError("")
         return updatedSelection;
@@ -466,17 +434,17 @@ function Breeds() {
     setStates(newArray)
   }
 
- 
+
     const deleteGeoChoices = async ()=>{
       setChooseGeoBoundingBox(false)
       await dispatch(clearGeoBounding())
     }
 
-  
+
     const searchAction = (size) => {
-  
+
       if(otherParameters && !cityChange && !stateChange) {
-     
+
         setSizeChange(true)
         setSize(Number(size))
         return
@@ -617,7 +585,7 @@ function Breeds() {
 
 
           </div>
- 
+
         </div>
 
         <div className='gridArea2-1'>
