@@ -211,8 +211,8 @@ function Breeds() {
 
       let params = {}
       let dogParams = {}
-      const dogSearchUrl = 'https://frontend-take-home-service.fetch.com/dogs/search?';
-      const urlDogFrontend = new URL(dogSearchUrl);
+      const dogSearchUrl2 = 'https://frontend-take-home-service.fetch.com/dogs/search?';
+      const urlDogFrontend = new URL(dogSearchUrl2);
 
 
       if(chooseCity && city) params.city = city
@@ -220,10 +220,10 @@ function Breeds() {
 
       if(Object.keys(bodyParams).length>0) params.geoBoundingBox = bodyParams.geoBoundingBox
 
-      if(chooseStates && states.length>0 && !chooseCity && city.length===0) {
-        setError("Please Enter a City For Your Chosen States")
-        return
-      }
+      // if(chooseStates && states.length>0 && !chooseCity && city.length===0) {
+      //   setError("Please Enter a City For Your Chosen States")
+      //   return
+      // }
 
       params.size = '10000';
       params.from = from ? from : '0';
@@ -235,29 +235,114 @@ function Breeds() {
       let justZipCodes  = locationSearchData.payload.results.map(location=>location.zip_code)
       console.log(justZipCodes, 'zip codes line 233')
 
-      if(justZipCodes.length>1000) {
-        justZipCodes = justZipCodes.slice(0,1000)
-      }
+/************************************Start Experimental Code**************************************************** */
+      function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    
+    async function fetchAllDogsForBatch(url) {
+        let allDogIds = [];
+    
+        while (url) {
+            console.log(`Fetching dogs from: ${url}`);
+            let response = await dispatch(searchDog(url));
+    
+            if (!response.payload) {
+                console.error("Error: No payload received.");
+                break;
+            }
+    
+            allDogIds.push(...response.payload.resultIds);
+    
+            if (response.payload.next) {
+                url = `https://frontend-take-home-service.fetch.com${response.payload.next}`;
+            } else {
+                url = null; // No more pages, exit loop
+            }
+        }
+    
+        console.log(`Fetched all ${allDogIds.length} dogs for this batch.`);
+    
+        // if (allDogIds.length > 0) {
+        //     await dispatch(postSearchDog(allDogIds)); // Send all fetched dog IDs
+        // }
+    }
+    
+    async function dispatchBatches() {
+        for (let index = 0; index < batches.length; index++) {
+           let dogParams2 = {}
+            const urlDogFrontend2 = new URL(dogSearchUrl2);
+            let batch = batches[index];
+    
+            console.log(`Dispatching batch ${index + 1} with ${batch.length} zip codes`);
+            console.log(urlDogFrontend2, 'urlDogFrontend2 line 278')
+            // dogParams2.zipCodes = batch;
+            // batch.forEach(zipCode => urlDogFrontend2.searchParams.append('zipCodes', zipCode));
+            // dogParams2.size = 10000;
+            // urlDogFrontend2.searchParams.append('size', dogParams2.size);
+            // console.log(dogParams2.size, 'dogParams.size line 281')
+    
+            // Get first set of results
+            // let response = await dispatch(searchDog(urlDogFrontend2));
+            // console.log(response, 'response line 284')
+    
+            // if (!response.payload || !response.payload.resultIds) {
+            //     console.error("Error: No results for this batch.");
+                // continue; // Skip to next batch
+            // }
+    
+            // console.log(`Processing ${response.payload.total} total dogs before moving to next batch.`);
+    
+            // Fetch all dogs for this batch before moving on
+            // let firstNextUrl = response.payload.next ? `https://frontend-take-home-service.fetch.com${response.payload.next}` : null;
+            // let allDogIds = response.payload.resultIds;
+    
+            // if (firstNextUrl) {
+            //     await fetchAllDogsForBatch(firstNextUrl); // Fetch remaining pages for this batch
+            // }
+    
+            // await dispatch(postSearchDog(allDogIds)); // Send all collected dog IDs
+    
+            console.log(`✅ Finished processing batch ${index + 1}. Waiting before next batch...`);
+            await delay(1000); // Prevents overwhelming the server
+        }
+    }
+    
+    // **Prepare zip code batches**
+    let batchSize = 1000;
+    let batches = [];
+    for (let i = 0; i < justZipCodes.length; i += batchSize) {
+        let zipCodeBatch = justZipCodes.slice(i, i + batchSize);
+        batches.push(zipCodeBatch);
+    }
+    
+    // Start dispatching
+    dispatchBatches();
+//*************************************END Experimental Code********************************************************* */
+//******************************************Start Settled Code******************************************************* */
+      // if(justZipCodes.length>1000) {
+      //   justZipCodes = justZipCodes.slice(0,1000)
+      // }
      
-      dogParams.zipCodes = justZipCodes;
-      // console.log(dogParams.zipCodes, 'searchParams.zipCodes line 236')
-      dogParams.zipCodes.forEach(zipCode => urlDogFrontend.searchParams.append('zipCodes', zipCode));
+      // dogParams.zipCodes = justZipCodes;
+      // // console.log(dogParams.zipCodes, 'searchParams.zipCodes line 236')
+      // dogParams.zipCodes.forEach(zipCode => urlDogFrontend.searchParams.append('zipCodes', zipCode));
 
-      dogParams.size = '1000';
-      urlDogFrontend.searchParams.append('size', dogParams.size)
+      // dogParams.size = '1000';
+      // urlDogFrontend.searchParams.append('size', dogParams.size)
 
-      // console.log(urlDogFrontend, 'line 237')
+      // // console.log(urlDogFrontend, 'line 237')
 
-      let searchDogResults = await dispatch(searchDog(urlDogFrontend));
-      // console.log(searchDogResults, 'in breeds line 249')
+      // let searchDogResults = await dispatch(searchDog(urlDogFrontend));
+      // // console.log(searchDogResults, 'in breeds line 249')
      
-      let searchLocationArray = searchDogResults?.payload?.resultIds
-      // console.log(searchLocationArray, 'searchLocationArray line 251')
+      // let searchLocationArray = searchDogResults?.payload?.resultIds
+      // // console.log(searchLocationArray, 'searchLocationArray line 251')
      
-      let dogData = await dispatch(postSearchDog(searchLocationArray))
+      // let dogData = await dispatch(postSearchDog(searchLocationArray))
       // console.log(dogData, 'dogData line 280')
      
-
+/**********************************************************END Settled Code */
       setIsSearchingBreed_ZipCodes(false)
       setIsSearchingAllLocations(true)
       setCityChange(false)
@@ -532,22 +617,10 @@ function Breeds() {
 
 
           </div>
-          {/* <button className='allFilterButton' onClick={() => { setAllFilterButtons(!allFilterButtons); setOtherParameters(false); setFilters(false); setSort(false) }}>
-            <div><img src={filterImg} className="filterPic" alt='filterimg' /></div>
-            <div> Filters</div></button>
-          <button className='searchByLocationButton' onClick={() => { setOtherParameters(!otherParameters);setAllFilterButtons(false); setFilters(false); setSort(false) }}>Search By Location</button> */}
-
+ 
         </div>
 
         <div className='gridArea2-1'>
-
-          {/* <div className='breedChoices'>Breeds selected:
-            {selected.map((breed, index) => (
-              <div key={index} className='chosenBreeds'>{breed}
-                <button className='removeButton' onClick={() => removeBreed(breed)}><img src={deleteImg} className="deletePic" alt='deleteimg' /></button>
-              </div>
-            ))}
-          </div> */}
 
         </div>
 
@@ -603,27 +676,6 @@ function Breeds() {
                       onChange={(e) => setMaxAge(e.target.value)} />
                   )}
                 </div>
-
-                {/* <div className="filter-option-breed">
-                  <label>
-                    <input
-                      type="checkbox"
-                      value={location}
-                      onChange={() => setLocation(!location)}
-                    />Zip Code: </label>
-                  {location && (
-                    <div>
-                      <input
-                        className="zip-location-input-breed"
-                        type="number"
-                        value={zipCode}
-                        onFocus={() => setError("")}
-                        onChange={(e) => setZipCode(e.target.value)} />
-                      <button className='addZipButton' disabled={!location} onClick={() => { addZipCode(zipCode); setZipCode("") }}><img src={plusImg} className="addZip" alt='plusimg' /></button>
-
-                    </div>
-                  )}
-                </div> */}
 
               </div>
             </>

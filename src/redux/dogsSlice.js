@@ -40,7 +40,7 @@ export const searchDog = createAsyncThunk('dogs/SEARCH', async (urlFrontend) => 
         headers: {"Content-Type": "application/json"},
         credentials: 'include',
     })
-    console.log(response);
+    // console.log(response);
     if(response.ok){
         const data = await response.json()
         return data;
