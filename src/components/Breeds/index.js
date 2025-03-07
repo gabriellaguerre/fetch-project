@@ -240,12 +240,15 @@ function Breeds() {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    async function fetchAllDogDetails() {
-
-
-
-        //     await dispatch(postSearchDog(allDogIds)); 
-
+    let dogBatches = []
+  
+    const fetchAllDogDetails = async () => {
+          let allDogDetails = []
+          for(let index = 0; index < dogBatches.length; index++) {
+            let dogBatch = dogBatches[index];
+            let doggyDetails = await dispatch(postSearchDog(dogBatch))
+            allDogDetails.push(...doggyDetails)
+          }
     }
 
     const dispatchBatches = async () => {
@@ -268,7 +271,7 @@ function Breeds() {
 
 
 
-            console.log(`✅ Finished processing batch ${index + 1}. Waiting before next batch...`);
+            console.log(`Finished processing batch ${index + 1}. Waiting before next batch...`);
             await delay(1000); // Prevents overwhelming the server
         }
         return allDogIds;
@@ -286,6 +289,17 @@ function Breeds() {
     const idResults = await dispatchBatches();
     console.log(idResults, 'idResults line 314')
 
+    if(idResults.length > 0) {
+      let dogDetailBatchSize = 100
+      
+      for(let i = 0; i < idResults.length; i+= dogDetailBatchSize) {
+        let dogBatch = idResults.slice(i, i + dogDetailBatchSize)
+        dogBatches.push(dogBatch)
+      }
+    }
+
+    const finalDogDetails = await fetchAllDogDetails();
+    console.log(finalDogDetails, 'final Dog details line 302')
 //*************************************END Experimental Code********************************************************* */
 //******************************************Start Settled Code******************************************************* */
       // if(justZipCodes.length>1000) {
