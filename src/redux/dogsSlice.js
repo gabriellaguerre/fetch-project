@@ -115,6 +115,10 @@ const dogsSlice = createSlice({
             state.likeDogs = []
         },
 
+        clearDogDetails(state) {
+            state.dogsDetail = []
+        },
+
         addLikeDog(state, action) {
             state.likeDogs = [...state.likeDogs, action.payload]
         },
@@ -140,7 +144,10 @@ const dogsSlice = createSlice({
             })
 
             .addCase(postSearchDog.fulfilled, (state, action)=> {
-                state.dogsDetail = action.payload;
+                console.log(action.payload,'action payloda for postsearchDog line 143 dogslice ')
+                // state.dogsDetail = action.payload;
+                state.dogsDetail = [...state.dogsDetail, ...action.payload];
+                console.log(`array length after updating: ${state.dogsDetail.length}`)
                 state.status = 'succeeded';
                 state.error = null;
             })
@@ -186,6 +193,6 @@ export const locationSearchDogs = (state) => state.dogs.location_search
 export const locationDogDetails = (state) => state.dogs.location_dogsDetail
 export const getAllDogs = (state) => state.dogs.allDogsDetail
 
-export const { clearAllData, addLikeDog, removeLikeDog  } = dogsSlice.actions
+export const { clearAllData, addLikeDog, removeLikeDog, clearDogDetails  } = dogsSlice.actions
 
 export default dogsSlice.reducer

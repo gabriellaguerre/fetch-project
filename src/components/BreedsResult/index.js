@@ -11,7 +11,7 @@ import deleteImg from '../../assets/x.png';
 
 function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLocationsSearch }) {
   const dispatch = useDispatch();
-  // console.log(size, sizeChange, 'size sizeChange in breedresult line 14')
+  console.log(size, sizeChange, 'size sizeChange in breedresult line 14')
   const details = useSelector(getDogDetails);
   const searchResult = useSelector(getSearches)
   const likeList = useSelector(getLikeDogs)
@@ -22,7 +22,7 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
 
   const locationSearchForDog = useSelector(locationSearchDogs)
   const locationGetDogDetails = useSelector(locationDogDetails)
-
+  console.log(details, 'details line 25 in breedsresult')
   
   let total = searchResult?.total;
   let nextUrl = searchResult?.next;
@@ -143,7 +143,6 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
   }
 
   const handlePrevious = async () => {
-
 
     if (allLocationsSearch) {
       from1 = from - size

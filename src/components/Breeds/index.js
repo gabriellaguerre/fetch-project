@@ -4,7 +4,7 @@ import { selectUser } from '../../redux/usersSlice';
 import Profile from '../Profile';
 import BreedsResult from "../BreedsResult";
 import OpenModalButton from '../OpenModalButton';
-import { breeds, getDogBreed, getSearches, searchDog, postSearchDog, clearAllData} from '../../redux/dogsSlice';
+import { breeds, getDogBreed, getSearches, searchDog, postSearchDog, clearAllData, clearDogDetails} from '../../redux/dogsSlice';
 import {postLocations, geoBoundingData, postSearchLocations, clearZCLocations, clearLocationsSearch, clearGeoBounding} from '../../redux/locationsSlice'
 import './Breeds.css';
 import GeoBoundingBox from "../GeoBoundingBox";
@@ -206,7 +206,7 @@ function Breeds() {
     await dispatch(clearLocationsSearch())
 
   } else if(otherParameters && (chooseCity || chooseStates || chooseGeoBoundingBox)) {
-
+      await dispatch(clearDogDetails())
       await dispatch(clearZCLocations())
 
       let params = {}
@@ -247,8 +247,9 @@ function Breeds() {
           for(let index = 0; index < dogBatches.length; index++) {
             let dogBatch = dogBatches[index];
             let doggyDetails = await dispatch(postSearchDog(dogBatch))
-            allDogDetails.push(...doggyDetails)
+            allDogDetails.push(...doggyDetails.payload)
           }
+          return allDogDetails
     }
 
     const dispatchBatches = async () => {
@@ -269,9 +270,6 @@ function Breeds() {
 
             allDogIds.push(...response.payload.resultIds);
 
-
-
-            console.log(`Finished processing batch ${index + 1}. Waiting before next batch...`);
             await delay(1000); // Prevents overwhelming the server
         }
         return allDogIds;
@@ -296,10 +294,11 @@ function Breeds() {
         let dogBatch = idResults.slice(i, i + dogDetailBatchSize)
         dogBatches.push(dogBatch)
       }
+      await fetchAllDogDetails()
     }
 
-    const finalDogDetails = await fetchAllDogDetails();
-    console.log(finalDogDetails, 'final Dog details line 302')
+    // const finalDogDetails = await fetchAllDogDetails();
+    // console.log(finalDogDetails, 'final Dog details line 302')
 //*************************************END Experimental Code********************************************************* */
 //******************************************Start Settled Code******************************************************* */
       // if(justZipCodes.length>1000) {
