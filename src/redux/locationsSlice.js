@@ -17,14 +17,14 @@ const initialState = {
 //*****************************************POST /locations************************************* */
 
 export const postLocations = createAsyncThunk('locations/ZIP_CODES', async (searchArray) => {
-  
+
     const response = await fetch(locationsURL, {
         method: 'POST',
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(searchArray),
         credentials: 'include',
     })
-  
+
     if(response.ok){
         const data = await response.json()
         return data;
@@ -63,6 +63,11 @@ const locationsSlice = createSlice({
          },
          clearGeoBounding(state){
             state.geoBounding = {}
+         },
+         clearAllLocationData(state) {
+            state.locations = []
+            state.locationsSearch = []
+            state.geoBounding = {}
          }
     },
     extraReducers(builder) {
@@ -89,6 +94,6 @@ export const allLocations = (state) => state.locations.locations;
 export const searchLocations = (state) => state.locations.locationsSearch;
 export const geoBoundingData = (state) => state.locations.geoBounding;
 
-export const { addGeoBoundingData, clearZCLocations, clearLocationsSearch, clearGeoBounding } = locationsSlice.actions;
+export const { addGeoBoundingData, clearZCLocations, clearLocationsSearch, clearGeoBounding, clearAllLocationData } = locationsSlice.actions;
 
 export default locationsSlice.reducer;

@@ -28,18 +28,19 @@ ul.resultList {
 }
 
 .filters-breed {
+    grid-column: 1;
     position: absolute;
-    left: 120px;
     width: 250px;
     padding: 10px;
+    left: 30px;
   }
 
   .sort {
+    grid-column: 2;
     position: absolute;
-    left: 490px;
-    width: 250px;
+    width: 200px;
     padding: 10px;
-
+    left: 70px;
   }
 
 
@@ -183,9 +184,9 @@ ul.resultList {
 }
 
 .gridArea2-2{
-    display:flex;
-    flex-direction: column;
     grid-area: 2/2;
+    display:grid;
+    grid-template-columns: repeat(2,1fr);
     position: relative;
     width: 100%;
     height: 100px;
@@ -327,11 +328,11 @@ ul.resultList {
   }
 
   .breedChoices {
-    position:absolute;   
+    position:absolute;
     font-weight: bold;
     font-size: 20px;
-    /* z-index: 7; */
-    left: 325px;
+    z-index: 7;
+
   }
 
   .chosenBreeds {
@@ -349,20 +350,21 @@ ul.resultList {
   .zipChoices {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
     gap: 8px;
     margin-top: 5px;
   }
 
   .locationChoices {
+    grid-column: span 2;
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
+    align-items: baseline;
     gap: 8px;
     position: relative;
-    top: 5px;
+    top: 10px;
     padding-left: 40px;
+
   }
 
   .removeButton {
@@ -623,11 +625,11 @@ ul.resultList {
 
 
 .chosenLocations {
-  font-size: 16px;
-  font-weight: normal;
-  display: flex;
-  align-items: center;
-
+   display: flex;
+   align-items: center;
+   font-size: 16px;
+   font-weight: normal;
+   white-space: nowrap;
 }
 
 .removeLocationButton {
@@ -716,7 +718,8 @@ ul.resultList {
   color: rgb(240, 240, 154);
   background-color: orange;
   border-radius: 3px;
-  width: 110px;
+  white-space: nowrap;
+  text-align: center;
 }
 
 .breedsSelectedTitle {

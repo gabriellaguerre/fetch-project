@@ -5,7 +5,7 @@ import Profile from '../Profile';
 import BreedsResult from "../BreedsResult";
 import OpenModalButton from '../OpenModalButton';
 import { breeds, getDogBreed, getSearches, searchDog, postSearchDog, clearAllData, clearDogDetails} from '../../redux/dogsSlice';
-import {postLocations, geoBoundingData, postSearchLocations, clearZCLocations, clearLocationsSearch, clearGeoBounding} from '../../redux/locationsSlice'
+import {clearAllLocationData, postLocations, geoBoundingData, postSearchLocations, clearZCLocations, clearLocationsSearch, clearGeoBounding} from '../../redux/locationsSlice'
 import './Breeds.css';
 import GeoBoundingBox from "../GeoBoundingBox";
 import searchImg from '../../assets/search.png';
@@ -104,6 +104,13 @@ function Breeds() {
   let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
 
   const search = async () => {
+    await dispatch(clearDogDetails())
+    await dispatch(clearAllLocationData())
+
+    if(!otherParameters && selected.length === 0){
+      setError("Please Select a Breed to Search")
+      return
+    }
 
     if(!otherParameters) {
 
@@ -117,6 +124,7 @@ function Breeds() {
 
 
     let searchParams = {};
+
 
     if ((breed && name) || (breed && age) || (name && age)) {
       setError("Choose 1 Sort Method")
@@ -208,6 +216,8 @@ function Breeds() {
   } else if(otherParameters && (chooseCity || chooseStates || chooseGeoBoundingBox)) {
       await dispatch(clearDogDetails())
       await dispatch(clearZCLocations())
+      await dispatch(clearLocationsSearch())
+      await dispatch(clearGeoBounding())
 
       let params = {}
       let dogParams = {}
@@ -230,7 +240,7 @@ function Breeds() {
 
 
       let locationSearchData = await dispatch(postSearchLocations(params))
-      // console.log(locationSearchData.payload, 'locationSearchData line 224')
+      console.log(locationSearchData.payload, 'locationSearchData line 224')
 
       let justZipCodes  = locationSearchData.payload.results.map(location=>location.zip_code)
       // console.log(justZipCodes, 'zip codes line 233')
@@ -337,6 +347,11 @@ function Breeds() {
   // console.log(results, 'results line 266')
 
   let addBreed = (selectedBreed) => {
+    if(selected.length >= 3) {
+      setError("A Maximum of 3 Breeds Can Be Selected at a Time")
+      return
+    }
+
     if(!results.includes(selectedBreed)){
       setError("This Breed is Not in Our List")
       return
@@ -409,6 +424,7 @@ function Breeds() {
     setFilters(false)
     setSort(false)
     await dispatch(clearAllData());
+    await dispatch(clearAllLocationData())
   }
 
   const breedError = 'breedErrors' + (error ? "" : "hidden")
@@ -428,6 +444,10 @@ function Breeds() {
       setError('Enter a two-letter state/territory abbreviations')
     }
 
+    if(states.length >= 3) {
+      setError("A Maximum of 3 States can be Selected at a Time")
+      return
+    }
 
     if(allCapsState.length === 2 && stateRegex.test(allCapsState)) {
 
@@ -489,7 +509,7 @@ function Breeds() {
                 className='inputBox'
                 type="text"
                 value={searching}
-                placeholder="Type to search our available breeds then click the + button"
+                placeholder="Type to search our available breeds, then click the + button"
                 onFocus={() => { setMenu(true); setError(""); setBreedSelected(true);setOtherParameters(false) }}
                 onChange={(e) => setSearching(e.target.value)}
               /> </div>
@@ -500,7 +520,7 @@ function Breeds() {
           </div>
 
           <div className='gridArea11-r2'>
-            {breedSelected && selected.length > 0 && (
+            {breedSelected && selected.length > 0 && !otherParameters && (
               <div className='breedChoices'><div className='breedsSelectedTitle'>Breeds selected:</div>
                 {selected.map((breed, index) => (
                   <div key={index} className='chosenBreeds'>{breed}
@@ -607,7 +627,7 @@ function Breeds() {
 
         <div className='gridArea2-2'>
         {chooseStates && states.length>0 && otherParameters && (
-             <div className='locationChoices'><div className='statesSelectedTitle'>States Selected:</div>
+             <div className='locationChoices'><div className='statesSelectedTitle'>States Selected: </div>
              {states.map((places, index) =>(
                <div key={index} className='chosenLocations'>{places}
                <button className='removeStateButton' onClick={()=>removeState(places)}><img src={deleteImg} className="deleteStatePic" alt='deleteimg'/></button>
@@ -757,7 +777,7 @@ function Breeds() {
 
         <div className='gridArea4-2'>
           {location && selectedZipCode.length > 0 && (
-            <div className='zipChoices'>Zip Codes Selected:
+            <div className='zipChoices'><div className='statesSelectedTitle'>Zip Codes Selected: </div>
               {selectedZipCode.map((zipcode, index) => (
                 <div key={index} className='chosenZips'>{zipcode}
                   <button className='removeZipButton' onClick={() => removeZipCode(zipcode)}><img src={deleteImg} className="deleteZipPic" alt='deleteimg' /></button>

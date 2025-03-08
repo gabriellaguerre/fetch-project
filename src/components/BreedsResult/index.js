@@ -5,7 +5,7 @@ import { searchLocations, allLocations, postLocations, postSearchLocations, geoB
 import OpenModalButton from '../OpenModalButton';
 import Match from '../Match';
 import './BreedsResult.css'
-import dogWaiting from '../../assets/dogwaiting-pic.png'
+import dogWaiting from '../../assets/dogwaitingpic-pickme.png'
 import deleteImg from '../../assets/x.png';
 
 
@@ -23,7 +23,7 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
   const locationSearchForDog = useSelector(locationSearchDogs)
   const locationGetDogDetails = useSelector(locationDogDetails)
   // console.log(details, 'details line 25 in breedsresult')
-  // console.log(searchLocationsList,'searchLocationsList line 26 breedresult')
+  // console.log(searchLocationsList, 'searchLocationsList line 26 breedresult')
   // console.log(searchResult, 'searchResult line 27')
   // let total = searchResult?.total;
   let total;
@@ -46,14 +46,15 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
   const [viewingArray, setViewingArray] = useState([])
   const [from, setFrom] = useState(0)
   const [to, setTo] = useState(size)
+  const [loading, setLoading] = useState(false)
 
 
   let from1;
   let to1;
 
-  if(allLocationsSearch) {
+  if (allLocationsSearch) {
     total = mergedArray.length
-    totalPage = Math.ceil(total/size)
+    totalPage = Math.ceil(total / size)
   } else {
     total = searchResult?.total;
   }
@@ -62,6 +63,7 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
 
     // if (locationsList && zipcodesearch) {
     if (locationsList && breedZipCodeSearch) {
+      setLoading(true)
       mergedData = details.map(dog => {
         const locationData = locationsList?.find(location => location?.zip_code === dog.zip_code);
         return locationData ? { ...dog, locationData } : null
@@ -69,6 +71,7 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
     }
 
     setUpdatedArray(mergedData)
+    setLoading(false)
 
 
 
@@ -77,12 +80,12 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
   useEffect(() => {
 
     if (searchLocationsList.length > 0 && allLocationsSearch) {
-
+      setLoading(true)
       mergedData = details.map(dog => {
         const locationData = searchLocationsList?.find(location => location?.zip_code === dog.zip_code)
         return locationData ? { ...dog, locationData } : null
       }).filter(dog => dog !== null)
-     
+
       setMergedArray(mergedData)
 
       let newArray = mergedData.slice(from, to)
@@ -90,6 +93,7 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
       setViewingArray(newArray)
       setPage(1)
       setIsPrevDisabled(true)
+      setLoading(false)
     }
   }, [details, searchLocationsList, allLocationsSearch])
 
@@ -103,7 +107,6 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
       setPage(1)
       setTo(Number(size))
       setFrom(0)
-
     }
   }, [totalPage, sizeChange])
 
@@ -111,7 +114,7 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
 
   const handleNext = async () => {
 
-   if (allLocationsSearch) {
+    if (allLocationsSearch) {
 
       let from1 = from + size
       let to1 = to + size
@@ -128,16 +131,16 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
         return
       }
 
-        let newArray = mergedArray.slice(Number(from))
-        from1 = mergedArray.length - newArray.length
-        to1 = from1 - size
-        setFrom(from1)
-        setTo(to1)
-        setIsPrevDisabled(false)
-        setUpdatedArray(newArray)
+      let newArray = mergedArray.slice(Number(from))
+      from1 = mergedArray.length - newArray.length
+      to1 = from1 - size
+      setFrom(from1)
+      setTo(to1)
+      setIsPrevDisabled(false)
+      setUpdatedArray(newArray)
 
-     }
-     if(breedZipCodeSearch) {
+    }
+    if (breedZipCodeSearch) {
 
       let getNextList = await dispatch(nextPrevList(nextUrl));
 
@@ -163,20 +166,20 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
         let newArray = mergedArray.slice(to1, from1)
         setUpdatedArray(newArray)
         setFrom(size)
-        setTo(from+size)
+        setTo(from + size)
         setIsPrevDisabled(true)
         setIsNextDisabled(false)
         return
       }
 
-        let newArray = mergedArray.slice(from1, to1)
-        setUpdatedArray(newArray)
+      let newArray = mergedArray.slice(from1, to1)
+      setUpdatedArray(newArray)
 
-        setFrom(from1)
-        setTo(to1)
+      setFrom(from1)
+      setTo(to1)
 
     }
-    if(breedZipCodeSearch) {
+    if (breedZipCodeSearch) {
       let getPrevList = await dispatch(nextPrevList(previousUrl));
       let dogData = await dispatch(postSearchDog(getPrevList.payload.resultIds))
       let zipCodes = dogData.payload.map(dog => dog.zip_code)
@@ -289,12 +292,19 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
         </div>
       ) : (
         <div>
-          <div>There Are No Results... </div>
+          {loading ? (
+            <div>Loading... </div>
+          ) : (
+            <div>There Are No Results... </div>
+          )}
+
           <div className='waitingDogDiv'><img src={dogWaiting} className='waitingDogImg' /></div>
         </div>
       )}
 
+
     </>
+
   )
 }
 
