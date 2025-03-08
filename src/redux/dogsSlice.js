@@ -25,7 +25,7 @@ const initialState = {
 
     if(response.ok){
        const data = response.json();
-    
+
        return data;
     }
 
@@ -144,16 +144,12 @@ const dogsSlice = createSlice({
             })
 
             .addCase(postSearchDog.fulfilled, (state, action)=> {
-                console.log(action.payload,'action payloda for postsearchDog line 143 dogslice ')
-                // state.dogsDetail = action.payload;
                 state.dogsDetail = [...state.dogsDetail, ...action.payload];
-                console.log(`array length after updating: ${state.dogsDetail.length}`)
                 state.status = 'succeeded';
                 state.error = null;
             })
 
             .addCase(nextPrevList.fulfilled, (state, action)=> {
-
                 state.search = action.payload;
                 state.status = 'succeeded';
                 state.error = null;

@@ -230,10 +230,10 @@ function Breeds() {
 
 
       let locationSearchData = await dispatch(postSearchLocations(params))
-      console.log(locationSearchData.payload, 'locationSearchData line 224')
+      // console.log(locationSearchData.payload, 'locationSearchData line 224')
 
       let justZipCodes  = locationSearchData.payload.results.map(location=>location.zip_code)
-      console.log(justZipCodes, 'zip codes line 233')
+      // console.log(justZipCodes, 'zip codes line 233')
 
 /************************************Start Experimental Code**************************************************** */
       function delay(ms) {
@@ -241,7 +241,7 @@ function Breeds() {
     }
 
     let dogBatches = []
-  
+
     const fetchAllDogDetails = async () => {
           let allDogDetails = []
           for(let index = 0; index < dogBatches.length; index++) {
@@ -285,11 +285,11 @@ function Breeds() {
 
     // Start dispatching
     const idResults = await dispatchBatches();
-    console.log(idResults, 'idResults line 314')
+    // console.log(idResults, 'idResults line 314')
 
     if(idResults.length > 0) {
       let dogDetailBatchSize = 100
-      
+
       for(let i = 0; i < idResults.length; i+= dogDetailBatchSize) {
         let dogBatch = idResults.slice(i, i + dogDetailBatchSize)
         dogBatches.push(dogBatch)

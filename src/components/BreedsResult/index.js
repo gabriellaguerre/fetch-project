@@ -11,7 +11,7 @@ import deleteImg from '../../assets/x.png';
 
 function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLocationsSearch }) {
   const dispatch = useDispatch();
-  console.log(size, sizeChange, 'size sizeChange in breedresult line 14')
+  // console.log(size, sizeChange, 'size sizeChange in breedresult line 14')
   const details = useSelector(getDogDetails);
   const searchResult = useSelector(getSearches)
   const likeList = useSelector(getLikeDogs)
@@ -22,9 +22,11 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
 
   const locationSearchForDog = useSelector(locationSearchDogs)
   const locationGetDogDetails = useSelector(locationDogDetails)
-  console.log(details, 'details line 25 in breedsresult')
-  
-  let total = searchResult?.total;
+  // console.log(details, 'details line 25 in breedsresult')
+  // console.log(searchLocationsList,'searchLocationsList line 26 breedresult')
+  // console.log(searchResult, 'searchResult line 27')
+  // let total = searchResult?.total;
+  let total;
   let nextUrl = searchResult?.next;
   let previousUrl = searchResult?.prev
   let list = searchResult?.resultIds
@@ -49,6 +51,12 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
   let from1;
   let to1;
 
+  if(allLocationsSearch) {
+    total = mergedArray.length
+    totalPage = Math.ceil(total/size)
+  } else {
+    total = searchResult?.total;
+  }
 
   useEffect(() => {
 
@@ -63,16 +71,18 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
     setUpdatedArray(mergedData)
 
 
+
   }, [details, locationsList, breedZipCodeSearch])
 
   useEffect(() => {
 
     if (searchLocationsList.length > 0 && allLocationsSearch) {
+
       mergedData = details.map(dog => {
         const locationData = searchLocationsList?.find(location => location?.zip_code === dog.zip_code)
         return locationData ? { ...dog, locationData } : null
       }).filter(dog => dog !== null)
-      
+     
       setMergedArray(mergedData)
 
       let newArray = mergedData.slice(from, to)
@@ -93,16 +103,16 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
       setPage(1)
       setTo(Number(size))
       setFrom(0)
-   
+
     }
   }, [totalPage, sizeChange])
 
 
 
   const handleNext = async () => {
-  
+
    if (allLocationsSearch) {
-     
+
       let from1 = from + size
       let to1 = to + size
       setIsPrevDisabled(true)
@@ -126,11 +136,11 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
         setIsPrevDisabled(false)
         setUpdatedArray(newArray)
 
-     } 
+     }
      if(breedZipCodeSearch) {
-    
+
       let getNextList = await dispatch(nextPrevList(nextUrl));
-     
+
       let dogData = await dispatch(postSearchDog(getNextList?.payload?.resultIds))
       // console.log(dogData, 'dogData line 77')
       let zipCodes = dogData.payload.map(dog => dog.zip_code)
@@ -267,7 +277,7 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
               {dog?.locationData && (
                 <>
                   <div>{dog?.locationData?.city}, {dog?.locationData?.state} {dog?.locationData?.zip_code}</div>
-                  
+
                   <div>{dog?.locationData?.county} County</div>
                 </>
               )}
