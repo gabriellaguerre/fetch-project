@@ -96,7 +96,6 @@ export const dogMatch = createAsyncThunk('dogs/MATCH', async (match) => {
         credentials: 'include',
     })
 
-    console.log(response, 'response line 103')
     if(response.ok){
         const data = response.json()
         return data;
@@ -172,9 +171,6 @@ export const getSearches = (state) => state.dogs.search;
 export const getDogDetails = (state) => state.dogs.dogsDetail;
 export const getLikeDogs = (state) => state.dogs.likeDogs
 export const getMatched = (state) => state.dogs.match
-// export const locationSearchDogs = (state) => state.dogs.location_search
-// export const locationDogDetails = (state) => state.dogs.location_dogsDetail
-// export const getAllDogs = (state) => state.dogs.allDogsDetail
 
 export const { clearAllData, addLikeDog, removeLikeDog, clearDogDetails, clearMatchedDog  } = dogsSlice.actions
 

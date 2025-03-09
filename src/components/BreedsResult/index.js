@@ -75,7 +75,7 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
 
       let newArray = mergedData.slice(from, to)
       setUpdatedArray(newArray)
-      // setViewingArray(newArray)
+
       setPage(1)
       setIsPrevDisabled(true)
       setLoading(false)
@@ -181,10 +181,7 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
 
   const match = async () => {
     let likeIDs = likeList.map(dog => dog.id)
-    let foundDog = await dispatch(dogMatch(likeIDs));
-    // if (dogData) {
-    //   setIsModalOpen(true)
-    // }
+    await dispatch(dogMatch(likeIDs));
   }
 
   let removeLike = async (id) => {
