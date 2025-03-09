@@ -1,26 +1,25 @@
 .resultDisplayed {
    display: flex;
-   gap: 10px;
+   gap: 20px;
    flex-direction: row;
    flex-wrap: wrap;
    justify-content: center;
    align-items: center;
-   cursor: pointer;
-   margin-left: 10%;
-   margin-right: 10%;
+   margin-left: 8%;
+   margin-right: 8%;
    margin-bottom: 200px;
 }
 
 .dogSet{
-  width: 180px;
-  height: auto;
+  width: 200px;
+  height: 250px;
   border-radius: 5px;
-  margin: 10px;
   cursor:pointer;
+  border:none;
 }
 
 .dogSet.selected {
-  background-color: #C0E6DE; /* Change to desired highlight color */
+  background-color: #C0E6DE;
 }
 
 .selectedDogsSet {
@@ -28,12 +27,12 @@
   height: 120px;
   border-radius: 5px;
   margin: 10px;
-
 }
 
-/* .dogSet:hover {
-  background-color: white;
-} */
+.dogSet:hover {
+  background-color: #C0E6DE;
+  box-shadow: 6px 6px 2px 1px rgba(0, 0, 255, .2);
+}
 
 
 .dogImage {
@@ -60,9 +59,6 @@
   margin-left: 10%;
   margin-right: 10%;
   background-color: beige;
-  /* border-top: 1px solid black;
-  border-bottom: 1px solid black; */
-
 }
 
 .removeDogFromList {
@@ -74,8 +70,6 @@
 .topRow {
   margin: 20px auto;
   display: flex;
-  /* flex-wrap: wrap;
-  justify-content: space-around; */
   background-color: rgb(253, 210, 129);
   height: 40px;
   align-items: center;

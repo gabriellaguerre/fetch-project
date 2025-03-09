@@ -125,7 +125,9 @@ const dogsSlice = createSlice({
 
         removeLikeDog(state, action) {
             state.likeDogs = state.likeDogs.filter(dog => dog.id !== action.payload)
-
+        },
+        clearMatchedDog(state) {
+            state.match = {}
         }
 
     },
@@ -154,21 +156,6 @@ const dogsSlice = createSlice({
                 state.status = 'succeeded';
                 state.error = null;
             })
-
-            // .addCase(locationSearchNextList.fulfilled, (state, action)=> {
-            //     state.location_search = action.payload;
-            //     state.status = 'succeeded';
-            //     state.error = null;
-            // })
-
-            // .addCase(postSearchLocationDog.fulfilled, (state, action)=> {
-            //     state.allDogsDetail = [...state.allDogsDetail, action.payload];
-            //     state.status = 'succeeded';
-            //     state.error = null;
-            // })
-
-
-
             .addCase(dogMatch.fulfilled, (state, action)=> {
                 state.match = action.payload;
                 // console.log(action.payload)
@@ -185,10 +172,10 @@ export const getSearches = (state) => state.dogs.search;
 export const getDogDetails = (state) => state.dogs.dogsDetail;
 export const getLikeDogs = (state) => state.dogs.likeDogs
 export const getMatched = (state) => state.dogs.match
-export const locationSearchDogs = (state) => state.dogs.location_search
-export const locationDogDetails = (state) => state.dogs.location_dogsDetail
-export const getAllDogs = (state) => state.dogs.allDogsDetail
+// export const locationSearchDogs = (state) => state.dogs.location_search
+// export const locationDogDetails = (state) => state.dogs.location_dogsDetail
+// export const getAllDogs = (state) => state.dogs.allDogsDetail
 
-export const { clearAllData, addLikeDog, removeLikeDog, clearDogDetails  } = dogsSlice.actions
+export const { clearAllData, addLikeDog, removeLikeDog, clearDogDetails, clearMatchedDog  } = dogsSlice.actions
 
 export default dogsSlice.reducer

@@ -331,7 +331,7 @@ ul.resultList {
     position:absolute;
     font-weight: bold;
     font-size: 20px;
-    z-index: 7;
+    /* z-index: 7; */
 
   }
 

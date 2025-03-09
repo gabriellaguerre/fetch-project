@@ -1,126 +1,126 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { allLocations, searchLocations, postSearchLocations } from '../../redux/locationsSlice';
-import { location, setLocation } from '../../redux/mapsSlice';
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
-import OpenModalButton from '../OpenModalButton';
-import Map from '../Map';
-import dogWaiting from '../../assets/dogwaiting-pic.png'
-import './LocationsResult.css'
+// import React, { useState, useEffect } from 'react';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { allLocations, searchLocations, postSearchLocations } from '../../redux/locationsSlice';
+// import { location, setLocation } from '../../redux/mapsSlice';
+// import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+// import OpenModalButton from '../OpenModalButton';
+// import Map from '../Map';
+// import dogWaiting from '../../assets/dogwaiting-pic.png'
+// import './LocationsResult.css'
 
 
 
-function LocationsResult({ data }) {
+// function LocationsResult({ data }) {
 
-  const dispatch = useDispatch();
+//   const dispatch = useDispatch();
 
-  const locationsList = useSelector(allLocations);
-  const allSearchLocations = useSelector(searchLocations)
+//   const locationsList = useSelector(allLocations);
+//   const allSearchLocations = useSelector(searchLocations)
 
-  const [page, setPage] = useState(0)
-  const [contentPage, setContentPage] = useState(1)
+//   const [page, setPage] = useState(0)
+//   const [contentPage, setContentPage] = useState(1)
 
-  let newPage;
-  let total = allSearchLocations?.total ? allSearchLocations.total : 0;
-  let pages = Math.ceil(total / Number(data.size)) || 1
-  let size = Number(data.size);
+//   let newPage;
+//   let total = allSearchLocations?.total ? allSearchLocations.total : 0;
+//   let pages = Math.ceil(total / Number(data.size)) || 1
+//   let size = Number(data.size);
 
-  let searchLocationArray = allSearchLocations.results
-  console.log(searchLocationArray, 'searchLocationArray')
+//   let searchLocationArray = allSearchLocations.results
+//   console.log(searchLocationArray, 'searchLocationArray')
 
-   const nextPage = async () => {
+//    const nextPage = async () => {
 
-    if(page === -1) {
-      newPage = 1
-    } else {
-       newPage = page + 1
-    }
-
-
-      data.from = newPage * size
-
-      const checkArray = await dispatch(postSearchLocations(data))
+//     if(page === -1) {
+//       newPage = 1
+//     } else {
+//        newPage = page + 1
+//     }
 
 
-      if (checkArray?.payload.results.length < size) {
-        newPage -= 1
-        setPage(newPage)
-        data.from = newPage * size
+//       data.from = newPage * size
 
-      }
-      setPage(newPage)
-  }
-
-  const prevPage = async () => {
-
-    let newPage = page - 1
-
-    data.from = newPage * size
-
-    if (page === 0) {
-      let newPage = page
-      setPage(newPage)
-      data.from = newPage*size
-    }
-    setPage(newPage)
-    await dispatch(postSearchLocations(data))
-  }
+//       const checkArray = await dispatch(postSearchLocations(data))
 
 
+//       if (checkArray?.payload.results.length < size) {
+//         newPage -= 1
+//         setPage(newPage)
+//         data.from = newPage * size
 
-  return (
-    <>
-      <div className='topRowLocation'>
-      <div>Total Finds: {allSearchLocations.total}</div>
+//       }
+//       setPage(newPage)
+//   }
 
-        <div className='nextPrevButtonsLocation'>
+//   const prevPage = async () => {
 
-           <div><button onClick={() => { prevPage(); setContentPage(contentPage - 1) }} disabled={contentPage === 1}> &lt; Previous</button>
-              <button onClick={() => { nextPage(); setContentPage(contentPage + 1) }} disabled={contentPage === pages}>Next &gt;</button></div>
-         </div>
+//     let newPage = page - 1
 
-         <div>page {contentPage} of {pages} pages</div>
-      </div>
+//     data.from = newPage * size
 
-      {locationsList && (
-        <div className='resultDisplayedLocation'>
-          {locationsList?.map(location =>
-            <div key={location?.id} className='locationSet'>
-              <button className='openMapModalButton'><OpenModalButton
-                buttonText={<div className='getMap'>See Map</div>}
-                modalComponent={<Map location={location} />}
-              /></button>
-              <div>City: {location?.city}</div>
-              <div>County: {location?.county}</div>
-              <div>State: {location?.state}</div>
-              <div>Zip Code: {location?.zip_code}</div>
-            </div>
-          )}
-        </div>
-      )}
+//     if (page === 0) {
+//       let newPage = page
+//       setPage(newPage)
+//       data.from = newPage*size
+//     }
+//     setPage(newPage)
+//     await dispatch(postSearchLocations(data))
+//   }
 
-      {allSearchLocations.results && (
-        <div className='resultDisplayedLocation'>
-          {allSearchLocations.results?.map(location =>
-            <div key={location.id} className='locationSet'>
-              <button className='openMapModalButton'><OpenModalButton
-                buttonText=<div className='getMap'>See Map</div>
-                modalComponent={<Map location={location} />}
-              /></button>
-              <div>City: {location.city}</div>
-              <div>County: {location.county}</div>
-              <div>State: {location.state}</div>
-              <div>Zip Code: {location.zip_code}</div>
-            </div>
-          )}
-        </div>
-      )}
-      {(locationsList?.length===0 && searchLocationArray===undefined) && (
-        <div className='waitingDogDivLocation'><img src={dogWaiting} className='waitingDogImg'/></div>
-      )}
 
-    </>
-  )
-}
 
-export default LocationsResult;
+//   return (
+//     <>
+//       <div className='topRowLocation'>
+//       <div>Total Finds: {allSearchLocations.total}</div>
+
+//         <div className='nextPrevButtonsLocation'>
+
+//            <div><button onClick={() => { prevPage(); setContentPage(contentPage - 1) }} disabled={contentPage === 1}> &lt; Previous</button>
+//               <button onClick={() => { nextPage(); setContentPage(contentPage + 1) }} disabled={contentPage === pages}>Next &gt;</button></div>
+//          </div>
+
+//          <div>page {contentPage} of {pages} pages</div>
+//       </div>
+
+//       {locationsList && (
+//         <div className='resultDisplayedLocation'>
+//           {locationsList?.map(location =>
+//             <div key={location?.id} className='locationSet'>
+//               <button className='openMapModalButton'><OpenModalButton
+//                 buttonText={<div className='getMap'>See Map</div>}
+//                 modalComponent={<Map location={location} />}
+//               /></button>
+//               <div>City: {location?.city}</div>
+//               <div>County: {location?.county}</div>
+//               <div>State: {location?.state}</div>
+//               <div>Zip Code: {location?.zip_code}</div>
+//             </div>
+//           )}
+//         </div>
+//       )}
+
+//       {allSearchLocations.results && (
+//         <div className='resultDisplayedLocation'>
+//           {allSearchLocations.results?.map(location =>
+//             <div key={location.id} className='locationSet'>
+//               <button className='openMapModalButton'><OpenModalButton
+//                 buttonText=<div className='getMap'>See Map</div>
+//                 modalComponent={<Map location={location} />}
+//               /></button>
+//               <div>City: {location.city}</div>
+//               <div>County: {location.county}</div>
+//               <div>State: {location.state}</div>
+//               <div>Zip Code: {location.zip_code}</div>
+//             </div>
+//           )}
+//         </div>
+//       )}
+//       {(locationsList?.length===0 && searchLocationArray===undefined) && (
+//         <div className='waitingDogDivLocation'><img src={dogWaiting} className='waitingDogImg'/></div>
+//       )}
+
+//     </>
+//   )
+// }
+
+// export default LocationsResult;
