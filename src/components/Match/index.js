@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getMatched, getLikeDogs, clearMatchedDog } from '../../redux/dogsSlice';
 import { useModal } from '../Context/Modal';
+import Map from '../Map'
 import './Match.css'
 
 
@@ -12,6 +13,7 @@ function Match() {
   const { closeModal } = useModal();
 
   let matched = likeList.filter(dog => dog.id === matchedWithDog?.match)
+  // console.log(matched, 'matched line 15')
 
   return (
     <div className="matchModalContainer">
@@ -24,6 +26,7 @@ function Match() {
           <div>Name: {matched[0]?.name}</div>
           <div>Age: {matched[0]?.age}</div>
           <div>Breed:{matched[0]?.breed}</div>
+          <div><Map location={matched} /></div>
         </>
       ) : (
         <div>LOADING.......</div>

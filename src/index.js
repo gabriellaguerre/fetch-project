@@ -5,6 +5,8 @@ import { BrowserRouter } from "react-router-dom";
 import App from './App';
 import {ModalProvider, Modal} from './components/Context/Modal';
 import { store } from '../src/redux/store';
+import { googleMapsApiKey } from './redux/locationsSlice';
+import { LoadScript } from '@react-google-maps/api';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -13,8 +15,10 @@ root.render(
     <Provider store={store}>
     <ModalProvider>
       <BrowserRouter>
+      <LoadScript googleMapsApiKey={googleMapsApiKey} libraries={["places"]}>
         <App />
         <Modal />
+      </LoadScript>
       </BrowserRouter>
       </ModalProvider>
     </Provider>
