@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 // import { useModal } from '../Context/Modal'
-import {googleMapsApiKey} from '../../redux/locationsSlice';
-import { GoogleMap, useJsApiLoader, Marker,DirectionsRenderer } from "@react-google-maps/api";
+// import {googleMapsApiKey} from '../../redux/locationsSlice';useJsApiLoader
+import { GoogleMap, Marker,DirectionsRenderer } from "@react-google-maps/api";
 import './Map.css';
 
 
@@ -18,7 +18,7 @@ function Map({location}){
   useEffect(() => {
     if (location && location.length > 0 && location[0]?.locationData) {
       const { latitude, longitude } = location[0].locationData;
-    
+
       if (typeof latitude === "number" && typeof longitude === "number") {
         setDestination({ lat: latitude, lng: longitude });
       } else {
@@ -48,10 +48,10 @@ function Map({location}){
     }
   }, [destination]);
 
-  
+
 
   const getRoute = (origin, destination) => {
-   
+
     if (!origin || !destination || !window.google) return;
     const directionsService = new window.google.maps.DirectionsService();
     directionsService.route(
@@ -61,13 +61,13 @@ function Map({location}){
         travelMode: window.google.maps.TravelMode.DRIVING, // Can be "WALKING", "BICYCLING", "TRANSIT"
       },
       (result, status) => {
-        
+
         if (status === "OK") {
           setDirections(result);
           setIsLoaded(true)
-          const distance = result.routes[0].legs[0].distance.text
+          const distance = result?.routes[0]?.legs[0]?.distance.text
           setDistance(distance)
-        
+
         } else {
           console.error("Error fetching directions:", status);
         }
@@ -75,17 +75,17 @@ function Map({location}){
     );
   };
 
- 
+
   const mapContainerStyle = {
     width: "200px",
     height: "200px",
     borderRadius: "10px",
   };
 
- 
+
   return isLoaded && destination ? (
          <>
-      
+
           <GoogleMap mapContainerStyle={mapContainerStyle} center={userLocation || destination} zoom={10} onLoad={()=>setIsLoaded(true)} options={{mapTypeControl: false}}>
           {userLocation && <Marker position={userLocation}  />}
           {destination && <Marker position={destination} />}

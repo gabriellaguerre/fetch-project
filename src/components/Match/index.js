@@ -5,6 +5,10 @@ import { selectUser } from '../../redux/usersSlice';
 import { useModal } from '../Context/Modal';
 import Map from '../Map'
 import './Match.css'
+import balloons from '../../assets/balloons.png'
+import confetti_right from '../../assets/confetti-5182.png'
+import confetti_left from '../../assets/confetti-5182-left.png'
+
 
 
 function Match() {
@@ -25,25 +29,25 @@ function Match() {
           <div className='gridArea11'>
           <div>CONGRATULATIONS {user}!!!! </div></div>
           <div className='gridArea21'>
-          <div>YOU ARE MATCHED WITH:</div></div>
-        
+          <div>YOU ARE MATCHED WITH: {matched[0]?.name}</div></div>
+
           <div className='gridArea31'>
-         
+
           <img src={matched[0]?.img} alt={matched[0]?.name} className="dogImageMatch" />
-          <div>Name: {matched[0]?.name}</div>
-          <div>Age: {matched[0]?.age}</div>
-          <div>Breed:{matched[0]?.breed}</div></div>
+          {/* <div>Name: {matched[0]?.name}</div> */}
+          <div>{matched[0]?.age} yrs old</div>
+          <div>{matched[0]?.breed}</div></div>
 
           <div className='gridArea41'>
           <div><Map location={matched} /></div></div>
-        
-       
+
+
         </>
       ) : (
         <div>LOADING.......</div>
       )}
       <div className='gridArea51'>
-      <button onClick={() => { dispatch(clearMatchedDog()); { closeModal() } }} className="close-btn">Close</button></div>
+      <button onClick={() => { dispatch(clearMatchedDog());  closeModal()  }} className="close-btn">Close</button></div>
 
     </div>
   )

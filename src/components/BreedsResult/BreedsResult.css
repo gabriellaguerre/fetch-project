@@ -23,10 +23,11 @@
 }
 
 .selectedDogsSet {
-  width: 100px;
-  height: 120px;
+  width: 130px;
+  height: 160px;
   border-radius: 5px;
   margin: 10px;
+  background-color: rgb(255, 226, 171);
 }
 
 .dogSet:hover {
@@ -47,6 +48,7 @@
   height: 70px;
   object-fit: cover;
   border-radius: 5px;
+  margin-top: 3px;
 }
 
 

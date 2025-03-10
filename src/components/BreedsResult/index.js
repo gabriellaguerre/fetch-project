@@ -213,7 +213,7 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
           <div key={dog.id} className='selectedDogsSet'>
              <div>{dog.breed}</div>
             <div><img src={dog.img} className='dogImageSelected' /> </div>
-            <div>{dog.name} {dog.age}</div>
+            <div>{dog.name}</div>
             <div><button className='removeDogFromList' onClick={() => removeLike(dog.id)}><img src={deleteImg} className="deletePic" alt='deleteimg' /></button></div>
           </div>
         )}
