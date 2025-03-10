@@ -43,3 +43,8 @@
 .closeMapModalButton:hover {
     background-color: red;
 }
+
+.distance {
+    margin-top: 10px;
+    
+}
