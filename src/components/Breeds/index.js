@@ -4,8 +4,8 @@ import { selectUser } from '../../redux/usersSlice';
 import Profile from '../Profile';
 import BreedsResult from "../BreedsResult";
 import OpenModalButton from '../OpenModalButton';
-import { breeds, getDogBreed, getSearches, searchDog, postSearchDog, postSearchDog2, clearAllData, clearDogDetails} from '../../redux/dogsSlice';
-import {clearAllLocationData, postLocations, geoBoundingData, postSearchLocations, clearZCLocations, clearLocationsSearch, clearGeoBounding} from '../../redux/locationsSlice'
+import { breeds, getDogBreed, getSearches, searchDog, postSearchDog, postSearchDog2, clearAllData, clearDogDetails } from '../../redux/dogsSlice';
+import { clearAllLocationData, postLocations, geoBoundingData, postSearchLocations, clearZCLocations, clearLocationsSearch, clearGeoBounding } from '../../redux/locationsSlice'
 import './Breeds.css';
 import GeoBoundingBox from "../GeoBoundingBox";
 import searchImg from '../../assets/search.png';
@@ -76,6 +76,7 @@ function Breeds() {
   const [selectedZipCode, setSelectedZipCode] = useState([])
 
   const [size, setSize] = useState(25)
+  const [tempSize, setTempSize] = useState(size)
   const [from, setFrom] = useState(0);
 
   const [searching, setSearching] = useState("")
@@ -104,119 +105,121 @@ function Breeds() {
   let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
 
   const search = async () => {
-   
+
     await dispatch(clearDogDetails())
     await dispatch(clearAllLocationData())
 
-    if(!otherParameters && selected.length === 0){
+    if (!otherParameters && selected.length === 0) {
       setError("Please Select a Breed to Search")
       return
     }
 
-    if(!otherParameters) {
+    if (!otherParameters) {
 
-    const urlFrontend = new URL(dogSearchUrl);
+      const urlFrontend = new URL(dogSearchUrl);
 
-    if (size <= 0) {
-      setError("Enter a Valid Number of Dogs To Display")
-      setSize(25);
-      return;
-    }
-
-
-    let searchParams = {};
+      if (size <= 0) {
+        setError("Enter a Valid Number of Dogs To Display")
+        setSize(25);
+        return;
+      }
 
 
-    if ((breed && name) || (breed && age) || (name && age)) {
-      setError("Choose 1 Sort Method")
-      return;
-    }
-
-    if ((breed && !breedAsc && !breedDesc) || (name && !nameAsc && !nameDesc) || (age && !ageAsc && !ageDesc)) {
-      setError("Choose an Ascending or Descending Type for your Sort")
-      return;
-    }
-
-    if (minAge < 0 || maxAge < 0) {
-      setError("Please Enter a Valid Age")
-      return
-    }
-
-    searchParams.breeds = selected;
-    searchParams.breeds.forEach(breed => urlFrontend.searchParams.append('breeds', breed));
-
-    searchParams.size = size;
-    urlFrontend.searchParams.append('size', searchParams.size)
-
-    searchParams.from = from;
-    urlFrontend.searchParams.append('from', searchParams.from)
-
-    if (location && selectedZipCode.length > 0) {
-      searchParams.zipCodes = selectedZipCode;
-      searchParams.zipCodes.forEach(zipCode => urlFrontend.searchParams.append('zipCodes', zipCode));
-    }
-
-    if (minimumAge && minAge) {
-      searchParams.ageMin = minAge;
-      urlFrontend.searchParams.append('ageMin', searchParams.ageMin)
-    }
-    if (maximumAge && maxAge) {
-      searchParams.ageMax = maxAge;
-      urlFrontend.searchParams.append('ageMax', searchParams.ageMax)
-    }
-
-    if (breed && breedAsc) {
-      searchParams.sort = 'breed:asc'
-      urlFrontend.searchParams.append('sort', searchParams.sort)
-    }
-    if (breed && breedDesc) {
-      searchParams.sort = 'breed:desc'
-      urlFrontend.searchParams.append('sort', searchParams.sort)
-    }
-
-    if (name && nameAsc) {
-      searchParams.sort = 'name:asc'
-      urlFrontend.searchParams.append('sort', searchParams.sort)
-    }
-    if (name && nameDesc) {
-      searchParams.sort = 'name:desc'
-      urlFrontend.searchParams.append('sort', searchParams.sort)
-    }
-
-    if (age && ageAsc) {
-      searchParams.sort = 'age:asc'
-      urlFrontend.searchParams.append('sort', searchParams.sort)
-    }
-    if (age && ageDesc) {
-      searchParams.sort = 'age:desc'
-      urlFrontend.searchParams.append('sort', searchParams.sort)
-    }
-
-    if(!breed && !name && !age) {
-      searchParams.sort = 'breed:asc'
-      urlFrontend.searchParams.append('sort', searchParams.sort)
-    }
+      let searchParams = {};
 
 
-    setError("")
+      if ((breed && name) || (breed && age) || (name && age)) {
+        setError("Choose 1 Sort Method")
+        return;
+      }
 
-    setUpdateButton(false);
-    let searchDogResults = await dispatch(searchDog(urlFrontend));
-    console.log(searchDogResults, 'searchDogResults line 205')
-    let searchArray = searchDogResults.payload.resultIds
-    // console.log(searchArray, 'searchArray line 206')
-    let dogData = await dispatch(postSearchDog2(searchArray))
-    // console.log(dogData, 'dogData line 208')
-    let zipCodes = dogData.payload.map(dog=>dog.zip_code)
-    // console.log(zipCodes, 'zipCodes line 210')
-    let getZipCodes = await dispatch(postLocations(zipCodes))
-    // console.log(getZipCodes, 'getZipCodes line 212')
+      if ((breed && !breedAsc && !breedDesc) || (name && !nameAsc && !nameDesc) || (age && !ageAsc && !ageDesc)) {
+        setError("Choose an Ascending or Descending Type for your Sort")
+        return;
+      }
 
-    setIsSearchingBreed_ZipCodes(true)
-    setIsSearchingAllLocations(false)
-    await dispatch(clearLocationsSearch())
+      if (minAge < 0 || maxAge < 0) {
+        setError("Please Enter a Valid Age")
+        return
+      }
 
-  } else if(otherParameters && (chooseCity || chooseStates || chooseGeoBoundingBox)) {
+      searchParams.breeds = selected;
+      searchParams.breeds.forEach(breed => urlFrontend.searchParams.append('breeds', breed));
+
+      searchParams.size = size;
+      urlFrontend.searchParams.append('size', searchParams.size)
+
+      searchParams.from = from;
+      urlFrontend.searchParams.append('from', searchParams.from)
+
+      if (location && selectedZipCode.length > 0) {
+        searchParams.zipCodes = selectedZipCode;
+        searchParams.zipCodes.forEach(zipCode => urlFrontend.searchParams.append('zipCodes', zipCode));
+      }
+
+      if (minimumAge && minAge) {
+        searchParams.ageMin = minAge;
+        urlFrontend.searchParams.append('ageMin', searchParams.ageMin)
+      }
+      if (maximumAge && maxAge) {
+        searchParams.ageMax = maxAge;
+        urlFrontend.searchParams.append('ageMax', searchParams.ageMax)
+      }
+
+      if (breed && breedAsc) {
+        searchParams.sort = 'breed:asc'
+        urlFrontend.searchParams.append('sort', searchParams.sort)
+      }
+      if (breed && breedDesc) {
+        searchParams.sort = 'breed:desc'
+        urlFrontend.searchParams.append('sort', searchParams.sort)
+      }
+
+      if (name && nameAsc) {
+        searchParams.sort = 'name:asc'
+        urlFrontend.searchParams.append('sort', searchParams.sort)
+      }
+      if (name && nameDesc) {
+        searchParams.sort = 'name:desc'
+        urlFrontend.searchParams.append('sort', searchParams.sort)
+      }
+
+      if (age && ageAsc) {
+        searchParams.sort = 'age:asc'
+        urlFrontend.searchParams.append('sort', searchParams.sort)
+      }
+      if (age && ageDesc) {
+        searchParams.sort = 'age:desc'
+        urlFrontend.searchParams.append('sort', searchParams.sort)
+      }
+
+      if (!breed && !name && !age) {
+        searchParams.sort = 'breed:asc'
+        urlFrontend.searchParams.append('sort', searchParams.sort)
+      }
+
+
+      setError("")
+
+      setUpdateButton(false);
+      let searchDogResults = await dispatch(searchDog(urlFrontend));
+      // console.log(searchDogResults, 'searchDogResults line 205')
+      let searchArray = searchDogResults.payload.resultIds
+      // console.log(searchArray, 'searchArray line 206')
+      let dogData = await dispatch(postSearchDog2(searchArray))
+      // console.log(dogData, 'dogData line 208')
+      let zipCodes = dogData.payload.map(dog => dog.zip_code)
+      // console.log(zipCodes, 'zipCodes line 210')
+       await dispatch(postLocations(zipCodes))
+      // let getZipCodes = await dispatch(postLocations(zipCodes))
+      // console.log(getZipCodes, 'getZipCodes line 212')
+
+      setIsSearchingBreed_ZipCodes(true)
+      setIsSearchingAllLocations(false)
+      await dispatch(clearLocationsSearch())
+
+    } else if (otherParameters && (chooseCity || chooseStates || chooseGeoBoundingBox)) {
+      console.log('inside else if line 220')
       await dispatch(clearDogDetails())
       await dispatch(clearZCLocations())
       await dispatch(clearLocationsSearch())
@@ -228,10 +231,10 @@ function Breeds() {
       // const urlDogFrontend = new URL(dogSearchUrl2);
 
 
-      if(chooseCity && city) params.city = city
-      if(chooseStates || states.length > 0) params.states = states
+      if (chooseCity && city) params.city = city
+      if (chooseStates || states.length > 0) params.states = states
 
-      if(Object.keys(bodyParams).length>0) params.geoBoundingBox = bodyParams.geoBoundingBox
+      if (Object.keys(bodyParams).length > 0) params.geoBoundingBox = bodyParams.geoBoundingBox
 
       // if(chooseStates && states.length>0 && !chooseCity && city.length===0) {
       //   setError("Please Enter a City For Your Chosen States")
@@ -245,98 +248,72 @@ function Breeds() {
       let locationSearchData = await dispatch(postSearchLocations(params))
       console.log(locationSearchData.payload, 'locationSearchData line 224')
 
-      let justZipCodes  = locationSearchData.payload.results.map(location=>location.zip_code)
-      // console.log(justZipCodes, 'zip codes line 233')
+      let justZipCodes = locationSearchData.payload.results.map(location => location.zip_code)
+      console.log(justZipCodes, 'zip codes line 233')
 
-/************************************Start Experimental Code**************************************************** */
+      /************************************Start Experimental Code**************************************************** */
       function delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
-    }
+      }
 
-    let dogBatches = []
+      let dogBatches = []
 
-    const fetchAllDogDetails = async () => {
-          let allDogDetails = []
-          for(let index = 0; index < dogBatches.length; index++) {
-            let dogBatch = dogBatches[index];
-            let doggyDetails = await dispatch(postSearchDog(dogBatch))
-            allDogDetails.push(...doggyDetails.payload)
-          }
-          return allDogDetails
-    }
+      const fetchAllDogDetails = async () => {
+        let allDogDetails = []
+        for (let index = 0; index < dogBatches.length; index++) {
+          let dogBatch = dogBatches[index];
+          let doggyDetails = await dispatch(postSearchDog(dogBatch))
+          allDogDetails.push(...doggyDetails.payload)
+        }
+        return allDogDetails
+      }
 
-    const dispatchBatches = async () => {
+      const dispatchBatches = async () => {
         let allDogIds = []
         for (let index = 0; index < batches.length; index++) {
-           let dogParams2 = {}
-            const urlDogFrontend2 = new URL(dogSearchUrl2);
-            let batch = batches[index];
+          let dogParams2 = {}
+          const urlDogFrontend2 = new URL(dogSearchUrl2);
+          let batch = batches[index];
 
-            dogParams2.size = 10000;
-            urlDogFrontend2.searchParams.append('size', dogParams2.size);
+          dogParams2.size = 10000;
+          urlDogFrontend2.searchParams.append('size', dogParams2.size);
 
 
-            dogParams2.zipCodes = batch;
-            batch.forEach(zipCode => urlDogFrontend2.searchParams.append('zipCodes', zipCode));
+          dogParams2.zipCodes = batch;
+          batch.forEach(zipCode => urlDogFrontend2.searchParams.append('zipCodes', zipCode));
 
-            let response = await dispatch(searchDog(urlDogFrontend2));
+          let response = await dispatch(searchDog(urlDogFrontend2));
 
-            allDogIds.push(...response.payload.resultIds);
+          allDogIds.push(...response.payload.resultIds);
 
-            await delay(1000); // Prevents overwhelming the server
+          await delay(1000);
         }
         return allDogIds;
-    }
+      }
 
-    // **Prepare zip code batches**
-    let batchSize = 1000;
-    let batches = [];
-    for (let i = 0; i < justZipCodes.length; i += batchSize) {
+      // **Prepare zip code batches**
+      let batchSize = 1000;
+      let batches = [];
+      for (let i = 0; i < justZipCodes.length; i += batchSize) {
         let zipCodeBatch = justZipCodes.slice(i, i + batchSize);
         batches.push(zipCodeBatch);
-    }
-
-    // Start dispatching
-    const idResults = await dispatchBatches();
-    // console.log(idResults, 'idResults line 314')
-
-    if(idResults.length > 0) {
-      let dogDetailBatchSize = 100
-
-      for(let i = 0; i < idResults.length; i+= dogDetailBatchSize) {
-        let dogBatch = idResults.slice(i, i + dogDetailBatchSize)
-        dogBatches.push(dogBatch)
       }
-      await fetchAllDogDetails()
-    }
 
-    // const finalDogDetails = await fetchAllDogDetails();
-    // console.log(finalDogDetails, 'final Dog details line 302')
-//*************************************END Experimental Code********************************************************* */
-//******************************************Start Settled Code******************************************************* */
-      // if(justZipCodes.length>1000) {
-      //   justZipCodes = justZipCodes.slice(0,1000)
-      // }
+      // Start dispatching
+      const idResults = await dispatchBatches();
+      console.log(idResults, 'idResults line 314')
 
-      // dogParams.zipCodes = justZipCodes;
-      // // console.log(dogParams.zipCodes, 'searchParams.zipCodes line 236')
-      // dogParams.zipCodes.forEach(zipCode => urlDogFrontend.searchParams.append('zipCodes', zipCode));
+      if (idResults.length > 0) {
+        let dogDetailBatchSize = 100
 
-      // dogParams.size = '1000';
-      // urlDogFrontend.searchParams.append('size', dogParams.size)
+        for (let i = 0; i < idResults.length; i += dogDetailBatchSize) {
+          let dogBatch = idResults.slice(i, i + dogDetailBatchSize)
+          dogBatches.push(dogBatch)
+        }
+        await fetchAllDogDetails()
+      }
 
-      // // console.log(urlDogFrontend, 'line 237')
 
-      // let searchDogResults = await dispatch(searchDog(urlDogFrontend));
-      // // console.log(searchDogResults, 'in breeds line 249')
-
-      // let searchLocationArray = searchDogResults?.payload?.resultIds
-      // // console.log(searchLocationArray, 'searchLocationArray line 251')
-
-      // let dogData = await dispatch(postSearchDog(searchLocationArray))
-      // console.log(dogData, 'dogData line 280')
-
-/**********************************************************END Settled Code */
       setIsSearchingBreed_ZipCodes(false)
       setIsSearchingAllLocations(true)
       setCityChange(false)
@@ -350,12 +327,12 @@ function Breeds() {
   // console.log(results, 'results line 266')
 
   let addBreed = (selectedBreed) => {
-    if(selected.length >= 3) {
+    if (selected.length >= 3) {
       setError("A Maximum of 3 Breeds Can Be Selected at a Time")
       return
     }
 
-    if(!results.includes(selectedBreed)){
+    if (!results.includes(selectedBreed)) {
       setError("This Breed is Not in Our List")
       return
     }
@@ -438,30 +415,31 @@ function Breeds() {
     const stateRegex = /^(AL|AK|AZ|AR|CA|CO|CT|DE|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WA|WV|WI|WY)$/;
 
 
-    if(states.includes(allCapsState)) {
+    if (states.includes(allCapsState)) {
       setError("This State is Already in Your List")
       return
     }
 
-    if(chooseStates && selectedState.length > 2) {
+    if (chooseStates && selectedState.length > 2) {
       setError('Enter a two-letter state/territory abbreviations')
     }
 
-    if(states.length >= 3) {
+    if (states.length >= 3) {
       setError("A Maximum of 3 States can be Selected at a Time")
       return
     }
 
-    if(allCapsState.length === 2 && stateRegex.test(allCapsState)) {
+    if (allCapsState.length === 2 && stateRegex.test(allCapsState)) {
 
-        setStates(prevSelected => {const updatedSelection = [...prevSelected, allCapsState];
+      setStates(prevSelected => {
+        const updatedSelection = [...prevSelected, allCapsState];
         setError("")
         return updatedSelection;
       })
-      } else {
-        setError("Please Enter a Valid State")
-        return
-      }
+    } else {
+      setError("Please Enter a Valid State")
+      return
+    }
   }
 
 
@@ -471,22 +449,24 @@ function Breeds() {
   }
 
 
-    const deleteGeoChoices = async ()=>{
-      setChooseGeoBoundingBox(false)
-      await dispatch(clearGeoBounding())
-    }
+  const deleteGeoChoices = async () => {
+    setChooseGeoBoundingBox(false)
+    await dispatch(clearGeoBounding())
+  }
 
 
-    const searchAction = (size) => {
+  const searchAction = (size) => {
 
-      if(otherParameters && !cityChange && !stateChange) {
+    if (otherParameters && !cityChange && !stateChange) {
 
-        setSizeChange(true)
-        setSize(Number(size))
-        return
-       } else {
-         search()
-         setSizeChange(false)
+      // setSizeChange(true)
+      setSize(Number(tempSize))
+      setSizeChange(true);
+      setTimeout(() => setSizeChange(false), 100);
+      return
+    } else {
+      search()
+      setSizeChange(false)
     }
   }
 
@@ -513,7 +493,7 @@ function Breeds() {
                 type="text"
                 value={searching}
                 placeholder="Type to search our available breeds, then click the + button"
-                onFocus={() => { setMenu(true); setError(""); setBreedSelected(true);setOtherParameters(false) }}
+                onFocus={() => { setMenu(true); setError(""); setBreedSelected(true); setOtherParameters(false) }}
                 onChange={(e) => setSearching(e.target.value)}
               /> </div>
 
@@ -542,7 +522,7 @@ function Breeds() {
             <button className='allFilterButton' onClick={() => { setAllFilterButtons(!allFilterButtons); setOtherParameters(false); setFilters(false); setSort(false) }}>
               <div><img src={filterImg} className="filterPic" alt='filterimg' /></div>
               <div> Filters</div></button>
-            <button className='searchByLocationButton' onClick={() => { setOtherParameters(!otherParameters); setAllFilterButtons(false); setFilters(false); setSort(false);setChooseStates(false);setChooseCity(false) }}>Search By Location</button>
+            <button className='searchByLocationButton' onClick={() => { setOtherParameters(!otherParameters); setAllFilterButtons(false); setFilters(false); setSort(false); setChooseStates(false); setChooseCity(false) }}>Search By Location</button>
 
           </div>
 
@@ -568,7 +548,7 @@ function Breeds() {
                       className="filter-input-city"
                       type="text"
                       value={city}
-                      onFocus={()=>setCityChange(true)}
+                      onFocus={() => setCityChange(true)}
                       onChange={(e) => setCity(e.target.value)} />
                   )}
 
@@ -586,34 +566,34 @@ function Breeds() {
                         className="filter-input-state"
                         type="text"
                         value={selectedState}
-                        onFocus={() => {setMenu(true);setStateChange(true);setError("")}}
+                        onFocus={() => { setMenu(true); setStateChange(true); setError("") }}
                         onChange={(e) => setSelectedState(e.target.value)} />
-                      <span className='searchSpan'><button className='addStateButton' onClick={()=>{addState(selectedState);setSelectedState("")}} ><img src={plusImg} className="searchStatePic" alt='plusimg' /></button></span>
+                      <span className='searchSpan'><button className='addStateButton' onClick={() => { addState(selectedState); setSelectedState("") }} ><img src={plusImg} className="searchStatePic" alt='plusimg' /></button></span>
                     </>
                   )}
                 </div>
                 <div className='geoBoundingArea'>
-                  <button className='openModalButton' onClick={()=>setChooseGeoBoundingBox(true)} disabled={geoChoices.length>0}><OpenModalButton
+                  <button className='openModalButton' onClick={() => setChooseGeoBoundingBox(true)} disabled={geoChoices.length > 0}><OpenModalButton
                     buttonText={<div className='geoBoundingBox'>Geo-Bounding Box</div>}
                     modalComponent={<GeoBoundingBox />}
-                    /></button>
+                  /></button>
                 </div>
 
-          <div className='geoChoicesArea'>
-          {geoChoices.length>0 &&  (
-        <>
-      {geoChoices?.map((choice, index) => (
-          <div key={index} className='geoChoice' id={'s'+ index}>{choice}</div>
-      ))}
-      <div className='editGeoDiv'><button className='editGeoChoiceButton'>
-                    <OpenModalButton
-                    buttonText={<div className='geoBoundingBox'><img src={editImg} className="editPic" alt='editimg'/></div>}
-                    modalComponent={<GeoBoundingBox parameters={bodyParams} />} /></button></div>
-      <div className='deleteGeoDiv'><button className='deleteGeoChoiceButton'onClick={()=>{deleteGeoChoices()}} >
-        <img src={deleteImg} className="deleteGeoPic" alt='plusimg'/></button></div>
-      </>
-         )}
-         </div>
+                <div className='geoChoicesArea'>
+                  {geoChoices.length > 0 && (
+                    <>
+                      {geoChoices?.map((choice, index) => (
+                        <div key={index} className='geoChoice' id={'s' + index}>{choice}</div>
+                      ))}
+                      <div className='editGeoDiv'><button className='editGeoChoiceButton'>
+                        <OpenModalButton
+                          buttonText={<div className='geoBoundingBox'><img src={editImg} className="editPic" alt='editimg' /></div>}
+                          modalComponent={<GeoBoundingBox parameters={bodyParams} />} /></button></div>
+                      <div className='deleteGeoDiv'><button className='deleteGeoChoiceButton' onClick={() => { deleteGeoChoices() }} >
+                        <img src={deleteImg} className="deleteGeoPic" alt='plusimg' /></button></div>
+                    </>
+                  )}
+                </div>
 
 
               </div>
@@ -629,15 +609,15 @@ function Breeds() {
         </div>
 
         <div className='gridArea2-2'>
-        {chooseStates && states.length>0 && otherParameters && (
-             <div className='locationChoices'><div className='statesSelectedTitle'>States Selected: </div>
-             {states.map((places, index) =>(
-               <div key={index} className='chosenLocations'>{places}
-               <button className='removeStateButton' onClick={()=>removeState(places)}><img src={deleteImg} className="deleteStatePic" alt='deleteimg'/></button>
-               </div>
-             ))}
-             </div>
-        )}
+          {chooseStates && states.length > 0 && otherParameters && (
+            <div className='locationChoices'><div className='statesSelectedTitle'>States Selected: </div>
+              {states.map((places, index) => (
+                <div key={index} className='chosenLocations'>{places}
+                  <button className='removeStateButton' onClick={() => removeState(places)}><img src={deleteImg} className="deleteStatePic" alt='deleteimg' /></button>
+                </div>
+              ))}
+            </div>
+          )}
 
 
 
@@ -748,32 +728,32 @@ function Breeds() {
         <div className='gridArea3-2'>
 
           {(allFilterButtons || otherParameters) && (
-             <div className='zipCodeEntry'>
-            <div className='inputDiv'>
-            <input
-              className='inputBoxLocation'
-              type="number"
-              value={zipCode}
-              disabled={(chooseCity || chooseStates)}
-              placeholder="Enter a zip code and press +"
-              onFocus={() => setLocation(true)}
-              onChange={(e) => { setZipCode(e.target.value); setError("") }}
-            /> </div>
+            <div className='zipCodeEntry'>
+              <div className='inputDiv'>
+                <input
+                  className='inputBoxLocation'
+                  type="number"
+                  value={zipCode}
+                  disabled={(chooseCity || chooseStates)}
+                  placeholder="Enter a zip code and press +"
+                  onFocus={() => setLocation(true)}
+                  onChange={(e) => { setZipCode(e.target.value); setError("") }}
+                /> </div>
 
-          <div className='searchDiv'><button className='addZipButton' onClick={() => { addZipCode(zipCode); setZipCode("") }} disabled={(chooseCity || chooseStates)}><img src={plusImg} className="searchPic" alt='plusimg' /></button></div>
-          </div>
+              <div className='searchDiv'><button className='addZipButton' onClick={() => { addZipCode(zipCode); setZipCode("") }} disabled={(chooseCity || chooseStates)}><img src={plusImg} className="searchPic" alt='plusimg' /></button></div>
+            </div>
 
           )}
 
-            <div className='sizeBreed'>Dogs per page:
-              <input
-                className='sizeInputBreed'
-                type="number"
-                value={size}
-                onFocus={() => { setSizeChange(true); setUpdateButton(true); setError("") }}
-                onChange={(e) => { setSize(e.target.value); setSizeChange(true) }} />
+          <div className='sizeBreed'>Dogs per page:
+            <input
+              className='sizeInputBreed'
+              type="number"
+              value={tempSize}
+              onFocus={() => {setUpdateButton(true); setError("") }}
+              onChange={(e) =>setTempSize(e.target.value)} />
 
-              <button className='updateButton' onClick={() => searchAction(size)} disabled={!updateButton}>Update</button></div>
+            <button className='updateButton' onClick={() => searchAction(tempSize)} disabled={!updateButton}>Update</button></div>
 
 
         </div>
@@ -793,10 +773,10 @@ function Breeds() {
 
       </div>
 
-        <div className='searchBreed'><button className='searchBreedButton' onClick={() => { search(); setMenu(false); setFrom(0) }}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg' /></button>
+      <div className='searchBreed'><button className='searchBreedButton' onClick={() => { search(); setMenu(false); setFrom(0) }}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg' /></button>
         <button className='clearAllButton' onClick={clearAll}>Clear All</button></div>
 
-      <div className='breedResult'><BreedsResult size={size} sizeChange={sizeChange} totalPage={Math.ceil(Number(searchResult?.total) / Number(size))} breedZipCodeSearch={isSearchingBreed_ZipCodes} allLocationsSearch={isSearchingAllLocations}/></div>
+      <div className='breedResult'><BreedsResult size={size} sizeChange={sizeChange} totalPage={Math.ceil(Number(searchResult?.total) / Number(size))} breedZipCodeSearch={isSearchingBreed_ZipCodes} allLocationsSearch={isSearchingAllLocations} /></div>
     </>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addLikeDog, getSearches, getLikeDogs, getDogDetails, postSearchDog2, nextPrevList, dogMatch, removeLikeDog, clearDogDetails} from '../../redux/dogsSlice';
+import { addLikeDog, getSearches, getLikeDogs, getDogDetails, postSearchDog2, nextPrevList, dogMatch, removeLikeDog} from '../../redux/dogsSlice';
 import { searchLocations, allLocations, postLocations } from '../../redux/locationsSlice'
 import OpenModalButton from '../OpenModalButton';
 import Match from '../Match';
@@ -33,11 +33,12 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
   let nextUrl = searchResult?.next;
   let previousUrl = searchResult?.prev
   let list = searchResult?.resultIds
-  
+
   // console.log(searchResult, 'searchResult line 37')
 
   let from1;
   let to1;
+  console.log(page, 'page line 41')
 
   if (allLocationsSearch) {
     total = mergedArray.length
@@ -74,8 +75,8 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
       let newArray = mergedData.slice(from, to)
       setUpdatedArray(newArray)
 
-      setPage(1)
-      setIsPrevDisabled(true)
+      // setPage(1)
+      // setIsPrevDisabled(true)
       setLoading(false)
     }
   }, [details, searchLocationsList, allLocationsSearch, from, to])
@@ -86,7 +87,7 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
   }, [totalPageProp])
 
   useEffect(() => {
-   
+
     if (sizeChange) {
       let newArray = mergedArray.slice(0, Number(size))
       setUpdatedArray(newArray)
@@ -94,12 +95,14 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
       setTo(Number(size))
       setFrom(0)
     }
+
   }, [totalPage,sizeChange, mergedArray, size])
 
 
 
   const handleNext = async () => {
     if (allLocationsSearch) {
+      console.log(from, size, 'from size line 103')
       let from1 = from + size
       let to1 = to + size
       setIsPrevDisabled(true)
@@ -239,7 +242,7 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
           )}
         </div>
       </div>
-       
+
       {details.length > 0 ? (
         <div className='resultDisplayed'>
           {updatedArray?.map(dog =>
