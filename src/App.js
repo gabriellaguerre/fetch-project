@@ -1,21 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 import { Route,Routes } from "react-router-dom";
 import LoginPage from "./components/LoginPage";
 import Breeds from "./components/Breeds";
-// import Breeds from "./components/Breeds";
-// import Locations from './components/Locations';
 import {selectUser} from '../src/redux/usersSlice';
 
 function App() {
-
-  // const dispatch = useDispatch();
-
-  // const [isLoaded, setIsLoaded] = useState(false);
-
-  // useEffect(() => {
-  //   dispatch(authenticate()).then(() => setIsLoaded(true));
-  // }, [dispatch]);
 
   const user = useSelector(selectUser);
 
@@ -26,8 +16,6 @@ function App() {
           <Routes>
             <Route path="/" element = {<LoginPage />}/>
             <Route path="/main" element = {<Breeds user={user}/> }/>
-            {/* <Route path="/breeds" element = {<Breeds />} />
-            <Route path="/locations" element = {<Locations />} /> */}
             <Route path="*" element={<h1>404: Page not found</h1>} />
           </Routes>
       

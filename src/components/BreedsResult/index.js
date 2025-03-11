@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addLikeDog, getSearches, getLikeDogs, getDogDetails, postSearchDog, nextPrevList, dogMatch, removeLikeDog, getMatched } from '../../redux/dogsSlice';
+import { addLikeDog, getSearches, getLikeDogs, getDogDetails, postSearchDog2, nextPrevList, dogMatch, removeLikeDog, clearDogDetails} from '../../redux/dogsSlice';
 import { searchLocations, allLocations, postLocations } from '../../redux/locationsSlice'
 import OpenModalButton from '../OpenModalButton';
 import Match from '../Match';
@@ -9,7 +9,7 @@ import dogWaiting from '../../assets/dogwaitingpic-pickme.png'
 import deleteImg from '../../assets/x.png';
 
 
-function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLocationsSearch }) {
+function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCodeSearch, allLocationsSearch }) {
   const dispatch = useDispatch();
 
   const details = useSelector(getDogDetails);
@@ -18,6 +18,7 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
   const locationsList = useSelector(allLocations);
   const searchLocationsList = useSelector(searchLocations)
 
+  const [totalPage, setTotalPage] = useState(totalPageProp)
   const [page, setPage] = useState(1)
   const [selectedDogs, setSelectedDogs] = useState(new Set());
   const [updatedArray, setUpdatedArray] = useState([])
@@ -32,15 +33,15 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
   let nextUrl = searchResult?.next;
   let previousUrl = searchResult?.prev
   let list = searchResult?.resultIds
-  let mergedData;
-
+  
+  // console.log(searchResult, 'searchResult line 37')
 
   let from1;
   let to1;
 
   if (allLocationsSearch) {
     total = mergedArray.length
-    totalPage = Math.ceil(total / size)
+    totalPageProp = Math.ceil(total / size)
   } else {
     total = searchResult?.total;
   }
@@ -49,24 +50,21 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
 
     if (locationsList && breedZipCodeSearch) {
       setLoading(true)
-      mergedData = details.map(dog => {
+      const mergedData = details.map(dog => {
         const locationData = locationsList?.find(location => location?.zip_code === dog.zip_code);
         return locationData ? { ...dog, locationData } : null
       }).filter(dog => dog !== null)
+
+      setUpdatedArray(mergedData)
+      setLoading(false)
     }
-
-    setUpdatedArray(mergedData)
-    setLoading(false)
-
-
-
   }, [details, locationsList, breedZipCodeSearch])
 
   useEffect(() => {
 
     if (searchLocationsList.length > 0 && allLocationsSearch) {
       setLoading(true)
-      mergedData = details.map(dog => {
+      const mergedData = details.map(dog => {
         const locationData = searchLocationsList?.find(location => location?.zip_code === dog.zip_code)
         return locationData ? { ...dog, locationData } : null
       }).filter(dog => dog !== null)
@@ -80,12 +78,15 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
       setIsPrevDisabled(true)
       setLoading(false)
     }
-  }, [details, searchLocationsList, allLocationsSearch])
+  }, [details, searchLocationsList, allLocationsSearch, from, to])
 
-  let dogData;
+  // let dogData;
+  useEffect(()=> {
+    if (totalPageProp === Infinity || totalPageProp < 0) setTotalPage(0)
+  }, [totalPageProp])
 
   useEffect(() => {
-    if (totalPage === Infinity || totalPage < 0) totalPage = 0
+   
     if (sizeChange) {
       let newArray = mergedArray.slice(0, Number(size))
       setUpdatedArray(newArray)
@@ -93,7 +94,7 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
       setTo(Number(size))
       setFrom(0)
     }
-  }, [totalPage, sizeChange])
+  }, [totalPage,sizeChange, mergedArray, size])
 
 
 
@@ -121,7 +122,7 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
     }
     if (breedZipCodeSearch) {
       let getNextList = await dispatch(nextPrevList(nextUrl));
-      let dogData = await dispatch(postSearchDog(getNextList?.payload?.resultIds))
+      let dogData = await dispatch(postSearchDog2(getNextList?.payload?.resultIds))
       let zipCodes = dogData.payload.map(dog => dog.zip_code)
       await dispatch(postLocations(zipCodes))
     }
@@ -153,7 +154,7 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
     }
     if (breedZipCodeSearch) {
       let getPrevList = await dispatch(nextPrevList(previousUrl));
-      let dogData = await dispatch(postSearchDog(getPrevList.payload.resultIds))
+      let dogData = await dispatch(postSearchDog2(getPrevList.payload.resultIds))
       let zipCodes = dogData.payload.map(dog => dog.zip_code)
       await dispatch(postLocations(zipCodes))
     }
@@ -212,7 +213,7 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
         {likeList.map((dog) =>
           <div key={dog.id} className='selectedDogsSet'>
              <div>{dog.breed}</div>
-            <div><img src={dog.img} className='dogImageSelected' /> </div>
+            <div><img src={dog.img} className='dogImageSelected' alt='dogImageSelected' /> </div>
             <div>{dog.name}</div>
             <div><button className='removeDogFromList' onClick={() => removeLike(dog.id)}><img src={deleteImg} className="deletePic" alt='deleteimg' /></button></div>
           </div>
@@ -233,18 +234,18 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
           )}
 
 
-          {(details.length > 0 && totalPage && size) && (
-            <div className="pageInfo">page {page} of {totalPage} pages</div>
+          {(details.length > 0 && totalPageProp && size) && (
+            <div className="pageInfo">page {page} of {totalPageProp} pages</div>
           )}
         </div>
       </div>
-
+       
       {details.length > 0 ? (
         <div className='resultDisplayed'>
           {updatedArray?.map(dog =>
             <button key={dog?.id} className={`dogSet ${selectedDogs.has(dog?.id) ? "selected" : ""}`} onClick={() => likeDogs(dog)}>
               <div className='dogBreed-BR'>{dog?.breed}</div>
-              <div className='dogImg-BR'><img src={dog?.img} className='dogImage' /> </div>
+              <div className='dogImg-BR'><img src={dog?.img} className='dogImage' alt='dogImage'/> </div>
               <div className='dogNameAge-BR'>{dog?.name} {dog?.age} yrs</div>
 
               {dog?.locationData && (
@@ -265,7 +266,7 @@ function BreedsResult({ size, sizeChange, totalPage, breedZipCodeSearch, allLoca
             <div>There Are No Results... </div>
           )}
 
-          <div className='waitingDogDiv'><img src={dogWaiting} className='waitingDogImg' /></div>
+          <div className='waitingDogDiv'><img src={dogWaiting} className='waitingDogImg' alt='waitingDogImg'/></div>
         </div>
       )}
 

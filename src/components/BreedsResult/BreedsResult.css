@@ -1,12 +1,12 @@
 .resultDisplayed {
    display: flex;
-   gap: 20px;
+   gap: 30px;
    flex-direction: row;
    flex-wrap: wrap;
    justify-content: center;
    align-items: center;
-   margin-left: 8%;
-   margin-right: 8%;
+   margin-left: 10%;
+   margin-right: 10%;
    margin-bottom: 200px;
 }
 

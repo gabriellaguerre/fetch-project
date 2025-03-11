@@ -4,7 +4,7 @@ import { selectUser } from '../../redux/usersSlice';
 import Profile from '../Profile';
 import BreedsResult from "../BreedsResult";
 import OpenModalButton from '../OpenModalButton';
-import { breeds, getDogBreed, getSearches, searchDog, postSearchDog, clearAllData, clearDogDetails} from '../../redux/dogsSlice';
+import { breeds, getDogBreed, getSearches, searchDog, postSearchDog, postSearchDog2, clearAllData, clearDogDetails} from '../../redux/dogsSlice';
 import {clearAllLocationData, postLocations, geoBoundingData, postSearchLocations, clearZCLocations, clearLocationsSearch, clearGeoBounding} from '../../redux/locationsSlice'
 import './Breeds.css';
 import GeoBoundingBox from "../GeoBoundingBox";
@@ -16,7 +16,7 @@ import sortImg from '../../assets/sort-by.png';
 import ascImg from '../../assets/asc.png';
 import descImg from '../../assets/desc.png';
 import editImg from '../../assets/edit.png'
-// import { getAllDogs } from "../../utils";
+
 
 
 function Breeds() {
@@ -104,6 +104,7 @@ function Breeds() {
   let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
 
   const search = async () => {
+   
     await dispatch(clearDogDetails())
     await dispatch(clearAllLocationData())
 
@@ -201,13 +202,15 @@ function Breeds() {
 
     setUpdateButton(false);
     let searchDogResults = await dispatch(searchDog(urlFrontend));
+    console.log(searchDogResults, 'searchDogResults line 205')
     let searchArray = searchDogResults.payload.resultIds
-    // console.log(searchArray, 'searchArray line 124')
-    let dogData = await dispatch(postSearchDog(searchArray))
-
+    // console.log(searchArray, 'searchArray line 206')
+    let dogData = await dispatch(postSearchDog2(searchArray))
+    // console.log(dogData, 'dogData line 208')
     let zipCodes = dogData.payload.map(dog=>dog.zip_code)
-
+    // console.log(zipCodes, 'zipCodes line 210')
     let getZipCodes = await dispatch(postLocations(zipCodes))
+    // console.log(getZipCodes, 'getZipCodes line 212')
 
     setIsSearchingBreed_ZipCodes(true)
     setIsSearchingAllLocations(false)
@@ -220,9 +223,9 @@ function Breeds() {
       await dispatch(clearGeoBounding())
 
       let params = {}
-      let dogParams = {}
+      // let dogParams = {}
       const dogSearchUrl2 = 'https://frontend-take-home-service.fetch.com/dogs/search?';
-      const urlDogFrontend = new URL(dogSearchUrl2);
+      // const urlDogFrontend = new URL(dogSearchUrl2);
 
 
       if(chooseCity && city) params.city = city

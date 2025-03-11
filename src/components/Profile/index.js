@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useRef} from "react";
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router';
 import { logout } from "../../redux/usersSlice";
 import profile from '../../assets/puppy_profile_pic.png';

@@ -10,6 +10,7 @@ const initialState = {
     breed: [],
     search: {},
     dogsDetail: [],
+    dogsDetail2: [],
     match: {},
     likeDogs: [],
 }
@@ -70,6 +71,21 @@ export const nextPrevList = createAsyncThunk('dogs/NEXT_SEARCH', async (nextPrev
 //*************************POST /dogs******************************************************* */
 
 export const postSearchDog = createAsyncThunk('dogs/DOG_DETAILS', async (searchArray) => {
+
+    const response = await fetch(postDogURL, {
+        method: 'POST',
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(searchArray),
+        credentials: 'include',
+    })
+
+    if(response.ok){
+        const data = await response.json()
+        return data;
+    }
+})
+
+export const postSearchDog2 = createAsyncThunk('dogs/DOG_DETAILS2', async (searchArray) => {
 
     const response = await fetch(postDogURL, {
         method: 'POST',
@@ -149,6 +165,11 @@ const dogsSlice = createSlice({
                 state.status = 'succeeded';
                 state.error = null;
             })
+            .addCase(postSearchDog2.fulfilled, (state, action)=> {
+                state.dogsDetail = action.payload;
+                state.status = 'succeeded';
+                state.error = null;
+            })
 
             .addCase(nextPrevList.fulfilled, (state, action)=> {
                 state.search = action.payload;
@@ -169,6 +190,8 @@ const dogsSlice = createSlice({
 export const getDogBreed = (state) => state.dogs.breed;
 export const getSearches = (state) => state.dogs.search;
 export const getDogDetails = (state) => state.dogs.dogsDetail;
+export const getDogDetails2 = (state) => state.dogs.dogsDetail2;
+
 export const getLikeDogs = (state) => state.dogs.likeDogs
 export const getMatched = (state) => state.dogs.match
 

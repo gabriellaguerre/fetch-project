@@ -1,11 +1,9 @@
-import React, {useEffect, useRef, useState} from "react";
-// import { useModal } from '../Context/Modal'
-// import {googleMapsApiKey} from '../../redux/locationsSlice';useJsApiLoader
+import React, {useEffect, useState} from "react";
 import { GoogleMap, Marker,DirectionsRenderer } from "@react-google-maps/api";
 import './Map.css';
 
 
-const libraries = ["places"]
+// const libraries = ["places"]
 
 function Map({location}){
 
