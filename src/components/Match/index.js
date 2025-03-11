@@ -27,9 +27,9 @@ function Match() {
       {matched ? (
         <>
           <div className='gridArea11'>
-          <div>CONGRATULATIONS {user}!!!! </div></div>
+          <div><img src={confetti_right} className="confettiPic" alt='confettiimg' />CONGRATULATIONS {user}!!!! <img src={confetti_left} className="confettiPic" alt='confettiimg' /></div></div>
           <div className='gridArea21'>
-          <div>YOU ARE MATCHED WITH: {matched[0]?.name}</div></div>
+          <div>YOU ARE MATCHED WITH: {matched[0]?.name}<img src={balloons} className="confettiPic" alt='confettiimg' /></div></div>
 
           <div className='gridArea31'>
 

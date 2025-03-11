@@ -24,7 +24,7 @@
 
 .selectedDogsSet {
   width: 130px;
-  height: 160px;
+  height: auto;
   border-radius: 5px;
   margin: 10px;
   background-color: rgb(255, 226, 171);
