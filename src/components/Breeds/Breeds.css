@@ -665,7 +665,9 @@ ul.resultList {
 .geoChoicesArea {
   grid-area: 2/2;
   display: flex;
-  justify-content:start;
+  justify-content:center;
+  align-items: center;
+  
 }
 
 .geoChoice {
@@ -686,8 +688,8 @@ ul.resultList {
 }
 
 .editPic, .deleteGeoPic {
-  height: 20px;
-  width: 20px;
+  height: 15px;
+  width: 15px;
 }
 
 .editGeoChoiceButton, .deleteGeoChoiceButton {

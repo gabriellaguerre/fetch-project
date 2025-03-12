@@ -126,6 +126,7 @@ const dogsSlice = createSlice({
         clearAllData(state){
             state.search = {}
             state.dogsDetail = []
+            state.dogsDetail2 = []
             state.match = {}
             state.likeDogs = []
         },

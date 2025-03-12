@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { selectUser } from '../../redux/usersSlice';
 import Profile from '../Profile';
 import BreedsResult from "../BreedsResult";
 import OpenModalButton from '../OpenModalButton';
-import { breeds, getDogBreed, getSearches, searchDog, postSearchDog, postSearchDog2, clearAllData, clearDogDetails } from '../../redux/dogsSlice';
+import { getDogBreed, getSearches, searchDog, postSearchDog, postSearchDog2, clearAllData, clearDogDetails } from '../../redux/dogsSlice';
 import { clearAllLocationData, postLocations, geoBoundingData, postSearchLocations, clearZCLocations, clearLocationsSearch, clearGeoBounding } from '../../redux/locationsSlice'
 import './Breeds.css';
 import GeoBoundingBox from "../GeoBoundingBox";
@@ -25,11 +25,6 @@ function Breeds() {
 
 
   const dispatch = useDispatch();
-
-
-  useEffect(() => {
-    dispatch(breeds());
-  }, [dispatch]);
 
   const user = useSelector(selectUser);
   const doggyBreeds = useSelector(getDogBreed)
@@ -91,8 +86,8 @@ function Breeds() {
   const [chooseStates, setChooseStates] = useState(false);
   const [selectedState, setSelectedState] = useState("")
   const [states, setStates] = useState([]);
-  const [cityChange, setCityChange] = useState(false)
-  const [stateChange, setStateChange] = useState((false))
+  // const [cityChange, setCityChange] = useState(false)
+  // const [stateChange, setStateChange] = useState((false))
 
 
   const [otherParameters, setOtherParameters] = useState(false)
@@ -101,21 +96,23 @@ function Breeds() {
   const [isSearchingAllLocations, setIsSearchingAllLocations] = useState(false)
   const [isSearchingBreed_ZipCodes, setIsSearchingBreed_ZipCodes] = useState(false)
 
+  const [clearAllPressed, setClearAllPressed] = useState(false)
+
 
   let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
 
-  const search = async () => {
+  const search = async (tempSize) => {
 
     await dispatch(clearDogDetails())
     await dispatch(clearAllLocationData())
 
+   
     if (!otherParameters && selected.length === 0) {
       setError("Please Select a Breed to Search")
       return
     }
 
     if (!otherParameters) {
-
       const urlFrontend = new URL(dogSearchUrl);
 
       if (size <= 0) {
@@ -146,7 +143,12 @@ function Breeds() {
       searchParams.breeds = selected;
       searchParams.breeds.forEach(breed => urlFrontend.searchParams.append('breeds', breed));
 
-      searchParams.size = size;
+      if(updateButton) {
+        searchParams.size = tempSize;
+      } else {
+        searchParams.size = size;
+      }
+      
       urlFrontend.searchParams.append('size', searchParams.size)
 
       searchParams.from = from;
@@ -219,7 +221,7 @@ function Breeds() {
       await dispatch(clearLocationsSearch())
 
     } else if (otherParameters && (chooseCity || chooseStates || chooseGeoBoundingBox)) {
-      console.log('inside else if line 220')
+    
       await dispatch(clearDogDetails())
       await dispatch(clearZCLocations())
       await dispatch(clearLocationsSearch())
@@ -246,10 +248,10 @@ function Breeds() {
 
 
       let locationSearchData = await dispatch(postSearchLocations(params))
-      console.log(locationSearchData.payload, 'locationSearchData line 224')
+      // console.log(locationSearchData.payload, 'locationSearchData line 224')
 
       let justZipCodes = locationSearchData.payload.results.map(location => location.zip_code)
-      console.log(justZipCodes, 'zip codes line 233')
+      // console.log(justZipCodes, 'zip codes line 233')
 
       /************************************Start Experimental Code**************************************************** */
       function delay(ms) {
@@ -301,7 +303,7 @@ function Breeds() {
 
       // Start dispatching
       const idResults = await dispatchBatches();
-      console.log(idResults, 'idResults line 314')
+      // console.log(idResults, 'idResults line 314')
 
       if (idResults.length > 0) {
         let dogDetailBatchSize = 100
@@ -316,8 +318,8 @@ function Breeds() {
 
       setIsSearchingBreed_ZipCodes(false)
       setIsSearchingAllLocations(true)
-      setCityChange(false)
-      setStateChange(false)
+      // setCityChange(false)
+      // setStateChange(false)
     }
 
   }
@@ -375,8 +377,6 @@ function Breeds() {
   }
 
 
-
-
   const ascBreed = `breed ${breedAsc ? "asc" : ""}`
   const descBreed = `breed ${breedDesc ? "desc" : ""}`
   const ascName = `name ${nameAsc ? "asc" : ""}`
@@ -403,6 +403,10 @@ function Breeds() {
     setStates([])
     setFilters(false)
     setSort(false)
+    setClearAllPressed(true)
+    setTimeout(() => setClearAllPressed(false), 100);
+    setSize(25)
+    setTempSize(25)
     await dispatch(clearAllData());
     await dispatch(clearAllLocationData())
   }
@@ -455,19 +459,16 @@ function Breeds() {
   }
 
 
-  const searchAction = (size) => {
-
-    if (otherParameters && !cityChange && !stateChange) {
-
-      // setSizeChange(true)
-      setSize(Number(tempSize))
-      setSizeChange(true);
-      setTimeout(() => setSizeChange(false), 100);
+  const searchAction = (tempSize) => {
+  
+    setSize(Number(tempSize))
+    setSizeChange(true);
+    setTimeout(() => setSizeChange(false), 100);
+   
+    if (!otherParameters) {
+      search(tempSize)
       return
-    } else {
-      search()
-      setSizeChange(false)
-    }
+    } 
   }
 
   return (
@@ -548,7 +549,7 @@ function Breeds() {
                       className="filter-input-city"
                       type="text"
                       value={city}
-                      onFocus={() => setCityChange(true)}
+                      // onFocus={() => setCityChange(true)}
                       onChange={(e) => setCity(e.target.value)} />
                   )}
 
@@ -566,7 +567,7 @@ function Breeds() {
                         className="filter-input-state"
                         type="text"
                         value={selectedState}
-                        onFocus={() => { setMenu(true); setStateChange(true); setError("") }}
+                        onFocus={() => { setMenu(true); setError("") }}
                         onChange={(e) => setSelectedState(e.target.value)} />
                       <span className='searchSpan'><button className='addStateButton' onClick={() => { addState(selectedState); setSelectedState("") }} ><img src={plusImg} className="searchStatePic" alt='plusimg' /></button></span>
                     </>
@@ -776,7 +777,8 @@ function Breeds() {
       <div className='searchBreed'><button className='searchBreedButton' onClick={() => { search(); setMenu(false); setFrom(0) }}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg' /></button>
         <button className='clearAllButton' onClick={clearAll}>Clear All</button></div>
 
-      <div className='breedResult'><BreedsResult size={size} sizeChange={sizeChange} totalPage={Math.ceil(Number(searchResult?.total) / Number(size))} breedZipCodeSearch={isSearchingBreed_ZipCodes} allLocationsSearch={isSearchingAllLocations} /></div>
+      <div className='breedResult'><BreedsResult size={size} sizeChange={sizeChange} totalPage={Math.ceil(Number(searchResult?.total) / Number(size))} 
+                breedZipCodeSearch={isSearchingBreed_ZipCodes} allLocationsSearch={isSearchingAllLocations} clearAllPressed={clearAllPressed}/></div>
     </>
   );
 }

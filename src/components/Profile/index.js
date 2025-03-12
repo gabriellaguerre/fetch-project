@@ -1,7 +1,8 @@
 import React, {useEffect, useState, useRef} from "react";
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {useNavigate} from 'react-router';
 import { logout } from "../../redux/usersSlice";
+import { getDogBreed, breeds} from '../../redux/dogsSlice';
 import profile from '../../assets/puppy_profile_pic.png';
 import './Profile.css';
 
@@ -10,8 +11,14 @@ function Profile({user}) {
     const navigate = useNavigate();
     const ulRef = useRef();
 
-
+    const doggyBreeds = useSelector(getDogBreed)
     const [showMenu, setShowMenu] = useState(false);
+
+    useEffect(() => {
+        dispatch(breeds());
+      }, [dispatch]);
+
+    // console.log(doggyBreeds, 'doggyBreeds')
 
     const openMenu = (e) => {
       e.stopPropagation();
@@ -43,6 +50,7 @@ function Profile({user}) {
     return (
         <>
         <div className='profile'>
+         <div className='welcomeMessage'>Welcome! We have {doggyBreeds.length} breeds to choose from !!</div>
         <button className='profileButton' onClick={openMenu}> <img src={profile} className='profilePic' alt="dog-pic-profile" ></img> </button>
         <ul className={ulClassName} ref={ulRef}>
         {user && (

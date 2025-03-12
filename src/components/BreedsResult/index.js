@@ -9,7 +9,7 @@ import dogWaiting from '../../assets/dogwaitingpic-pickme.png'
 import deleteImg from '../../assets/x.png';
 
 
-function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCodeSearch, allLocationsSearch }) {
+function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCodeSearch, allLocationsSearch, clearAllPressed }) {
   const dispatch = useDispatch();
 
   const details = useSelector(getDogDetails);
@@ -34,11 +34,11 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
   let previousUrl = searchResult?.prev
   let list = searchResult?.resultIds
 
-  // console.log(searchResult, 'searchResult line 37')
+  
 
   let from1;
   let to1;
-  console.log(page, 'page line 41')
+  // console.log(page, 'page line 41')
 
   if (allLocationsSearch) {
     total = mergedArray.length
@@ -46,6 +46,10 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
   } else {
     total = searchResult?.total;
   }
+
+  useEffect(()=> {
+    if(clearAllPressed) setPage(1)
+  }, [clearAllPressed])
 
   useEffect(() => {
 
@@ -59,6 +63,7 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
       setUpdatedArray(mergedData)
       setLoading(false)
     }
+    
   }, [details, locationsList, breedZipCodeSearch])
 
   useEffect(() => {
@@ -87,13 +92,14 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
   }, [totalPageProp])
 
   useEffect(() => {
-
+    
     if (sizeChange) {
       let newArray = mergedArray.slice(0, Number(size))
       setUpdatedArray(newArray)
       setPage(1)
       setTo(Number(size))
       setFrom(0)
+      
     }
 
   }, [totalPage,sizeChange, mergedArray, size])
@@ -102,7 +108,7 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
 
   const handleNext = async () => {
     if (allLocationsSearch) {
-      console.log(from, size, 'from size line 103')
+   
       let from1 = from + size
       let to1 = to + size
       setIsPrevDisabled(true)
@@ -229,11 +235,11 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
           {(allLocationsSearch) ? (
             <>
               <button className='prevButton' onClick={() => { setPage(page - 1); handlePrevious() }} disabled={isPrevDisabled || page === 1}>&lt; Previous</button>
-              <button className='nextButton' onClick={() => { setPage(page + 1); handleNext() }} disabled={isNextDisabled || page === totalPage}>Next &gt;</button></>
+              <button className='nextButton' onClick={() => { setPage(page + 1); handleNext() }} disabled={isNextDisabled || page === totalPageProp}>Next &gt;</button></>
           ) : (
             <>
               <button className='prevButton' onClick={() => { setPage(page - 1); handlePrevious() }} disabled={!previousUrl || page === 0}>&lt; Previous</button>
-              <button className='nextButton' onClick={() => { setPage(page + 1); handleNext() }} disabled={(!nextUrl || list?.length === 0) || page === totalPage}>Next &gt;</button></>
+              <button className='nextButton' onClick={() => { setPage(page + 1); handleNext() }} disabled={(!nextUrl || list?.length === 0) || page === totalPageProp}>Next &gt;</button></>
           )}
 
 

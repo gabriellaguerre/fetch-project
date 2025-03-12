@@ -1,8 +1,14 @@
 .profile {
     display: flex;
     flex-direction: row;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
     margin: 10px;
+}
+
+.welcomeMessage {
+  font-size: 30px;
+  padding-left: 30px;
 }
 
 .profilePic {
