@@ -10,7 +10,7 @@ const initialState = {
     breed: [],
     search: {},
     dogsDetail: [],
-    dogsDetail2: [],
+    // dogsDetail2: [],
     match: {},
     likeDogs: [],
 }
@@ -70,6 +70,7 @@ export const nextPrevList = createAsyncThunk('dogs/NEXT_SEARCH', async (nextPrev
 
 //*************************POST /dogs******************************************************* */
 
+//postSearchDog gets dog details and spreads it with the other dogs detail 
 export const postSearchDog = createAsyncThunk('dogs/DOG_DETAILS', async (searchArray) => {
 
     const response = await fetch(postDogURL, {
@@ -85,6 +86,7 @@ export const postSearchDog = createAsyncThunk('dogs/DOG_DETAILS', async (searchA
     }
 })
 
+//postSearchDog2 gets dog details and replaces it with the dog details that was already there
 export const postSearchDog2 = createAsyncThunk('dogs/DOG_DETAILS2', async (searchArray) => {
 
     const response = await fetch(postDogURL, {
@@ -126,7 +128,7 @@ const dogsSlice = createSlice({
         clearAllData(state){
             state.search = {}
             state.dogsDetail = []
-            state.dogsDetail2 = []
+            // state.dogsDetail2 = []
             state.match = {}
             state.likeDogs = []
         },

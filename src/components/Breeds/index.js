@@ -101,12 +101,13 @@ function Breeds() {
 
   let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
 
+  //Search either by BREED or by LOCATION
   const search = async (tempSize) => {
 
     await dispatch(clearDogDetails())
     await dispatch(clearAllLocationData())
 
-   
+  //SEARCH BY BREED AND FILTERS 
     if (!otherParameters && selected.length === 0) {
       setError("Please Select a Breed to Search")
       return
@@ -220,6 +221,7 @@ function Breeds() {
       setIsSearchingAllLocations(false)
       await dispatch(clearLocationsSearch())
 
+    //SEARCH BY LOCATION AND OTHER PARAMETERS    
     } else if (otherParameters && (chooseCity || chooseStates || chooseGeoBoundingBox)) {
     
       await dispatch(clearDogDetails())
@@ -228,38 +230,34 @@ function Breeds() {
       await dispatch(clearGeoBounding())
 
       let params = {}
-      // let dogParams = {}
+    
       const dogSearchUrl2 = 'https://frontend-take-home-service.fetch.com/dogs/search?';
-      // const urlDogFrontend = new URL(dogSearchUrl2);
-
+    
 
       if (chooseCity && city) params.city = city
       if (chooseStates || states.length > 0) params.states = states
 
       if (Object.keys(bodyParams).length > 0) params.geoBoundingBox = bodyParams.geoBoundingBox
 
-      // if(chooseStates && states.length>0 && !chooseCity && city.length===0) {
-      //   setError("Please Enter a City For Your Chosen States")
-      //   return
-      // }
 
       params.size = '10000';
       params.from = from ? from : '0';
 
 
       let locationSearchData = await dispatch(postSearchLocations(params))
-      // console.log(locationSearchData.payload, 'locationSearchData line 224')
+      
 
       let justZipCodes = locationSearchData.payload.results.map(location => location.zip_code)
-      // console.log(justZipCodes, 'zip codes line 233')
+      /
 
-      /************************************Start Experimental Code**************************************************** */
+      //Add a delay to avoid overloading server
       function delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
       }
 
       let dogBatches = []
 
+      //fetching dog details per batch 
       const fetchAllDogDetails = async () => {
         let allDogDetails = []
         for (let index = 0; index < dogBatches.length; index++) {
@@ -270,6 +268,7 @@ function Breeds() {
         return allDogDetails
       }
 
+      //Getting Dog IDS from server per batch
       const dispatchBatches = async () => {
         let allDogIds = []
         for (let index = 0; index < batches.length; index++) {
@@ -293,7 +292,7 @@ function Breeds() {
         return allDogIds;
       }
 
-      // **Prepare zip code batches**
+      // Prepare zip code batches
       let batchSize = 1000;
       let batches = [];
       for (let i = 0; i < justZipCodes.length; i += batchSize) {
@@ -325,9 +324,9 @@ function Breeds() {
   }
 
 
-  let results = doggyBreeds.filter((word) => word.includes(capitalLetterWord))
-  // console.log(results, 'results line 266')
-
+  let results = doggyBreeds.filter((word) => word.includes(capitalLetterWord)) //filtering the Dog Breeds array
+ 
+  //Adding a breed to the Breed Array
   let addBreed = (selectedBreed) => {
     if (selected.length >= 3) {
       setError("A Maximum of 3 Breeds Can Be Selected at a Time")
@@ -348,7 +347,7 @@ function Breeds() {
     }
   }
 
-
+  //Removing a Breed from the Breed Array
   let removeBreed = (breed) => {
     let newArray = selected.filter((dog) => dog !== breed);
     setSelected(newArray)
@@ -371,6 +370,7 @@ function Breeds() {
     }
   }
 
+  //Removing a Zip Code from the selectedZipCode Array
   let removeZipCode = (zipCode) => {
     let newArray = selectedZipCode.filter((zip) => zip !== zipCode)
     setSelectedZipCode(newArray)
@@ -384,6 +384,7 @@ function Breeds() {
   const ascAge = `age ${ageAsc ? "asc" : ""}`
   const descAge = `age ${ageDesc ? "desc" : ""}`
 
+  //Clear all choosen parameters from the Sort Filtering
   const clearSort = () => {
     setBreedAsc(false); setBreedDesc(false);
     setNameAsc(false); setNameDesc(false);
@@ -391,10 +392,12 @@ function Breeds() {
     setBreed(false); setName(false); setAge(false)
   }
 
+  //Clearing all chosen Ages from the Filters
   const clearFilters = () => {
     setMinimumAge(false); setMaximumAge(false);
   }
 
+  //Clearing All Data in State and Redux
   const clearAll = async () => {
     setSelected([]);
     setSelectedZipCode([])
@@ -413,6 +416,7 @@ function Breeds() {
 
   const breedError = 'breedErrors' + (error ? "" : "hidden")
 
+  //Adding a State in the States array and verifying if the data is an actual state
   let addState = (selectedState) => {
 
     let allCapsState = selectedState.toUpperCase()
@@ -446,19 +450,20 @@ function Breeds() {
     }
   }
 
-
+  //Removing a State from the State array
   let removeState = (state) => {
     let newArray = states.filter((place) => place !== state);
     setStates(newArray)
   }
 
-
+  //Deleting the Choices in the GEOBounding Box
   const deleteGeoChoices = async () => {
     setChooseGeoBoundingBox(false)
     await dispatch(clearGeoBounding())
   }
 
 
+  //When the UPdate Button is clicked, determines if the size should be modified in the array in BreedsResults or Call the Search Funtion with a new size
   const searchAction = (tempSize) => {
   
     setSize(Number(tempSize))

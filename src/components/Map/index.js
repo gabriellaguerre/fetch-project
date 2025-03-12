@@ -3,7 +3,7 @@ import { GoogleMap, Marker,DirectionsRenderer } from "@react-google-maps/api";
 import './Map.css';
 
 
-// const libraries = ["places"]
+
 
 function Map({location}){
 
@@ -13,6 +13,7 @@ function Map({location}){
   const [isLoaded, setIsLoaded] = useState(false)
   const [distance, setDistance] = useState('')
 
+  //If there is location data for the matched dog in the prop then set the destination 
   useEffect(() => {
     if (location && location.length > 0 && location[0]?.locationData) {
       const { latitude, longitude } = location[0].locationData;
@@ -25,7 +26,7 @@ function Map({location}){
     }
   }, [location]);
 
-
+  //Gets user geolocation from the browser
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -47,7 +48,7 @@ function Map({location}){
   }, [destination]);
 
 
-
+  //Get the route from google maps with location data and user data
   const getRoute = (origin, destination) => {
 
     if (!origin || !destination || !window.google) return;

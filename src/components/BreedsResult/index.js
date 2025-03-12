@@ -38,8 +38,8 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
 
   let from1;
   let to1;
-  // console.log(page, 'page line 41')
-
+ 
+  //If doing a Search By Location, then the total is determined by the created array, else get the total from the server
   if (allLocationsSearch) {
     total = mergedArray.length
     totalPageProp = Math.ceil(total / size)
@@ -47,12 +47,13 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
     total = searchResult?.total;
   }
 
+  //If the user clicks on the ClearAll button, then reset the page to 1 
   useEffect(()=> {
     if(clearAllPressed) setPage(1)
   }, [clearAllPressed])
 
+  //Checking if the user is Searching By BREED 
   useEffect(() => {
-
     if (locationsList && breedZipCodeSearch) {
       setLoading(true)
       const mergedData = details.map(dog => {
@@ -66,8 +67,8 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
     
   }, [details, locationsList, breedZipCodeSearch])
 
+  //Checking if the user is Searching By LOCATION
   useEffect(() => {
-
     if (searchLocationsList.length > 0 && allLocationsSearch) {
       setLoading(true)
       const mergedData = details.map(dog => {
@@ -79,20 +80,18 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
 
       let newArray = mergedData.slice(from, to)
       setUpdatedArray(newArray)
-
-      // setPage(1)
-      // setIsPrevDisabled(true)
       setLoading(false)
     }
   }, [details, searchLocationsList, allLocationsSearch, from, to])
 
-  // let dogData;
+  
+  //Setting the Total Page when the user is changing the Size and to avoid the word Infinity to be displayed
   useEffect(()=> {
     if (totalPageProp === Infinity || totalPageProp < 0) setTotalPage(0)
   }, [totalPageProp])
 
+  //If the user has changed the Size, update the array, page, to and from parameters
   useEffect(() => {
-    
     if (sizeChange) {
       let newArray = mergedArray.slice(0, Number(size))
       setUpdatedArray(newArray)
@@ -105,10 +104,11 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
   }, [totalPage,sizeChange, mergedArray, size])
 
 
-
+  //Handles the Next button and depends on if the user is Searching By BREED or By LOCATION
   const handleNext = async () => {
+
+    //The user is Searching By Location and the results displayed are managed with the complete array of data
     if (allLocationsSearch) {
-   
       let from1 = from + size
       let to1 = to + size
       setIsPrevDisabled(true)
@@ -129,6 +129,8 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
       setIsPrevDisabled(false)
       setUpdatedArray(newArray)
     }
+
+    //The user is Searching By BREED and the results displayed are managed by the server
     if (breedZipCodeSearch) {
       let getNextList = await dispatch(nextPrevList(nextUrl));
       let dogData = await dispatch(postSearchDog2(getNextList?.payload?.resultIds))
@@ -139,6 +141,7 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
 
   const handlePrevious = async () => {
 
+     //The user is Searching By Location and the results displayed are managed with the complete array of data
     if (allLocationsSearch) {
       from1 = from - size
       to1 = to - size
@@ -161,6 +164,8 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
       setTo(to1)
 
     }
+
+     //The user is Searching By BREED and the results displayed are managed by the server
     if (breedZipCodeSearch) {
       let getPrevList = await dispatch(nextPrevList(previousUrl));
       let dogData = await dispatch(postSearchDog2(getPrevList.payload.resultIds))
@@ -169,7 +174,7 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
     }
   }
 
-
+  //Creates the list of favorite dogs that will be used for the match
   const likeDogs = async (dog) => {
     const isLiked = likeList.some(likedDog => likedDog.id === dog.id);
     if (!isLiked) {
@@ -189,11 +194,7 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
     });
   }
 
-  const match = async () => {
-    let likeIDs = likeList.map(dog => dog.id)
-    await dispatch(dogMatch(likeIDs));
-  }
-
+  //Removes a favorite dog from the favorites list
   let removeLike = async (id) => {
     await dispatch(removeLikeDog(id))
 
@@ -202,8 +203,12 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
       newSelectedDogs.delete(id);
       return newSelectedDogs;
     });
+  }
 
-
+  //Sends the list of Dog Ids from the likeList to the server to get a match
+  const match = async () => {
+    let likeIDs = likeList.map(dog => dog.id)
+    await dispatch(dogMatch(likeIDs));
   }
 
   return (

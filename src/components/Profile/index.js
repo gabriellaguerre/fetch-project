@@ -14,26 +14,29 @@ function Profile({user}) {
     const doggyBreeds = useSelector(getDogBreed)
     const [showMenu, setShowMenu] = useState(false);
 
+    //dispatches to get the Breeds list
     useEffect(() => {
         dispatch(breeds());
       }, [dispatch]);
 
-    // console.log(doggyBreeds, 'doggyBreeds')
-
+   
+    //toggles the profile menu
     const openMenu = (e) => {
       e.stopPropagation();
       setShowMenu((prev) => !prev);
     };
 
+
     useEffect(() => {
       if (!showMenu) return;
 
+      //closes the menu 
       const closeMenu = (e) => {
         if (ulRef.current && !ulRef.current.contains(e.target)) {
           setShowMenu(false);
         }
       };
-
+      //event listerner to hide the menu
       document.addEventListener("click", closeMenu);
       return () => document.removeEventListener("click", closeMenu);
     }, [showMenu]);
@@ -41,7 +44,7 @@ function Profile({user}) {
 
       const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
 
-
+     //logs out the user
       const logoutUser = () => {
           dispatch(logout());
           navigate('/');

@@ -12,7 +12,7 @@ function GeoBoundingBox({parameters}){
   const dispatch = useDispatch()
   const {closeModal} = useModal();
 
-
+  // Allows the user to update the data in state
   const [topLat, setTopLat] = useState(() => parameters?.geoBoundingBox?.top?.lat || "");
   const [topLon, setTopLon] = useState(() => parameters?.geoBoundingBox?.top?.lon ||"");
 
@@ -39,6 +39,8 @@ function GeoBoundingBox({parameters}){
 
   const [error, setError] = useState("");
 
+  
+  //Grabs and stores in state the data entered by the user.
   const geoBoundingData = () => {
     const set1 = [topLat, topLon, leftLat, leftLon, bottomLat, bottomLon, rightLat, rightLon].some(value => value.length > 0)
     const set2 = [bottomLeftLat, bottomLeftLon, topRightLat, topRightLon].some(value => value.length > 0);
