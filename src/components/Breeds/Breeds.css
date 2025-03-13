@@ -1,31 +1,324 @@
-.instruction {
-  text-align: center;
+
+/***************************************************SEARCH AND FILTER BREED DIV***************************/
+.searchAndFilterBreed {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  grid-template-rows: repeat(4,1fr);
+  height: 100px;
+  margin-top: 40px;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: 250px;
+}
+
+/*****GRID AREA 1-1******/
+.gridArea1-1{
+  grid-area: 1/1;
+  display: grid;
+  grid-template-rows: repeat(2,1fr);
+  width: 100%;
+  height: 110px;
+}
+
+/*******GRID AREA 11-R1*/
+.gridArea11-r1 {
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 .results {
-    position: absolute;
-    margin-bottom: 150px;
-    width: 90%;
-    max-width: 415px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    height: 100px;
-    overflow: auto;
-    background-color: #f9f9f9;
-    z-index: 10;
-    transform: translateX(-6%); /* Moves it slightly to the left */
-    cursor: pointer;
+  position: absolute;
+  margin-bottom: 150px;
+  width: 90%;
+  max-width: 415px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  height: 100px;
+  overflow: auto;
+  background-color: #f9f9f9;
+  z-index: 10;
+  transform: translateX(-6%); 
+  cursor: pointer;
 }
 
 ul.resultList {
   height: 20px;
-
 }
 
 .resultList:hover{
   background-color: rgb(240, 240, 154);
+}
+
+.inputDiv {
 
 }
+
+.inputBox {
+  height: 40px;
+  width: 400px;
+  border-radius: 10px 0px 0px 10px;
+  padding-left: 10px;
+}
+
+.searchDiv {
+
+}
+
+.addButton {
+  height: 46px;
+  width: 50px;
+  border-left: none;
+  border-radius: 0px 10px 10px 0px;
+  background-color: rgb(240, 240, 154);
+  text-align: center;
+  cursor: pointer;
+}
+
+/*******GRID AREA 11-R2*/
+
+.gridArea11-r2 {
+  grid-area: 2/1/3/1;
+  display:flex;
+  justify-content: center;
+}
+
+.breedChoices {
+  position:absolute;
+  font-weight: bold;
+  font-size: 20px;
+  z-index:1;
+}
+
+.breedsSelectedTitle {
+  font-weight: bold;
+  color: rgb(240, 240, 154);
+  background-color: orange;
+  border-radius: 3px;
+  width: 140px;
+}
+
+.chosenBreeds {
+  width: 300px;
+  font-size: 16px;
+  font-weight: normal;
+  display: flex;
+  align-items: center;
+}
+
+.removeButton {
+  margin-left: 5px;
+  border: none;
+  background-color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+/*******GRID AREA 1-2*/
+.gridArea1-2 {
+  grid-area: 1/2;
+  display: grid;
+  grid-template-rows: repeat(2,1fr);
+  width: 100%;
+}
+
+/**GRID AREA 12-R1*******************/
+.gridArea12-r1 {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.allFilterButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filterPic {
+  height: 20px;
+  width: 20px;
+  margin:5px;
+}
+
+.allFilterButton, .searchByLocationButton {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.allFilterButton.open {
+    background-color: #f0f0f0;
+}
+
+/*GRID AREA 12-R2*********/
+.gridArea12-r2 {
+  display: grid;
+  position: relative;
+  top: 5px;
+}
+
+.breedFilterChosen {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.filterButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 100px;
+  border-radius: 10px;
+  background-color: white;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  gap: 5px;
+}
+
+.otherParametersChosen {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  grid-template-rows: repeat(2,1fr);
+  width: 100%;
+}
+
+.filter-option, .filter-option-state {
+  padding-left: 35px;
+  height: 25px;
+}
+
+.checkbox {
+
+}
+
+.filter-input-city {
+  width: 152px;
+  height: 18px;
+  border-radius: 5px;
+  margin-left: 5px;
+  border-width: 0.5px;
+}
+
+.filter-option-state {
+  grid-area: 2/1;
+}
+
+.filter-input-state {
+  width: 30px;
+  height: 17px;
+  margin-left: 5px;
+  border-radius: 5px 0px 0px 5px;
+  border-width: 0.5px;
+  padding-left: 5px;
+}
+
+.searchSpan{
+  position: relative;
+  right: 2px;
+  top: 2px;
+}
+
+.addStateButton{
+  position: relative;
+  height: 21px;
+  width: 35px;
+  border-left: none;
+  border-radius: 0px 5px 5px 0px;
+  border-width: 0.5px;
+  background-color: rgb(240, 240, 154);
+  text-align: center;
+  cursor: pointer;
+}
+
+.searchStatePic {
+  height: 15px;
+  width: 15px;
+}
+
+.geoBoundingArea {
+  grid-area: 1/2;
+  display: flex;
+  justify-content:center;
+}
+
+.openModalButton {
+  width: 150px;
+  height: 25px;
+  font-size: 16px;
+  border-radius: 10px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.geoBoundingBox {
+
+}
+
+.geoChoicesArea {
+  grid-area: 2/2;
+  display: flex;
+  justify-content:center;
+  align-items: center;
+}
+
+.geoChoice {
+  display: flex;
+  margin-left: 10px;
+  height: 25px;
+  justify-content:center;
+  align-items: center;
+  border-radius: 10px;
+}
+
+.editGeoDiv{
+  margin-left: 10px;
+}
+.editGeoChoiceButton, .deleteGeoChoiceButton{
+  height: 25px;
+}
+
+.editPic, .deleteGeoPic {
+  height: 15px;
+  width: 15px;
+}
+
+.editGeoChoiceButton, .deleteGeoChoiceButton {
+  background-color: white;
+  border:none;
+  cursor:pointer;
+}
+
+/**********************GRID AREA 2-1********/
+
+
+
+
+
+
+/***********************************************/
+
+.instruction {
+  text-align: center;
+}
+
+
+
+
 
 .filters-breed {
     grid-column: 1;
@@ -44,134 +337,38 @@ ul.resultList {
   }
 
 
-.inputBox {
-    height: 40px;
-    width: 400px;
-    border-radius: 10px 0px 0px 10px;
-    padding-left: 10px;
-}
-
-.searchAndFilterBreed {
-  display: grid;
-  grid-template-columns: repeat(2,1fr);
-  grid-template-rows: repeat(4,1fr);
-  height: 100px;
-  margin-top: 40px;
-  margin-left: 10%;
-  margin-right: 10%;
-  margin-bottom: 250px;
-}
-
-.addButton {
-  height: 46px;
-  width: 50px;
-  border-left: none;
-  border-radius: 0px 10px 10px 0px;
-  /* padding-left: 10px; */
-  background-color: rgb(240, 240, 154);
-  text-align: center;
-  cursor: pointer;
-}
-
-.filterButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 40px;
-    width: 100px;
-    border-radius: 10px;
-    background-color: white;
-    text-align: center;
-    cursor: pointer;
-    border: 1px solid #ccc;
-    gap: 5px;
-}
 
 
-.gridArea1-1{
-    grid-area: 1/1;
-    display: grid;
-    grid-template-rows: repeat(2,1fr);
-    width: 100%;
-    height: 110px;
-}
 
-.gridArea11-r1 {
-  display:flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
 
-.gridArea11-r2 {
-  grid-area: 2/1/3/1;
-  display:flex;
-  justify-content: center;
-}
 
-.gridArea1-2 {
-    grid-area: 1/2;
-    display: grid;
-    grid-template-rows: repeat(2,1fr);
-    width: 100%;
-    /* height: 100px; */
-}
 
-.gridArea12-r1 {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: center;
-  justify-content: center;
 
-}
 
-.gridArea12-r2 {
-  display: grid;
-  position: relative;
-  top: 5px;
-}
 
-.breedFilterChosen {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: center;
-  justify-content: space-around;
-}
 
-.otherParametersChosen {
-  display: grid;
-  grid-template-columns: repeat(2,1fr);
-  grid-template-rows: repeat(2,1fr);
-  width: 100%;
-}
 
-.filter-option-state {
-  grid-area: 2/1;
-}
 
-.filter-input-city {
-  width: 152px;
-  height: 18px;
-  border-radius: 5px;
-  margin-left: 5px;
-  border-width: 0.5px;
-}
 
-.filter-input-state {
-  width: 30px;
-  height: 17px;
-  margin-left: 5px;
-  border-radius: 5px 0px 0px 5px;
-  border-width: 0.5px;
-  padding-left: 5px;
-}
 
-.searchStatePic {
-  height: 15px;
-  width: 15px;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 .gridArea2-1{
@@ -306,11 +503,7 @@ ul.resultList {
     padding-left: 10px;
 }
 
-  .filterPic {
-    height: 20px;
-    width: 20px;
-    margin:5px;
-  }
+  
 
   .sizeBreed {
     grid-column: 2;
@@ -328,20 +521,9 @@ ul.resultList {
     top: 15px;
   }
 
-  .breedChoices {
-    position:absolute;
-    font-weight: bold;
-    font-size: 20px;
-    z-index:1;
-  }
+ 
 
-  .chosenBreeds {
-    width: 300px;
-    font-size: 16px;
-    font-weight: normal;
-    display: flex;
-    align-items: center;
-  }
+
 
   .chosenZips {
     display: flex;
@@ -367,14 +549,7 @@ ul.resultList {
 
   }
 
-  .removeButton {
-    margin-left: 5px;
-    border: none;
-    background-color: white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-  }
+ 
 
   .removeStateButton {
     border: none;
@@ -509,26 +684,8 @@ ul.resultList {
   border-radius: 10px;
 }
 
-.allFilterButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
-.allFilterButton, .searchByLocationButton {
 
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  transition: background-color 0.3s ease;
-}
-
-.allFilterButton.open {
-    background-color: #f0f0f0;
-}
 
 
 .allLocationItems {
@@ -572,23 +729,9 @@ ul.resultList {
   z-index: 7;
   }
 
-.addStateButton{
-  position: relative;
-  height: 21px;
-  width: 35px;
-  border-left: none;
-  border-radius: 0px 5px 5px 0px;
-  border-width: 0.5px;
-  background-color: rgb(240, 240, 154);
-  text-align: center;
-  cursor: pointer;
-}
 
-.searchSpan{
-  position: relative;
-  right: 2px;
-  top: 2px;
-}
+
+
 
 .searchStatePic {
   height: 15px;
@@ -640,63 +783,17 @@ ul.resultList {
   align-items: center;
 }
 
-.filter-option, .filter-option-state {
-  padding-left: 35px;
-  height: 25px;
-}
 
-.openModalButton {
-  width: 150px;
-  height: 25px;
-  font-size: 16px;
-  border-radius: 10px;
-  background-color: #007BFF;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
 
-.geoBoundingArea {
-  grid-area: 1/2;
-  display: flex;
-  justify-content:center;
-}
 
-.geoChoicesArea {
-  grid-area: 2/2;
-  display: flex;
-  justify-content:center;
-  align-items: center;
-  
-}
 
-.geoChoice {
-  display: flex;
-  margin-left: 10px;
-  /* width: 200px; */
-  height: 25px;
-  justify-content:center;
-  align-items: center;
-  border-radius: 10px;
-}
 
-.editGeoDiv{
-  margin-left: 10px;
-}
-.editGeoChoiceButton, .deleteGeoChoiceButton{
-  height: 25px;
-}
 
-.editPic, .deleteGeoPic {
-  height: 15px;
-  width: 15px;
-}
 
-.editGeoChoiceButton, .deleteGeoChoiceButton {
-  background-color: white;
-  border:none;
-  cursor:pointer;
-}
+
+
+
+
 #s0, #s2  {
   background-color: green;
   color:white;
@@ -724,10 +821,4 @@ ul.resultList {
   text-align: center;
 }
 
-.breedsSelectedTitle {
-  font-weight: bold;
-  color: rgb(240, 240, 154);
-  background-color: orange;
-  border-radius: 3px;
-  width: 140px;
-}
+

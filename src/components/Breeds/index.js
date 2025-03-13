@@ -148,12 +148,6 @@ function Breeds() {
 
       // searchParams.breeds = selected;
       searchParams.breeds.forEach(breed => urlFrontend.searchParams.append('breeds', breed));
-
-      // if(updateButton) {
-      //   searchParams.size = tempSize;
-      // } else {
-      //   searchParams.size = size;
-      // }
       
       urlFrontend.searchParams.append('size', searchParams.size)
 
