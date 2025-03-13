@@ -1,117 +1,4 @@
-.resultDisplayed {
-   display: flex;
-   gap: 30px;
-   flex-direction: row;
-   flex-wrap: wrap;
-   justify-content: center;
-   margin-left: 10%;
-   margin-right: 10%;
-   margin-bottom: 200px;
-   min-height: 600px;
-}
-
-.dogSet{
-  width: 200px;
-  height: 250px;
-  border-radius: 5px;
-  cursor:pointer;
-  border:none;
-}
-
-.dogSet.selected {
-  background-color: rgb(253, 210, 129);
-}
-
-.selectedDogsSet {
-  width: 130px;
-  height: auto;
-  border-radius: 5px;
-  margin: 10px;
-  background-color: rgb(255, 226, 171);
-}
-
-.dogSet:hover {
-  background-color: #C0E6DE;
-  box-shadow: 6px 6px 2px 1px rgba(0, 0, 255, .2);
-}
-
-
-.dogImage {
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 5px;
-}
-
-.dogImageSelected {
-  width: 70px;
-  height: 70px;
-  object-fit: cover;
-  border-radius: 5px;
-  margin-top: 3px;
-}
-
-
-.selectedDogsList{
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  margin-left: 10%;
-  margin-right: 10%;
-  background-color: beige;
-}
-
-.removeDogFromList {
-  cursor:pointer;
-  background-color: transparent;
-  border:none;
-}
-
-.topRow {
-  margin: 20px auto;
-  display: flex;
-  background-color: rgb(253, 210, 129);
-  height: 40px;
-  align-items: center;
-  width: 80%;
-  border-radius: 5px;
-}
-
-.nexPrevButtons{
-  display: flex;
-  gap: 10px;
-  flex: 1;
-  justify-content: center;
-}
-
-.pageInfo {
-  flex: 1;
-  text-align: right;
-  margin-right: 10px;
-}
-
-.waitingDogDiv {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.totalFinds{
-  font-weight: bold;
-  flex: 1;
-  text-align: left;
-  margin-left: 10px;
-}
-
-.goToPage-breed {
-  margin-left: 5px;
-  border-radius: 5px;
-  width: 35px;
-  align-items: center;
-}
-
+/*************************************SELECTED FAVORITES DIV*********************************/
 .selectedFavorites {
   display: flex;
   text-align: left;
@@ -141,6 +28,80 @@
   font-weight: bold;
 }
 
+/*******************************************SELECTED DOG LIST DIV  **********************************/
+
+.selectedDogsList{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-left: 10%;
+  margin-right: 10%;
+  background-color: beige;
+}
+
+.selectedDogsSet {
+  width: 130px;
+  height: auto;
+  border-radius: 5px;
+  margin: 10px;
+  background-color: rgb(255, 226, 171);
+}
+
+.dogImageSelected {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-top: 3px;
+}
+
+.removeDogFromList {
+  cursor:pointer;
+  background-color: transparent;
+  border:none;
+}
+
+.deletePic_breedsresult {
+  height: 20px;
+  width: 20px;
+}
+/**************************************************LOADING MESSAGE DIV********************************************/
+
+.loadingMessage {
+  min-height: 600px;
+  font-size: 100px;
+  color: gray;
+}
+
+
+/********************************************************TOP ROW DIV*************************************/
+
+.topRow {
+  margin: 20px auto;
+  display: flex;
+  background-color: rgb(253, 210, 129);
+  height: 40px;
+  align-items: center;
+  width: 80%;
+  border-radius: 5px;
+}
+
+.totalFinds{
+  font-weight: bold;
+  flex: 1;
+  text-align: left;
+  margin-left: 10px;
+}
+
+.nexPrevButtons{
+  display: flex;
+  gap: 10px;
+  flex: 1;
+  justify-content: center;
+}
+
 .prevButton, .nextButton {
   border: none;
   background-color: transparent;
@@ -150,5 +111,100 @@
 .prevButton:hover, .nextButton:hover {
   background-color: white;
   border-radius: 5px;
+}
+
+.pageInfo {
+  flex: 1;
+  text-align: right;
+  margin-right: 10px;
+}
+
+
+/**********************************************RESULT DISPLAYED DIV******************************************/
+
+.resultDisplayed {
+   display: flex;
+   gap: 30px;
+   flex-direction: row;
+   flex-wrap: wrap;
+   justify-content: center;
+   margin-left: 10%;
+   margin-right: 10%;
+   margin-bottom: 200px;
+   min-height: 600px;
+}
+
+.dogSet{
+  width: 200px;
+  height: 250px;
+  border-radius: 5px;
+  cursor:pointer;
+  border:none;
+}
+
+.dogSet.selected {
+  background-color: rgb(253, 210, 129);
+}
+
+
+.dogSet:hover {
+  background-color: #C0E6DE;
+  box-shadow: 6px 6px 2px 1px rgba(0, 0, 255, .2);
+}
+
+.dogBreed-BR {
 
 }
+
+.dogImg-BR {
+
+}
+
+.dogNameAge-BR {
+
+}
+
+.dogImage {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.dogLocationData-BR {
+
+}
+
+.dogCounty-BR {
+
+}
+
+/****************************************************EMPTY DATA DIV*********************/
+.emptyData {
+  min-height: 600px;
+}
+
+.noResults {
+  font-weight: bold;
+  font-size: 30px;
+  color: gray;
+}
+
+.waitingDogDiv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/*******************************************************CERTIFIED DIV************************************************/
+
+.certified {
+  margin-bottom: 100px;
+  font-style: italic;
+}
+
+
+
+
+
+

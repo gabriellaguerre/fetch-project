@@ -86,7 +86,7 @@ function Breeds() {
   const [chooseStates, setChooseStates] = useState(false);
   const [selectedState, setSelectedState] = useState("")
   const [states, setStates] = useState([]);
-  // const [cityChange, setCityChange] = useState(false)
+  const [loading, setLoading] = useState(false)
   // const [stateChange, setStateChange] = useState((false))
 
 
@@ -123,11 +123,16 @@ function Breeds() {
       }
 
 
-      let searchParams = {};
+      let searchParams = {
+        breeds: selected,
+        size: updateButton ? tempSize : size,
+        from: from
+      };
 
 
       if ((breed && name) || (breed && age) || (name && age)) {
         setError("Choose 1 Sort Method")
+        setLoading(false)
         return;
       }
 
@@ -141,18 +146,18 @@ function Breeds() {
         return
       }
 
-      searchParams.breeds = selected;
+      // searchParams.breeds = selected;
       searchParams.breeds.forEach(breed => urlFrontend.searchParams.append('breeds', breed));
 
-      if(updateButton) {
-        searchParams.size = tempSize;
-      } else {
-        searchParams.size = size;
-      }
+      // if(updateButton) {
+      //   searchParams.size = tempSize;
+      // } else {
+      //   searchParams.size = size;
+      // }
       
       urlFrontend.searchParams.append('size', searchParams.size)
 
-      searchParams.from = from;
+      // searchParams.from = from;
       urlFrontend.searchParams.append('from', searchParams.from)
 
       if (location && selectedZipCode.length > 0) {
@@ -169,37 +174,53 @@ function Breeds() {
         urlFrontend.searchParams.append('ageMax', searchParams.ageMax)
       }
 
-      if (breed && breedAsc) {
-        searchParams.sort = 'breed:asc'
-        urlFrontend.searchParams.append('sort', searchParams.sort)
-      }
-      if (breed && breedDesc) {
-        searchParams.sort = 'breed:desc'
-        urlFrontend.searchParams.append('sort', searchParams.sort)
-      }
+      const sortingOptions = [
+        { key: 'breed', asc: breedAsc, desc: breedDesc },
+        { key: 'name', asc: nameAsc, desc: nameDesc },
+        { key: 'age', asc: ageAsc, desc: ageDesc }
+    ];
 
-      if (name && nameAsc) {
-        searchParams.sort = 'name:asc'
-        urlFrontend.searchParams.append('sort', searchParams.sort)
-      }
-      if (name && nameDesc) {
-        searchParams.sort = 'name:desc'
-        urlFrontend.searchParams.append('sort', searchParams.sort)
-      }
+    const sortParam = sortingOptions.find(option => option.asc || option.desc);
+    const sortValue = sortParam ? `${sortParam.key}:${sortParam.asc ? 'asc' : 'desc'}` : 'breed:asc';
 
-      if (age && ageAsc) {
-        searchParams.sort = 'age:asc'
-        urlFrontend.searchParams.append('sort', searchParams.sort)
-      }
-      if (age && ageDesc) {
-        searchParams.sort = 'age:desc'
-        urlFrontend.searchParams.append('sort', searchParams.sort)
-      }
+    searchParams.sort = sortValue;
+    urlFrontend.searchParams.append('sort', sortValue);
+//****************************************************************************************************** */
+      // if (breed && breedAsc) {
+      //   searchParams.sort = 'breed:asc'
+      //   urlFrontend.searchParams.append('sort', searchParams.sort)
+      // }
+      // if (breed && breedDesc) {
+      //   searchParams.sort = 'breed:desc'
+      //   urlFrontend.searchParams.append('sort', searchParams.sort)
+      // }
 
-      if (!breed && !name && !age) {
-        searchParams.sort = 'breed:asc'
-        urlFrontend.searchParams.append('sort', searchParams.sort)
-      }
+      // if (name && nameAsc) {
+      //   searchParams.sort = 'name:asc'
+      //   urlFrontend.searchParams.append('sort', searchParams.sort)
+      // }
+      // if (name && nameDesc) {
+      //   searchParams.sort = 'name:desc'
+      //   urlFrontend.searchParams.append('sort', searchParams.sort)
+      // }
+
+      // if (age && ageAsc) {
+      //   searchParams.sort = 'age:asc'
+      //   urlFrontend.searchParams.append('sort', searchParams.sort)
+      // }
+      // if (age && ageDesc) {
+      //   searchParams.sort = 'age:desc'
+      //   urlFrontend.searchParams.append('sort', searchParams.sort)
+      // }
+
+      // if (!breed && !name && !age) {
+      //   searchParams.sort = 'breed:asc'
+      //   urlFrontend.searchParams.append('sort', searchParams.sort)
+      // }
+
+/*************************************************************************************************** */
+
+
 
 
       setError("")
@@ -219,6 +240,7 @@ function Breeds() {
 
       setIsSearchingBreed_ZipCodes(true)
       setIsSearchingAllLocations(false)
+      setLoading(false)
       await dispatch(clearLocationsSearch())
 
     //SEARCH BY LOCATION AND OTHER PARAMETERS    
@@ -248,10 +270,10 @@ function Breeds() {
       
 
       let justZipCodes = locationSearchData.payload.results.map(location => location.zip_code)
-      /
+      
 
       //Add a delay to avoid overloading server
-      function delay(ms) {
+     const delay = async (ms) => {
         return new Promise(resolve => setTimeout(resolve, ms));
       }
 
@@ -317,6 +339,7 @@ function Breeds() {
 
       setIsSearchingBreed_ZipCodes(false)
       setIsSearchingAllLocations(true)
+      setLoading(false)
       // setCityChange(false)
       // setStateChange(false)
     }
@@ -410,6 +433,7 @@ function Breeds() {
     setTimeout(() => setClearAllPressed(false), 100);
     setSize(25)
     setTempSize(25)
+    setLoading(false)
     await dispatch(clearAllData());
     await dispatch(clearAllLocationData())
   }
@@ -469,7 +493,7 @@ function Breeds() {
     setSize(Number(tempSize))
     setSizeChange(true);
     setTimeout(() => setSizeChange(false), 100);
-   
+    setLoading(false)
     if (!otherParameters) {
       search(tempSize)
       return
@@ -759,7 +783,7 @@ function Breeds() {
               onFocus={() => {setUpdateButton(true); setError("") }}
               onChange={(e) =>setTempSize(e.target.value)} />
 
-            <button className='updateButton' onClick={() => searchAction(tempSize)} disabled={!updateButton}>Update</button></div>
+            <button className='updateButton' onClick={() => {searchAction(tempSize); setLoading(true)}}  disabled={!updateButton}>Update</button></div>
 
 
         </div>
@@ -779,11 +803,11 @@ function Breeds() {
 
       </div>
 
-      <div className='searchBreed'><button className='searchBreedButton' onClick={() => { search(); setMenu(false); setFrom(0) }}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg' /></button>
+      <div className='searchBreed'><button className='searchBreedButton' onClick={() => { search(); setMenu(false); setFrom(0); setLoading(true) }}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg' /></button>
         <button className='clearAllButton' onClick={clearAll}>Clear All</button></div>
 
       <div className='breedResult'><BreedsResult size={size} sizeChange={sizeChange} totalPage={Math.ceil(Number(searchResult?.total) / Number(size))} 
-                breedZipCodeSearch={isSearchingBreed_ZipCodes} allLocationsSearch={isSearchingAllLocations} clearAllPressed={clearAllPressed}/></div>
+                breedZipCodeSearch={isSearchingBreed_ZipCodes} allLocationsSearch={isSearchingAllLocations} clearAllPressed={clearAllPressed} loading={loading}/></div>
     </>
   );
 }

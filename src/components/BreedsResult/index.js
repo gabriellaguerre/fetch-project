@@ -9,7 +9,7 @@ import dogWaiting from '../../assets/dogwaitingpic-pickme.png'
 import deleteImg from '../../assets/x.png';
 
 
-function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCodeSearch, allLocationsSearch, clearAllPressed }) {
+function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCodeSearch, allLocationsSearch, clearAllPressed, loading }) {
   const dispatch = useDispatch();
 
   const details = useSelector(getDogDetails);
@@ -27,15 +27,16 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
   const [isNextDisabled, setIsNextDisabled] = useState(false)
   const [from, setFrom] = useState(0)
   const [to, setTo] = useState(size)
-  const [loading, setLoading] = useState(false)
+  // const [loading, setLoading] = useState(false)
 
   let total;
   let nextUrl = searchResult?.next;
   let previousUrl = searchResult?.prev
   let list = searchResult?.resultIds
-
+  // console.log(page, 'page line 36')
   
-
+  // console.log(loading, 'loading line 38')
+  console.log(updatedArray, 'updatedArray line 39')
   let from1;
   let to1;
  
@@ -47,6 +48,7 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
     total = searchResult?.total;
   }
 
+ 
   //If the user clicks on the ClearAll button, then reset the page to 1 
   useEffect(()=> {
     if(clearAllPressed) setPage(1)
@@ -54,23 +56,25 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
 
   //Checking if the user is Searching By BREED 
   useEffect(() => {
+    // setLoading(true)
     if (locationsList && breedZipCodeSearch) {
-      setLoading(true)
+      
       const mergedData = details.map(dog => {
         const locationData = locationsList?.find(location => location?.zip_code === dog.zip_code);
         return locationData ? { ...dog, locationData } : null
       }).filter(dog => dog !== null)
 
       setUpdatedArray(mergedData)
-      setLoading(false)
+      
     }
     
   }, [details, locationsList, breedZipCodeSearch])
 
   //Checking if the user is Searching By LOCATION
   useEffect(() => {
+    // setLoading(true)
     if (searchLocationsList.length > 0 && allLocationsSearch) {
-      setLoading(true)
+      
       const mergedData = details.map(dog => {
         const locationData = searchLocationsList?.find(location => location?.zip_code === dog.zip_code)
         return locationData ? { ...dog, locationData } : null
@@ -80,15 +84,16 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
 
       let newArray = mergedData.slice(from, to)
       setUpdatedArray(newArray)
-      setLoading(false)
+      
     }
   }, [details, searchLocationsList, allLocationsSearch, from, to])
 
   
   //Setting the Total Page when the user is changing the Size and to avoid the word Infinity to be displayed
   useEffect(()=> {
+    if(loading) setPage(1)
     if (totalPageProp === Infinity || totalPageProp < 0) setTotalPage(0)
-  }, [totalPageProp])
+  }, [totalPageProp, loading])
 
   //If the user has changed the Size, update the array, page, to and from parameters
   useEffect(() => {
@@ -218,7 +223,7 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
         <div>Your selected favorites will show here, when you are done selecting, click</div><div className='matchButtonDiv'>
           <button className='matchButton' onClick={() => match()} disabled={likeList.length === 0}>
             <OpenModalButton
-              buttonText={<div className='getMatch'>Match</div>}
+              buttonText={<div>Match</div>}
               modalComponent={<Match />} />
           </button></div><div> to get matched with one of your favorites:</div>
 
@@ -229,11 +234,14 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
              <div>{dog.breed}</div>
             <div><img src={dog.img} className='dogImageSelected' alt='dogImageSelected' /> </div>
             <div>{dog.name}</div>
-            <div><button className='removeDogFromList' onClick={() => removeLike(dog.id)}><img src={deleteImg} className="deletePic" alt='deleteimg' /></button></div>
+            <div><button className='removeDogFromList' onClick={() => removeLike(dog.id)}><img src={deleteImg} className="deletePic_breedsresult" alt='deleteimg' /></button></div>
           </div>
         )}
       </div>
-
+      {loading ? (
+         <div className="loadingMessage">FETCHING...</div> 
+      ):(
+      <>
       <div className='topRow'>
         <div className='totalFinds'>Total Finds: {total}</div>
         <div className='nexPrevButtons'>
@@ -255,6 +263,7 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
       </div>
 
       {details.length > 0 ? (
+        <>
         <div className='resultDisplayed'>
           {updatedArray?.map(dog =>
             <button key={dog?.id} className={`dogSet ${selectedDogs.has(dog?.id) ? "selected" : ""}`} onClick={() => likeDogs(dog)}>
@@ -272,19 +281,21 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
             </button>
           )}
         </div>
+        <div className='certified'>This site is certified Dog Approved</div>
+        </>
       ) : (
-        <div>
-          {loading ? (
-            <div>Loading... </div>
-          ) : (
-            <div>There Are No Results... </div>
-          )}
-
+        <>
+        <div className='emptyData'>
+        
+         <div className='noResults'>There Are No Results... </div>
+       
           <div className='waitingDogDiv'><img src={dogWaiting} className='waitingDogImg' alt='waitingDogImg'/></div>
         </div>
+        <div className='certified'>This site is certified Dog Approved</div>
+        </>
       )}
-
-
+   </>
+    )}
     </>
 
   )
