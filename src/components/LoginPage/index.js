@@ -56,9 +56,9 @@ function LoginPage() {
   const errorClassName = 'errorsLogin' + (error ? "": "hidden") //toggle errors messages
 
   return (
-    <>
+    <div className='loginPage'>
 
- <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
 
       <div className='loginPic'>
       <img src={fetchin} className='dogpic' alt="dog-pic" ></img>
@@ -91,7 +91,7 @@ function LoginPage() {
     </div>
     </form>
 
-    </>
+    </div>
   );
 }
 
