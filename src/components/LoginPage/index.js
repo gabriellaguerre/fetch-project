@@ -19,34 +19,38 @@ function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+   
 
     if (!name) {
       setError("Please enter a name"); //Checking if a name was entered
+      return
     }
 
-//***********************Verifying if email entered is standard************************ */
-
+//Verifying if email entered is standard
     const emailVerification = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
    
-    if(emailVerification.test(email)){
-      console.log('valid email')
-    } else{
-      setError("Enter a valid email")
-    }
+    if(!emailVerification.test(email)){
+      setError("Please enter a valid email")
+      return
+    } 
 
-  }
+    const data = await dispatch(login({name, email}));
+
+    if (data.payload) {
+        navigate('/main', { state: { name } });
+    }
+ }
 
   //**********************Login Without Entering a name and email */
 
-  const demoLogin = async () => {
-     const data = await dispatch(login({name, email}));
+  // const demoLogin = async () => {
+  //    const data = await dispatch(login({name, email}));
 
-    if (data.payload) {
-      navigate('/main', { state: { name } });
+  //   if (data.payload) {
+  //     navigate('/main', { state: { name } });
 
-    }
-  }
+  //   }
+  // }
 //******************************************************************************** */
 
   const errorClassName = 'errorsLogin' + (error ? "": "hidden") //toggle errors messages
@@ -83,7 +87,7 @@ function LoginPage() {
         </div>
         <div className='loginButton'>
         <button id='submitLogin' type="submit">Log In</button>
-        <button id='submitLogin'onClick={demoLogin}>Demo</button>
+        {/* <button id='submitLogin'onClick={demoLogin}>Demo</button> */}
     </div>
     </form>
 

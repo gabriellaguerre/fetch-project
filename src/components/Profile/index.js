@@ -14,6 +14,9 @@ function Profile({user}) {
     const doggyBreeds = useSelector(getDogBreed)
     const [showMenu, setShowMenu] = useState(false);
 
+    let currentUser = user[0].toUpperCase() + user.slice(1)
+    // console.log(currentUser, 'currentUser')
+
     //dispatches to get the Breeds list
     useEffect(() => {
         dispatch(breeds());
@@ -59,7 +62,7 @@ function Profile({user}) {
         {user && (
           <>
          <div className='menu'>
-         <div className='userName'> Hello {user}!</div>
+         <div className='userName'> Hello {currentUser}!</div>
 
          <div className='buttonDiv'><button className='logoutButton' onClick={logoutUser}>Logout</button></div>
          </div>

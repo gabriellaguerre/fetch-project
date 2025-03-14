@@ -11,20 +11,20 @@
   padding-left: 30px;
 }
 
+.profileButton {
+    border: none;
+    background-color: transparent;
+    border-radius: 100px;
+    margin: 5px;
+}
+
 .profilePic {
     width: 70px;
     height: 70px;
     cursor: pointer;
 }
 
-.profileButton {
-    border: none;
-    background-color: transparent;
-    border-radius: 100px;
-    margin: 5px;
-
-}
-
+/*********************************ulClassName***************************/
 .profile-dropdown {
     background-color: rgb(255, 168, 6);
     border-radius: 6px;
@@ -43,9 +43,13 @@
     display: none;
   }
 
-  .menu {
+  /*********************************************************************/
+
+ .menu {
     text-align: center;
   }
+
+ 
   .userName, .buttonDiv {
     margin: 5px;
   }
@@ -55,6 +59,7 @@
     color: white;
     cursor: pointer;
     border-radius: 10px;
+    font-weight: bold;
   }
 
   .disabled-link {
@@ -64,10 +69,10 @@
     cursor: default;
   }
 
-  a {
+  /* a {
     text-decoration: none;
     color: white;
-  }
+  } */
 
   .breedSearchLink, .locationSearchLink {
     margin: 3px;

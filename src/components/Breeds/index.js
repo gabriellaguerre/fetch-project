@@ -32,7 +32,7 @@ function Breeds() {
   const bodyParams = useSelector(geoBoundingData);
 
   let geoChoices = bodyParams.geoBoundingBox ? Object.keys(bodyParams.geoBoundingBox) : [];
-
+  
 
 
   const [allFilterButtons, setAllFilterButtons] = useState(false);

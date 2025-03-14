@@ -11,18 +11,17 @@ const initialState = {
     error: null
   }
 
-  export const login = createAsyncThunk('user/LOGIN_USER', async ({name}) => {
-    // console.log(name, "name")
+  export const login = createAsyncThunk('user/LOGIN_USER', async ({name, email}) => {
+    console.log(name, "name", email, 'email')
     const response = await fetch(loginUsersURL, {
     method: 'POST',
     headers: {"Content-Type": "application/json",},
-    body: JSON.stringify({name: "asd", email: 'asdf@adf.com'}),
+    body: JSON.stringify({name: name, email: email}),
     credentials: 'include',
     })
-    // console.log(response, 'response')
+    console.log(response, 'response')
     if(response.ok){
-       return  { name: "asd" };
-      
+       return  { name: name };
      }  
 })
 

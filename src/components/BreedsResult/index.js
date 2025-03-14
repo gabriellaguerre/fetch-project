@@ -8,6 +8,7 @@ import Match from '../Match';
 import './BreedsResult.css'
 import dogWaiting from '../../assets/dogwaitingpic-pickme.png'
 import deleteImg from '../../assets/x.png';
+import paw from '../../assets/pawprint.png'
 
 
 function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCodeSearch, allLocationsSearch, clearAllPressed, loading }) {
@@ -284,7 +285,7 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
             </button>
           )}
         </div>
-        <div className='certified'>This site is certified Paw Approved</div>
+        <div className='certified'>This site is certified Paw Approved <img src={paw} className='pawImage' alt='pawImage'/></div>
         </>
       ) : (
         <>
@@ -294,7 +295,7 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
        
           <div className='waitingDogDiv'><img src={dogWaiting} className='waitingDogImg' alt='waitingDogImg'/></div>
         </div>
-        <div className='certified'>This site is certified Paw Approved</div>
+        <div className='certified'>This site is certified Paw Approved <img src={paw} className='pawImage' alt='pawImage'/></div>
         </>
       )}
    </>
