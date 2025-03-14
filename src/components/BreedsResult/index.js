@@ -222,7 +222,8 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
     <>
       <div className='selectedFavorites'>
 
-        <div>Your selected favorites will show here, when you are done selecting, click</div><div className='matchButtonDiv'>
+        <div>Your selected favorites will show here, when you are done selecting, click</div>
+        <div className='matchButtonDiv'>
           <button className='matchButton' onClick={() => match()} disabled={likeList.length === 0}>
             <OpenModalButton
               buttonText={<div>Match</div>}
