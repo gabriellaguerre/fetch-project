@@ -628,9 +628,9 @@ function Breeds() {
 
         </div>
 
-        <div className='gridArea2-1'>
+        {/* <div className='gridArea2-1'>
 
-        </div>
+        </div> */}
 
         <div className='gridArea2-2'>
           {chooseStates && states.length > 0 && otherParameters && (
@@ -694,14 +694,14 @@ function Breeds() {
             <>
               <div className='sort'>
                 <div className="sort-option">
-                  <label className='sort-checkbox'>
+                  <label>
                     <input
                       type="checkbox"
                       value={breed}
                       onChange={() => { setBreed(!breed) }}
                     />Breed: </label>
                   {breed && (
-                    <div className='sort-buttons'><button className={ascBreed} onClick={() => { setBreedAsc(true); setBreedDesc(false) }}>
+                    <div><button className={ascBreed} onClick={() => { setBreedAsc(true); setBreedDesc(false) }}>
                       <img src={ascImg} className="ascPic" alt='ascimg' /></button>
                       <button className={descBreed} onClick={() => { setBreedAsc(false); setBreedDesc(true) }}><img src={descImg} className="descPic" alt='descimg' /></button>
                     </div>
@@ -753,7 +753,7 @@ function Breeds() {
 
           {(allFilterButtons || otherParameters) && (
             <div className='zipCodeEntry'>
-              <div className='inputDiv'>
+              <div>
                 <input
                   className='inputBoxLocation'
                   type="number"
@@ -764,7 +764,7 @@ function Breeds() {
                   onChange={(e) => { setZipCode(e.target.value); setError("") }}
                 /> </div>
 
-              <div className='searchDiv'><button className='addZipButton' onClick={() => { addZipCode(zipCode); setZipCode("") }} disabled={(chooseCity || chooseStates)}><img src={plusImg} className="searchPic" alt='plusimg' /></button></div>
+              <div><button className='addZipButton' onClick={() => { addZipCode(zipCode); setZipCode("") }} disabled={(chooseCity || chooseStates)}><img src={plusImg} className="searchPic" alt='plusimg' /></button></div>
             </div>
 
           )}

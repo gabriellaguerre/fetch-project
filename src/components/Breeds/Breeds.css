@@ -51,9 +51,7 @@ ul.resultList {
   background-color: rgb(240, 240, 154);
 }
 
-.inputDiv {
 
-}
 
 .inputBox {
   height: 40px;
@@ -62,9 +60,7 @@ ul.resultList {
   padding-left: 10px;
 }
 
-.searchDiv {
 
-}
 
 .addButton {
   height: 46px;
@@ -303,103 +299,104 @@ ul.resultList {
   cursor:pointer;
 }
 
-/**********************GRID AREA 2-1********/
+/**********************GRID AREA 2-2********/
 
+.gridArea2-2{
+  grid-area: 2/2;
+  display:grid;
+  grid-template-columns: repeat(2,1fr);
+  position: relative;
+  width: 100%;
+  height: 100px;
+}
 
+.locationChoices {
+  grid-column: span 2;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  position: relative;
+  top: 10px;
+  padding-left: 40px;
+}
 
-
-
-
-/***********************************************/
-
-.instruction {
+.statesSelectedTitle  {
+  font-weight: bold;
+  color: rgb(240, 240, 154);
+  background-color: orange;
+  border-radius: 3px;
+  white-space: nowrap;
   text-align: center;
 }
 
+.chosenLocations {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: normal;
+  white-space: nowrap;
+}
 
+.removeStateButton {
+  border: none;
+  background-color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
 
-
+.deleteStatePic {
+  height: 15px;
+  width: 15px;
+}
 
 .filters-breed {
-    grid-column: 1;
-    position: absolute;
-    width: 250px;
-    padding: 10px;
-    left: 30px;
-  }
-
-  .sort {
-    grid-column: 2;
-    position: absolute;
-    width: 200px;
-    padding: 10px;
-    left: 70px;
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.gridArea2-1{
-    grid-area: 2/1;
-    display: flex;
-    flex-direction: row;
-    position: relative;
-    justify-content:start;
-    width: 100%;
-    height: 70px;
+  grid-column: 1;
+  position: absolute;
+  width: 250px;
+  padding: 10px;
+  left: 30px;
 }
 
-.gridArea2-2{
-    grid-area: 2/2;
-    display:grid;
-    grid-template-columns: repeat(2,1fr);
-    position: relative;
-    width: 100%;
-    height: 100px;
-}
-
-.gridArea3-1 {
-  grid-area: 3/1;
+.filter-option-breed {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 50px;
+  margin: 5px;
+  height: 20px;
 }
 
+.filter-input-breed {
+  margin-left: 5px;
+  border-radius: 5px;
+  width: 25px;
+}
+
+.sort {
+  grid-column: 2;
+  position: absolute;
+  width: 200px;
+  padding: 10px;
+  left: 70px;
+}
+
+.sort-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  height: 25px;
+}
+
+.ascPic, .descPic {
+  height: 17px;
+  width: 17px;
+}
+
+.ageSort {
+  margin-left:10px;
+}
+
+
+/**************************************GRID AREA 3-2**************************************/
 
 .gridArea3-2{
   grid-area: 3/2;
@@ -408,18 +405,57 @@ ul.resultList {
   position: relative;
   width: 100%;
   height: auto;
-
-
-
 }
 
-.gridArea4-1{
-  grid-area: 4/1;
-  position: relative;
-  width: 100%;
-  height: 50px;
+.zipCodeEntry {
+  grid-column: 1;
+  display: flex;
 }
 
+.inputBoxLocation {
+  height: 23px;
+  width: 170px;
+  border-radius: 5px 0px 0px 5px;
+  padding-left: 10px;
+}
+
+
+.addZipButton {
+  background-color: rgb(240, 240, 154);
+  border-left: none;
+  border-radius: 0px 5px 5px 0px;
+  cursor: pointer;
+}
+
+.searchPic {
+  height: 20px;
+  width: 20px;
+}
+
+.sizeBreed {
+  grid-column: 2;
+ display: flex;
+ justify-content: center;
+}
+
+
+.sizeInputBreed {
+  margin-left: 3px;
+  height: 18px;
+  width: 30px;
+  border-right: none;
+}
+
+.updateButton {
+  height: 24px;
+  cursor: pointer;
+  background-color: rgb(240, 240, 154);
+  color: red;
+  font-weight: bold;
+}
+
+
+/***************************************GRID AREA 4-2*******************************************/
 .gridArea4-2{
   grid-area: 4/2;
   position: relative;
@@ -427,48 +463,79 @@ ul.resultList {
   height: 50px;
 }
 
-
-.filter-option-breed {
-    display: flex;
-    margin: 5px;
-    height: 20px;
+.zipChoices {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 5px;
 }
 
-.sort-option {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    position: relative;
-    height: 25px;
+.chosenZips {
+  display: flex;
 }
 
-  .filter-input-breed {
-    margin-left: 5px;
-    border-radius: 5px;
-    width: 25px;
-  }
+.removeZipButton {
+  border: none;
+  background-color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
 
-  .zip-location-input-breed {
-    margin-left: 5px;
-    border-radius: 5px 0px 0px 5px;
-    width: 50px;
-  }
+.deleteZipPic {
+  height: 15px;
+  width: 15px;
+}
 
-  .sizeInputBreed {
-    margin-left: 3px;
-    height: 18px;
-    width: 30px;
-    border-right: none;
+/******************SEARCH BAR*********************/
 
-  }
+.searchBreed {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 20px;
+  margin-top: 100px;
+  text-align: center;
+}
 
-  .updateButton {
-    height: 24px;
-    cursor: pointer;
-    background-color: rgb(240, 240, 154);
-    color: red;
-    font-weight: bold;
-  }
+.searchBreedButton {
+  width: 600px;
+  height: 50px;
+  background-color: rgb(128, 231, 134);
+  cursor: pointer;
+  border-radius: 10px 0px 0px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+}
+
+.clearAllButton {
+  height: 50px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  background-color: red;
+  border: none;
+  border-radius: 0px 10px 10px 0px;
+  cursor: pointer;
+}
+
+
+/******************************BREED RESULT ************************************/
+
+.breedResult {
+  position: relative;
+  top: 15px;
+}
+
+/***************************INPUT BOX MODIFICATION******************************************/
 
 
   input.zip-location-input-breed::-webkit-inner-spin-button,
@@ -479,93 +546,33 @@ ul.resultList {
     margin: 0;
   }
 
-  .searchPic {
-    height: 20px;
-    width: 20px;
-  }
+  
+  
+ 
 
-  .addZip {
-    height: 10px;
-    width: 10px;
-  }
+ 
+  
 
-  .addZipButton {
-    background-color: rgb(240, 240, 154);
-    border-left: none;
-    border-radius: 0px 5px 5px 0px;
-    cursor: pointer;
-  }
+ 
+  
 
-  .inputBoxLocation {
-    height: 23px;
-    width: 170px;
-    border-radius: 5px 0px 0px 5px;
-    padding-left: 10px;
-}
+ 
+
+ 
+
+
+
+ 
+
+ 
 
   
 
-  .sizeBreed {
-    grid-column: 2;
-   display: flex;
-   justify-content: center;
-  }
-
-  .zipCodeEntry {
-    grid-column: 1;
-    display: flex;
-  }
-
-  .breedResult {
-    position: relative;
-    top: 15px;
-  }
+ 
 
  
 
-
-
-  .chosenZips {
-    display: flex;
-  }
-
-  .zipChoices {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
-    margin-top: 5px;
-  }
-
-  .locationChoices {
-    grid-column: span 2;
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-    position: relative;
-    top: 10px;
-    padding-left: 40px;
-
-  }
-
  
-
-  .removeStateButton {
-    border: none;
-    background-color: white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-  }
-
-  .removeZipButton {
-    border: none;
-    background-color: white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-  }
 
 
 
@@ -574,63 +581,22 @@ ul.resultList {
     width: 20px;
   }
 
-  .deleteStatePic {
-    height: 15px;
-    width: 15px;
-  }
+ 
 
-  .deleteZipPic {
-    height: 15px;
-    width: 15px;
-  }
-
+ 
   .deleteLocationPic {
     height: 15px;
     width: 15px;
   }
 
 
-  .searchBreed {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-    font-size: 20px;
-    margin-top: 100px;
-    text-align: center;
+ 
 
-  }
+ 
 
-  .searchBreedButton {
-    width: 600px;
-    height: 50px;
-    background-color: rgb(128, 231, 134);
-    cursor: pointer;
-    border-radius: 10px 0px 0px 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    font-size: 18px;
-    font-weight: bold;
-    border: none;
-  }
+ 
 
-  .clearAllButton {
-    height: 50px;
-    font-size: 18px;
-    font-weight: bold;
-    color: white;
-    background-color: red;
-    border: none;
-    border-radius: 0px 10px 10px 0px;
-    cursor: pointer;
-  }
-
-  .ascPic, .descPic {
-    height: 17px;
-    width: 17px;
-  }
+ 
 
   .breed, .name, .age {
     border: none;
@@ -647,10 +613,7 @@ ul.resultList {
     background-color:rgb(196, 196, 245);
   }
 
-  .ageSort {
-    margin-left:10px;
-  }
-
+  
   .breedErrors {
     width: 400px;
     height: 30px;
@@ -767,13 +730,7 @@ ul.resultList {
 }
 
 
-.chosenLocations {
-   display: flex;
-   align-items: center;
-   font-size: 16px;
-   font-weight: normal;
-   white-space: nowrap;
-}
+
 
 .removeLocationButton {
   border: none;
@@ -812,13 +769,6 @@ ul.resultList {
   padding-left: 3px;
 }
 
-.statesSelectedTitle  {
-  font-weight: bold;
-  color: rgb(240, 240, 154);
-  background-color: orange;
-  border-radius: 3px;
-  white-space: nowrap;
-  text-align: center;
-}
+
 
 

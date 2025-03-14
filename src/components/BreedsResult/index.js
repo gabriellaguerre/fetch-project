@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addLikeDog, getSearches, getLikeDogs, getDogDetails, postSearchDog2, nextPrevList, dogMatch, removeLikeDog} from '../../redux/dogsSlice';
 import { searchLocations, allLocations, postLocations } from '../../redux/locationsSlice'
 import OpenModalButton from '../OpenModalButton';
+// import { motion } from "framer-motion";
 import Match from '../Match';
 import './BreedsResult.css'
 import dogWaiting from '../../assets/dogwaitingpic-pickme.png'
@@ -36,7 +37,7 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
   // console.log(page, 'page line 36')
   
   // console.log(loading, 'loading line 38')
-  console.log(updatedArray, 'updatedArray line 39')
+  // console.log(updatedArray, 'updatedArray line 39')
   let from1;
   let to1;
  
@@ -239,7 +240,9 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
         )}
       </div>
       {loading ? (
-         <div className="loadingMessage">FETCHING...</div> 
+         <div className="loadingMessage">FETCHING<span className="dotOne">.</span>
+         <span className="dotTwo">.</span>
+         <span className="dotThree">.</span></div> 
       ):(
       <>
       <div className='topRow'>
@@ -281,7 +284,7 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
             </button>
           )}
         </div>
-        <div className='certified'>This site is certified Dog Approved</div>
+        <div className='certified'>This site is certified Paw Approved</div>
         </>
       ) : (
         <>
@@ -291,7 +294,7 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
        
           <div className='waitingDogDiv'><img src={dogWaiting} className='waitingDogImg' alt='waitingDogImg'/></div>
         </div>
-        <div className='certified'>This site is certified Dog Approved</div>
+        <div className='certified'>This site is certified Paw Approved</div>
         </>
       )}
    </>
