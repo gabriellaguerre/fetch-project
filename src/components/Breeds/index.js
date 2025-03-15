@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { selectUser } from '../../redux/usersSlice';
 import Profile from '../Profile';
@@ -25,6 +25,7 @@ function Breeds() {
 
 
   const dispatch = useDispatch();
+   const ulRef = useRef();
 
   const user = useSelector(selectUser);
   const doggyBreeds = useSelector(getDogBreed)
@@ -93,6 +94,20 @@ function Breeds() {
 
 
   let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
+
+   useEffect(() => {
+        if (!menu) return;
+
+        //closes the menu
+        const closeMenu = (e) => {
+          if (ulRef.current && !ulRef.current.contains(e.target)) {
+            setMenu(false);
+          }
+        };
+        //event listerner to hide the menu
+        document.addEventListener("click", closeMenu);
+        return () => document.removeEventListener("click", closeMenu);
+      }, [menu]);
 
   //Search either by BREED or by LOCATION
   const search = async (tempSize) => {
@@ -458,9 +473,9 @@ function Breeds() {
       <div className='searchAndFilterBreed'>
 
         <div className='gridArea1-1'>
-          <div className='gridArea11-r1'>
+          <div className='gridArea11-r1' ref={ulRef}>
             {results.length > 0 && menu ? (
-              <div className="results">
+              <div className="results" >
                 {results.map((word, index) => (
                   <ul key={index} className='resultList' onClick={() => { setSearching(word); setMenu(false) }}>{word}</ul>
                 ))}
