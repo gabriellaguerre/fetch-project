@@ -20,6 +20,7 @@ function Match() {
 
   let matched = likeList.filter(dog => dog.id === matchedWithDog?.match)
   // console.log(matched, 'matched line 15')
+  let currentUser = user[0].toUpperCase() + user.slice(1)
 
   return (
     <div className="matchModalContainer">
@@ -27,7 +28,7 @@ function Match() {
       {matched ? (
         <>
           <div className='gridArea11'>
-          <div className='congrats'><img src={confetti_right} className="confettiPic" alt='confettiimg' />CONGRATULATIONS {user}!!!! <img src={confetti_left} className="confettiPic" alt='confettiimg' /></div></div>
+          <div className='congrats'><img src={confetti_right} className="confettiPic" alt='confettiimg' />CONGRATULATIONS {currentUser}!!!! <img src={confetti_left} className="confettiPic" alt='confettiimg' /></div></div>
           <div className='gridArea21'>
           <div>YOU ARE MATCHED WITH: {matched[0]?.name}<img src={balloons} className="confettiPic" alt='confettiimg' /></div></div>
 

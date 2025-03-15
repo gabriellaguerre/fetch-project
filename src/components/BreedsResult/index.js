@@ -29,16 +29,13 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
   const [isNextDisabled, setIsNextDisabled] = useState(false)
   const [from, setFrom] = useState(0)
   const [to, setTo] = useState(size)
-  // const [loading, setLoading] = useState(false)
+
 
   let total;
   let nextUrl = searchResult?.next;
   let previousUrl = searchResult?.prev
   let list = searchResult?.resultIds
-  // console.log(page, 'page line 36')
 
-  // console.log(loading, 'loading line 38')
-  // console.log(updatedArray, 'updatedArray line 39')
   let from1;
   let to1;
 
@@ -67,7 +64,6 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
       }).filter(dog => dog !== null)
 
       setUpdatedArray(mergedData)
-
     }
 
   }, [details, locationsList, breedZipCodeSearch])
@@ -85,6 +81,7 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
       setMergedArray(mergedData)
 
       let newArray = mergedData.slice(from, to)
+
       setUpdatedArray(newArray)
 
     }

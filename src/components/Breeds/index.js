@@ -32,7 +32,7 @@ function Breeds() {
   const bodyParams = useSelector(geoBoundingData);
 
   let geoChoices = bodyParams.geoBoundingBox ? Object.keys(bodyParams.geoBoundingBox) : [];
-
+  let results = doggyBreeds;
 
 
   const [allFilterButtons, setAllFilterButtons] = useState(false);
@@ -49,20 +49,15 @@ function Breeds() {
   const [name, setName] = useState(false);
   const [nameAsc, setNameAsc] = useState(false);
   const [nameDesc, setNameDesc] = useState(false);
-
-
   const [age, setAge] = useState(false);
   const [ageAsc, setAgeAsc] = useState(false);
   const [ageDesc, setAgeDesc] = useState(false);
-
-
 
   const [filters, setFilters] = useState(false);
   const [sort, setSort] = useState(false);
 
   const [minimumAge, setMinimumAge] = useState(false);
   const [minAge, setMinAge] = useState("");
-
   const [maximumAge, setMaximumAge] = useState(false);
   const [maxAge, setMaxAge] = useState("");
 
@@ -87,8 +82,6 @@ function Breeds() {
   const [selectedState, setSelectedState] = useState("")
   const [states, setStates] = useState([]);
   const [loading, setLoading] = useState(false)
-  // const [stateChange, setStateChange] = useState((false))
-
 
   const [otherParameters, setOtherParameters] = useState(false)
   const [chooseGeoBoundingBox, setChooseGeoBoundingBox] = useState(false);
@@ -188,7 +181,7 @@ function Breeds() {
       let searchArray = searchDogResults.payload.resultIds
       // console.log(searchArray, 'searchArray line 206')
       let dogData = await dispatch(postSearchDog2(searchArray))
-      // console.log(dogData, 'dogData line 208')
+      // console.log(dogData, 'dogData line 191')
       let zipCodes = dogData.payload.map(dog => dog.zip_code)
       // console.log(zipCodes, 'zipCodes line 210')
       await dispatch(postLocations(zipCodes))
@@ -197,8 +190,8 @@ function Breeds() {
 
       setIsSearchingBreed_ZipCodes(true)
       setIsSearchingAllLocations(false)
-      setLoading(false)
       await dispatch(clearLocationsSearch())
+      setLoading(false)
 
       //SEARCH BY LOCATION AND OTHER PARAMETERS
     } else if (otherParameters && (chooseCity || chooseStates || chooseGeoBoundingBox)) {
@@ -301,8 +294,9 @@ function Breeds() {
 
   }
 
-
-  let results = doggyBreeds.filter((word) => word.includes(capitalLetterWord)) //filtering the Dog Breeds array
+  if(searching.length > 0) {
+    results = doggyBreeds.filter((word) => word.includes(capitalLetterWord)) //filtering the Dog Breeds array
+  }
 
   //Adding a breed to the Breed Array
   let addBreed = (selectedBreed) => {
@@ -465,7 +459,7 @@ function Breeds() {
 
         <div className='gridArea1-1'>
           <div className='gridArea11-r1'>
-            {searching && results.length > 0 && menu ? (
+            {results.length > 0 && menu ? (
               <div className="results">
                 {results.map((word, index) => (
                   <ul key={index} className='resultList' onClick={() => { setSearching(word); setMenu(false) }}>{word}</ul>
