@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getMatched, getLikeDogs, clearMatchedDog } from '../../redux/dogsSlice';
 import { selectUser } from '../../redux/usersSlice';
 import { useModal } from '../Context/Modal';
-import Map from '../Map'
+// import Map from '../Map'
 import './Match.css'
 import balloons from '../../assets/balloons.png'
 import confetti_right from '../../assets/confetti-5182.png'
@@ -27,7 +27,7 @@ function Match() {
       {matched ? (
         <>
           <div className='gridArea11'>
-          <div><img src={confetti_right} className="confettiPic" alt='confettiimg' />CONGRATULATIONS {user}!!!! <img src={confetti_left} className="confettiPic" alt='confettiimg' /></div></div>
+          <div className='congrats'><img src={confetti_right} className="confettiPic" alt='confettiimg' />CONGRATULATIONS {user}!!!! <img src={confetti_left} className="confettiPic" alt='confettiimg' /></div></div>
           <div className='gridArea21'>
           <div>YOU ARE MATCHED WITH: {matched[0]?.name}<img src={balloons} className="confettiPic" alt='confettiimg' /></div></div>
 
@@ -38,8 +38,9 @@ function Match() {
           <div>{matched[0]?.age} yrs old</div>
           <div>{matched[0]?.breed}</div></div>
 
-          <div className='gridArea41'>
-          <div><Map location={matched} /></div></div>
+          {/* <div className='gridArea41'> */}
+          {/* <div><Map location={matched} /></div> */}
+          {/* </div> */}
 
 
         </>

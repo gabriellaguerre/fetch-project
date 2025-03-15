@@ -2,7 +2,7 @@ import React, {useEffect, useState, useRef} from "react";
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigate} from 'react-router';
 import { logout } from "../../redux/usersSlice";
-import { getDogBreed, breeds} from '../../redux/dogsSlice';
+import { getDogBreed, breeds, clearAllData} from '../../redux/dogsSlice';
 import profile from '../../assets/puppy_profile_pic.png';
 import './Profile.css';
 
@@ -22,7 +22,7 @@ function Profile({user}) {
         dispatch(breeds());
       }, [dispatch]);
 
-   
+
     //toggles the profile menu
     const openMenu = (e) => {
       e.stopPropagation();
@@ -33,7 +33,7 @@ function Profile({user}) {
     useEffect(() => {
       if (!showMenu) return;
 
-      //closes the menu 
+      //closes the menu
       const closeMenu = (e) => {
         if (ulRef.current && !ulRef.current.contains(e.target)) {
           setShowMenu(false);
@@ -49,6 +49,7 @@ function Profile({user}) {
 
      //logs out the user
       const logoutUser = () => {
+          dispatch(clearAllData());
           dispatch(logout());
           navigate('/');
         }

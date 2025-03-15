@@ -34,7 +34,6 @@
     right: 10px;
     top: 70px;
     width: auto;
-    /* width:auto; */
     padding-inline: 10px;
     box-shadow: 0px 2px 6px .25px black;
   }
@@ -49,7 +48,13 @@
     text-align: center;
   }
 
- 
+  .userName {
+    max-width: 150px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
   .userName, .buttonDiv {
     margin: 5px;
   }
@@ -68,11 +73,6 @@
     text-decoration: none;
     cursor: default;
   }
-
-  /* a {
-    text-decoration: none;
-    color: white;
-  } */
 
   .breedSearchLink, .locationSearchLink {
     margin: 3px;

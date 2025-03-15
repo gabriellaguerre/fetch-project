@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addLikeDog, getSearches, getLikeDogs, getDogDetails, postSearchDog2, nextPrevList, dogMatch, removeLikeDog} from '../../redux/dogsSlice';
+import { addLikeDog, getSearches, getLikeDogs, getDogDetails, postSearchDog2, nextPrevList, dogMatch, removeLikeDog } from '../../redux/dogsSlice';
 import { searchLocations, allLocations, postLocations } from '../../redux/locationsSlice'
 import OpenModalButton from '../OpenModalButton';
 // import { motion } from "framer-motion";
@@ -36,12 +36,12 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
   let previousUrl = searchResult?.prev
   let list = searchResult?.resultIds
   // console.log(page, 'page line 36')
-  
+
   // console.log(loading, 'loading line 38')
   // console.log(updatedArray, 'updatedArray line 39')
   let from1;
   let to1;
- 
+
   //If doing a Search By Location, then the total is determined by the created array, else get the total from the server
   if (allLocationsSearch) {
     total = mergedArray.length
@@ -50,33 +50,33 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
     total = searchResult?.total;
   }
 
- 
-  //If the user clicks on the ClearAll button, then reset the page to 1 
-  useEffect(()=> {
-    if(clearAllPressed) setPage(1)
+
+  //If the user clicks on the ClearAll button, then reset the page to 1
+  useEffect(() => {
+    if (clearAllPressed) setPage(1)
   }, [clearAllPressed])
 
-  //Checking if the user is Searching By BREED 
+  //Checking if the user is Searching By BREED
   useEffect(() => {
     // setLoading(true)
     if (locationsList && breedZipCodeSearch) {
-      
+
       const mergedData = details.map(dog => {
         const locationData = locationsList?.find(location => location?.zip_code === dog.zip_code);
         return locationData ? { ...dog, locationData } : null
       }).filter(dog => dog !== null)
 
       setUpdatedArray(mergedData)
-      
+
     }
-    
+
   }, [details, locationsList, breedZipCodeSearch])
 
   //Checking if the user is Searching By LOCATION
   useEffect(() => {
     // setLoading(true)
     if (searchLocationsList.length > 0 && allLocationsSearch) {
-      
+
       const mergedData = details.map(dog => {
         const locationData = searchLocationsList?.find(location => location?.zip_code === dog.zip_code)
         return locationData ? { ...dog, locationData } : null
@@ -86,14 +86,14 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
 
       let newArray = mergedData.slice(from, to)
       setUpdatedArray(newArray)
-      
+
     }
   }, [details, searchLocationsList, allLocationsSearch, from, to])
 
-  
+
   //Setting the Total Page when the user is changing the Size and to avoid the word Infinity to be displayed
-  useEffect(()=> {
-    if(loading) setPage(1)
+  useEffect(() => {
+    if (loading) setPage(1)
     if (totalPageProp === Infinity || totalPageProp < 0) setTotalPage(0)
   }, [totalPageProp, loading])
 
@@ -105,10 +105,10 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
       setPage(1)
       setTo(Number(size))
       setFrom(0)
-      
+
     }
 
-  }, [totalPage,sizeChange, mergedArray, size])
+  }, [totalPage, sizeChange, mergedArray, size])
 
 
   //Handles the Next button and depends on if the user is Searching By BREED or By LOCATION
@@ -148,7 +148,7 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
 
   const handlePrevious = async () => {
 
-     //The user is Searching By Location and the results displayed are managed with the complete array of data
+    //The user is Searching By Location and the results displayed are managed with the complete array of data
     if (allLocationsSearch) {
       from1 = from - size
       to1 = to - size
@@ -172,7 +172,7 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
 
     }
 
-     //The user is Searching By BREED and the results displayed are managed by the server
+    //The user is Searching By BREED and the results displayed are managed by the server
     if (breedZipCodeSearch) {
       let getPrevList = await dispatch(nextPrevList(previousUrl));
       let dogData = await dispatch(postSearchDog2(getPrevList.payload.resultIds))
@@ -234,7 +234,7 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
       <div className='selectedDogsList'>
         {likeList.map((dog) =>
           <div key={dog.id} className='selectedDogsSet'>
-             <div>{dog.breed}</div>
+            <div>{dog.breed}</div>
             <div><img src={dog.img} className='dogImageSelected' alt='dogImageSelected' /> </div>
             <div>{dog.name}</div>
             <div><button className='removeDogFromList' onClick={() => removeLike(dog.id)}><img src={deleteImg} className="deletePic_breedsresult" alt='deleteimg' /></button></div>
@@ -242,65 +242,65 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
         )}
       </div>
       {loading ? (
-         <div className="loadingMessage">FETCHING<span className="dotOne">.</span>
-         <span className="dotTwo">.</span>
-         <span className="dotThree">.</span></div> 
-      ):(
-      <>
-      <div className='topRow'>
-        <div className='totalFinds'>Total Finds: {total}</div>
-        <div className='nexPrevButtons'>
-          {(allLocationsSearch) ? (
-            <>
-              <button className='prevButton' onClick={() => { setPage(page - 1); handlePrevious() }} disabled={isPrevDisabled || page === 1}>&lt; Previous</button>
-              <button className='nextButton' onClick={() => { setPage(page + 1); handleNext() }} disabled={isNextDisabled || page === totalPageProp}>Next &gt;</button></>
-          ) : (
-            <>
-              <button className='prevButton' onClick={() => { setPage(page - 1); handlePrevious() }} disabled={!previousUrl || page === 0}>&lt; Previous</button>
-              <button className='nextButton' onClick={() => { setPage(page + 1); handleNext() }} disabled={(!nextUrl || list?.length === 0) || page === totalPageProp}>Next &gt;</button></>
-          )}
-
-
-          {(details.length > 0 && totalPageProp && size) && (
-            <div className="pageInfo">page {page} of {totalPageProp} pages</div>
-          )}
-        </div>
-      </div>
-
-      {details.length > 0 ? (
-        <>
-        <div className='resultDisplayed'>
-          {updatedArray?.map(dog =>
-            <button key={dog?.id} className={`dogSet ${selectedDogs.has(dog?.id) ? "selected" : ""}`} onClick={() => likeDogs(dog)}>
-              <div className='dogBreed-BR'>{dog?.breed}</div>
-              <div className='dogImg-BR'><img src={dog?.img} className='dogImage' alt='dogImage'/> </div>
-              <div className='dogNameAge-BR'>{dog?.name} {dog?.age} yrs</div>
-
-              {dog?.locationData && (
-                <>
-                  <div className='dogLocationData-BR'>{dog?.locationData?.city}, {dog?.locationData?.state} {dog?.locationData?.zip_code}</div>
-
-                  <div className='dogCounty-BR'>{dog?.locationData?.county} County</div>
-                </>
-              )}
-            </button>
-          )}
-        </div>
-        <div className='certified'>This site is certified Paw Approved <img src={paw} className='pawImage' alt='pawImage'/></div>
-        </>
+        <div className="loadingMessage">FETCHING<span className="dotOne">.</span>
+          <span className="dotTwo">.</span>
+          <span className="dotThree">.</span></div>
       ) : (
         <>
-        <div className='emptyData'>
-        
-         <div className='noResults'>There Are No Results... </div>
-       
-          <div className='waitingDogDiv'><img src={dogWaiting} className='waitingDogImg' alt='waitingDogImg'/></div>
-        </div>
-        <div className='certified'>This site is certified Paw Approved <img src={paw} className='pawImage' alt='pawImage'/></div>
+          <div className='topRow'>
+            <div className='totalFinds'>Total Finds: {total}</div>
+            <div className='nexPrevButtons'>
+              {(allLocationsSearch) ? (
+                <>
+                  <button className='prevButton' onClick={() => { setPage(page - 1); handlePrevious() }} disabled={isPrevDisabled || page === 1}>&lt; Previous</button>
+                  <button className='nextButton' onClick={() => { setPage(page + 1); handleNext() }} disabled={isNextDisabled || page === totalPageProp}>Next &gt;</button></>
+              ) : (
+                <>
+                  <button className='prevButton' onClick={() => { setPage(page - 1); handlePrevious() }} disabled={!previousUrl || page === 0}>&lt; Previous</button>
+                  <button className='nextButton' onClick={() => { setPage(page + 1); handleNext() }} disabled={(!nextUrl || list?.length === 0) || page === totalPageProp}>Next &gt;</button></>
+              )}
+
+
+              {(details.length > 0 && totalPageProp && size) && (
+                <div className="pageInfo">page {page} of {totalPageProp} pages</div>
+              )}
+            </div>
+          </div>
+
+          {details.length > 0 ? (
+            <>
+              <div className='resultDisplayed'>
+                {updatedArray?.map(dog =>
+                  <button key={dog?.id} className={`dogSet ${selectedDogs.has(dog?.id) ? "selected" : ""}`} onClick={() => likeDogs(dog)}>
+                    <div className='dogBreed-BR'>{dog?.breed}</div>
+                    <div className='dogImg-BR'><img src={dog?.img} className='dogImage' alt='dogImage' /> </div>
+                    <div className='dogNameAge-BR'>{dog?.name} {dog?.age} yrs</div>
+
+                    {dog?.locationData && (
+                      <>
+                        <div className='dogLocationData-BR'>{dog?.locationData?.city}, {dog?.locationData?.state} {dog?.locationData?.zip_code}</div>
+
+                        <div className='dogCounty-BR'>{dog?.locationData?.county} County</div>
+                      </>
+                    )}
+                  </button>
+                )}
+              </div>
+              <div className='certified'>This site is certified Paw Approved <img src={paw} className='pawImage' alt='pawImage' /></div>
+            </>
+          ) : (
+            <>
+              <div className='emptyData'>
+
+                <div className='noResults'>There Are No Results... </div>
+
+                <div className='waitingDogDiv'><img src={dogWaiting} className='waitingDogImg' alt='waitingDogImg' /></div>
+              </div>
+              <div className='certified'>This site is certified Paw Approved <img src={paw} className='pawImage' alt='pawImage' /></div>
+            </>
+          )}
         </>
       )}
-   </>
-    )}
     </>
 
   )

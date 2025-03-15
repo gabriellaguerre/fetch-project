@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { selectUser } from '../../redux/usersSlice';
 import Profile from '../Profile';
@@ -32,7 +32,7 @@ function Breeds() {
   const bodyParams = useSelector(geoBoundingData);
 
   let geoChoices = bodyParams.geoBoundingBox ? Object.keys(bodyParams.geoBoundingBox) : [];
-  
+
 
 
   const [allFilterButtons, setAllFilterButtons] = useState(false);
@@ -107,7 +107,7 @@ function Breeds() {
     await dispatch(clearDogDetails())
     await dispatch(clearAllLocationData())
 
-  //SEARCH BY BREED AND FILTERS 
+    //SEARCH BY BREED AND FILTERS
     if (!otherParameters && selected.length === 0) {
       setError("Please Select a Breed to Search")
       return
@@ -148,7 +148,7 @@ function Breeds() {
 
       // searchParams.breeds = selected;
       searchParams.breeds.forEach(breed => urlFrontend.searchParams.append('breeds', breed));
-      
+
       urlFrontend.searchParams.append('size', searchParams.size)
 
       // searchParams.from = from;
@@ -172,14 +172,14 @@ function Breeds() {
         { key: 'breed', asc: breedAsc, desc: breedDesc },
         { key: 'name', asc: nameAsc, desc: nameDesc },
         { key: 'age', asc: ageAsc, desc: ageDesc }
-    ];
+      ];
 
-    const sortParam = sortingOptions.find(option => option.asc || option.desc);
-    const sortValue = sortParam ? `${sortParam.key}:${sortParam.asc ? 'asc' : 'desc'}` : 'breed:asc';
+      const sortParam = sortingOptions.find(option => option.asc || option.desc);
+      const sortValue = sortParam ? `${sortParam.key}:${sortParam.asc ? 'asc' : 'desc'}` : 'breed:asc';
 
-    searchParams.sort = sortValue;
-    urlFrontend.searchParams.append('sort', sortValue);
-//****************************************************************************************************** */
+      searchParams.sort = sortValue;
+      urlFrontend.searchParams.append('sort', sortValue);
+      //****************************************************************************************************** */
       // if (breed && breedAsc) {
       //   searchParams.sort = 'breed:asc'
       //   urlFrontend.searchParams.append('sort', searchParams.sort)
@@ -212,7 +212,7 @@ function Breeds() {
       //   urlFrontend.searchParams.append('sort', searchParams.sort)
       // }
 
-/*************************************************************************************************** */
+      /*************************************************************************************************** */
 
 
 
@@ -228,7 +228,7 @@ function Breeds() {
       // console.log(dogData, 'dogData line 208')
       let zipCodes = dogData.payload.map(dog => dog.zip_code)
       // console.log(zipCodes, 'zipCodes line 210')
-       await dispatch(postLocations(zipCodes))
+      await dispatch(postLocations(zipCodes))
       // let getZipCodes = await dispatch(postLocations(zipCodes))
       // console.log(getZipCodes, 'getZipCodes line 212')
 
@@ -237,18 +237,18 @@ function Breeds() {
       setLoading(false)
       await dispatch(clearLocationsSearch())
 
-    //SEARCH BY LOCATION AND OTHER PARAMETERS    
+      //SEARCH BY LOCATION AND OTHER PARAMETERS
     } else if (otherParameters && (chooseCity || chooseStates || chooseGeoBoundingBox)) {
-    
+
       await dispatch(clearDogDetails())
       await dispatch(clearZCLocations())
       await dispatch(clearLocationsSearch())
       await dispatch(clearGeoBounding())
 
       let params = {}
-    
+
       const dogSearchUrl2 = 'https://frontend-take-home-service.fetch.com/dogs/search?';
-    
+
 
       if (chooseCity && city) params.city = city
       if (chooseStates || states.length > 0) params.states = states
@@ -261,19 +261,19 @@ function Breeds() {
 
 
       let locationSearchData = await dispatch(postSearchLocations(params))
-      
+
 
       let justZipCodes = locationSearchData.payload.results.map(location => location.zip_code)
-      
+
 
       //Add a delay to avoid overloading server
-     const delay = async (ms) => {
+      const delay = async (ms) => {
         return new Promise(resolve => setTimeout(resolve, ms));
       }
 
       let dogBatches = []
 
-      //fetching dog details per batch 
+      //fetching dog details per batch
       const fetchAllDogDetails = async () => {
         let allDogDetails = []
         for (let index = 0; index < dogBatches.length; index++) {
@@ -342,7 +342,7 @@ function Breeds() {
 
 
   let results = doggyBreeds.filter((word) => word.includes(capitalLetterWord)) //filtering the Dog Breeds array
- 
+
   //Adding a breed to the Breed Array
   let addBreed = (selectedBreed) => {
     if (selected.length >= 3) {
@@ -483,15 +483,16 @@ function Breeds() {
 
   //When the UPdate Button is clicked, determines if the size should be modified in the array in BreedsResults or Call the Search Funtion with a new size
   const searchAction = (tempSize) => {
-  
+    setLoading(false)
     setSize(Number(tempSize))
     setSizeChange(true);
     setTimeout(() => setSizeChange(false), 100);
-    setLoading(false)
+
     if (!otherParameters) {
+      setLoading(true)
       search(tempSize)
       return
-    } 
+    }
   }
 
   return (
@@ -774,10 +775,10 @@ function Breeds() {
               className='sizeInputBreed'
               type="number"
               value={tempSize}
-              onFocus={() => {setUpdateButton(true); setError("") }}
-              onChange={(e) =>setTempSize(e.target.value)} />
+              onFocus={() => { setUpdateButton(true); setError("") }}
+              onChange={(e) => setTempSize(e.target.value)} />
 
-            <button className='updateButton' onClick={() => {searchAction(tempSize); setLoading(true)}}  disabled={!updateButton}>Update</button></div>
+            <button className='updateButton' onClick={() => { searchAction(tempSize)}} disabled={!updateButton}>Update</button></div>
 
 
         </div>
@@ -800,8 +801,8 @@ function Breeds() {
       <div className='searchBreed'><button className='searchBreedButton' onClick={() => { search(); setMenu(false); setFrom(0); setLoading(true) }}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg' /></button>
         <button className='clearAllButton' onClick={clearAll}>Clear All</button></div>
 
-      <div className='breedResult'><BreedsResult size={size} sizeChange={sizeChange} totalPage={Math.ceil(Number(searchResult?.total) / Number(size))} 
-                breedZipCodeSearch={isSearchingBreed_ZipCodes} allLocationsSearch={isSearchingAllLocations} clearAllPressed={clearAllPressed} loading={loading}/></div>
+      <div className='breedResult'><BreedsResult size={size} sizeChange={sizeChange} totalPage={Math.ceil(Number(searchResult?.total) / Number(size))}
+        breedZipCodeSearch={isSearchingBreed_ZipCodes} allLocationsSearch={isSearchingAllLocations} clearAllPressed={clearAllPressed} loading={loading} /></div>
     </>
   );
 }

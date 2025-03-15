@@ -12,17 +12,17 @@ const initialState = {
   }
 
   export const login = createAsyncThunk('user/LOGIN_USER', async ({name, email}) => {
-    console.log(name, "name", email, 'email')
+
     const response = await fetch(loginUsersURL, {
     method: 'POST',
     headers: {"Content-Type": "application/json",},
     body: JSON.stringify({name: name, email: email}),
     credentials: 'include',
     })
-    console.log(response, 'response')
+
     if(response.ok){
        return  { name: name };
-     }  
+     }
 })
 
 export const logout = createAsyncThunk('user/LOGOUT_USER', async () => {
@@ -31,7 +31,7 @@ export const logout = createAsyncThunk('user/LOGOUT_USER', async () => {
         headers: {"Content-Type": "application/json"},
         credentials: 'include',
     })
-    console.log(response);
+    // console.log(response);
     if(response.ok){
         return { users: null }
     }
