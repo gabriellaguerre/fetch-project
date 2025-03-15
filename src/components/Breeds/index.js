@@ -179,43 +179,6 @@ function Breeds() {
 
       searchParams.sort = sortValue;
       urlFrontend.searchParams.append('sort', sortValue);
-      //****************************************************************************************************** */
-      // if (breed && breedAsc) {
-      //   searchParams.sort = 'breed:asc'
-      //   urlFrontend.searchParams.append('sort', searchParams.sort)
-      // }
-      // if (breed && breedDesc) {
-      //   searchParams.sort = 'breed:desc'
-      //   urlFrontend.searchParams.append('sort', searchParams.sort)
-      // }
-
-      // if (name && nameAsc) {
-      //   searchParams.sort = 'name:asc'
-      //   urlFrontend.searchParams.append('sort', searchParams.sort)
-      // }
-      // if (name && nameDesc) {
-      //   searchParams.sort = 'name:desc'
-      //   urlFrontend.searchParams.append('sort', searchParams.sort)
-      // }
-
-      // if (age && ageAsc) {
-      //   searchParams.sort = 'age:asc'
-      //   urlFrontend.searchParams.append('sort', searchParams.sort)
-      // }
-      // if (age && ageDesc) {
-      //   searchParams.sort = 'age:desc'
-      //   urlFrontend.searchParams.append('sort', searchParams.sort)
-      // }
-
-      // if (!breed && !name && !age) {
-      //   searchParams.sort = 'breed:asc'
-      //   urlFrontend.searchParams.append('sort', searchParams.sort)
-      // }
-
-      /*************************************************************************************************** */
-
-
-
 
       setError("")
 
@@ -334,8 +297,6 @@ function Breeds() {
       setIsSearchingBreed_ZipCodes(false)
       setIsSearchingAllLocations(true)
       setLoading(false)
-      // setCityChange(false)
-      // setStateChange(false)
     }
 
   }
@@ -439,7 +400,6 @@ function Breeds() {
 
     let allCapsState = selectedState.toUpperCase()
     const stateRegex = /^(AL|AK|AZ|AR|CA|CO|CT|DE|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WA|WV|WI|WY)$/;
-
 
     if (states.includes(allCapsState)) {
       setError("This State is Already in Your List")
