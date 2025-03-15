@@ -24,7 +24,7 @@
     cursor: pointer;
 }
 
-/*********************************ulClassName***************************/
+/*****************************************ULCLASSNAME **************************/
 .profile-dropdown {
     background-color: rgb(255, 168, 6);
     border-radius: 6px;
@@ -41,8 +41,6 @@
   .hidden {
     display: none;
   }
-
-  /*********************************************************************/
 
  .menu {
     text-align: center;
@@ -67,13 +65,4 @@
     font-weight: bold;
   }
 
-  .disabled-link {
-    pointer-events: none;
-    color: gray;
-    text-decoration: none;
-    cursor: default;
-  }
-
-  .breedSearchLink, .locationSearchLink {
-    margin: 3px;
-  }
+ 
