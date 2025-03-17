@@ -29,6 +29,7 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
   const [isNextDisabled, setIsNextDisabled] = useState(false)
   const [from, setFrom] = useState(0)
   const [to, setTo] = useState(size)
+  const [pressedDog, setPressedDog] = useState(null);
 
 
   let total;
@@ -196,6 +197,8 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
       }
       return newSelectedDogs;
     });
+    setPressedDog(dog.id);
+    setTimeout(() => setPressedDog(null), 200);
   }
 
   //Removes a favorite dog from the favorites list

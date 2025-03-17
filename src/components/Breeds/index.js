@@ -112,6 +112,13 @@ function Breeds() {
   //Search either by BREED or by LOCATION
   const search = async (tempSize) => {
 
+    if(selected.length === 0 && !filters && !otherParameters) {
+      setLoading(false)
+      setError('Please Select a Breed or Search By Location')
+      return
+    }
+
+    setLoading(true)
     await dispatch(clearDogDetails())
     await dispatch(clearAllLocationData())
 
@@ -463,7 +470,7 @@ function Breeds() {
       return
     }
   }
-
+  
   return (
     <>
       <Profile user={user} />
@@ -513,10 +520,10 @@ function Breeds() {
 
         <div className='gridArea1-2'>
           <div className='gridArea12-r1'>
-            <button className='allFilterButton' onClick={() => { setAllFilterButtons(!allFilterButtons); setOtherParameters(false); setFilters(false); setSort(false) }}>
+            <button className={('allFilterButton') + (allFilterButtons ? 'selected' : '')} onClick={() => { setAllFilterButtons(!allFilterButtons); setOtherParameters(false); setFilters(false); setSort(false) }}>
               <div><img src={filterImg} className="filterPic" alt='filterimg' /></div>
               <div> Filters</div></button>
-            <button className='searchByLocationButton' onClick={() => { setOtherParameters(!otherParameters); setAllFilterButtons(false); setFilters(false); setSort(false); setChooseStates(false); setChooseCity(false) }}>Search By Location</button>
+            <button className={'searchByLocationButton' + (otherParameters ? 'selected' : '')} onClick={() => { setOtherParameters(!otherParameters); setAllFilterButtons(false); setFilters(false); setSort(false); setChooseStates(false); setChooseCity(false) }}>Search By Location</button>
 
           </div>
 
@@ -767,7 +774,7 @@ function Breeds() {
 
       </div>
 
-      <div className='searchBreed'><button className='searchBreedButton' onClick={() => { search(); setMenu(false); setFrom(0); setLoading(true) }}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg' /></button>
+      <div className='searchBreed'><button className='searchBreedButton' onClick={() => { search(); setMenu(false); setFrom(0);  }}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg' /></button>
         <button className='clearAllButton' onClick={clearAll}>Clear All</button></div>
 
       <div className='breedResult'><BreedsResult size={size} sizeChange={sizeChange} totalPage={Math.ceil(Number(searchResult?.total) / Number(size))}
