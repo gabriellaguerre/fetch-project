@@ -118,7 +118,7 @@ function Breeds() {
       return
     }
 
-    if((allFilterButtons && filters) && ((minAge.length===0) || (maxAge.length===0))) {
+    if(filters && minAge.length===0 && maxAge.length===0) {
       setError("Please Enter an Age")
       return
     } 
@@ -201,11 +201,19 @@ function Breeds() {
         { key: 'age', asc: ageAsc, desc: ageDesc }
       ];
 
+      // console.log(breedAsc,'breedAsc', breedDesc, 'breedDesc')
+      // console.log(nameAsc,'nameAsc', nameDesc, 'nameDesc')
+      // console.log(ageAsc,'ageAsc', ageDesc, 'ageDesc')
+      console.log(minAge, 'minAge', maxAge, 'maxAge', 'line 207')
+
       const sortParam = sortingOptions.find(option => option.asc || option.desc);
+      // console.log(sortParam, 'sortParam line 205')
+      
       const sortValue = sortParam ? `${sortParam.key}:${sortParam.asc ? 'asc' : 'desc'}` : 'breed:asc';
 
       searchParams.sort = sortValue;
       urlFrontend.searchParams.append('sort', sortValue);
+      // console.log(sortValue, 'sortValue line 209')
 
       setError("")
 
@@ -562,7 +570,7 @@ function Breeds() {
           <div className='gridArea12-r2'>
             {allFilterButtons && (
               <div className='breedFilterChosen'>
-                <button className='filterButton' onClick={() => { clearFilters(); setFilters(!filters); setError("") }}>Age Filters</button>
+                <button className='filterButton' onClick={() => { clearFilters(); setFilters(!filters); setError(""); setMinAge(""); setMaxAge("")}}>Age Filters</button>
                 <div><button className='filterButton' onClick={() => { clearSort(); setSort(!sort); setError("") }}><img src={sortImg} className="filterPic" alt='sortimg' />Sort By</button></div>
               </div>
             )}
@@ -707,12 +715,12 @@ function Breeds() {
                     <input
                       type="checkbox"
                       value={breed}
-                      onChange={() => { setBreed(!breed) }}
+                      onChange={() => { setBreed(!breed);}}
                     />Breed: </label>
                   {breed && (
-                    <div><button className={ascBreed} onClick={() => { setBreedAsc(true); setBreedDesc(false) }}>
+                    <div><button className={ascBreed} onClick={() => { setBreedAsc(true); setBreedDesc(false); setAgeAsc(false);setAgeDesc(false);setNameAsc(false); setNameDesc(false); }}>
                       <img src={ascImg} className="ascPic" alt='ascimg' /></button>
-                      <button className={descBreed} onClick={() => { setBreedAsc(false); setBreedDesc(true) }}><img src={descImg} className="descPic" alt='descimg' /></button>
+                      <button className={descBreed} onClick={() => { setBreedAsc(false); setBreedDesc(true); setAgeAsc(false);setAgeDesc(false);setNameAsc(false); setNameDesc(false); }}><img src={descImg} className="descPic" alt='descimg' /></button>
                     </div>
                   )}
 
@@ -724,11 +732,11 @@ function Breeds() {
                     <input
                       type="checkbox"
                       value={name}
-                      onChange={() => setName(!name)}
+                      onChange={() => {setName(!name); }}
                     />Name: </label>
                   {name && (
-                    <div><button className={ascName} onClick={() => { setNameAsc(true); setNameDesc(false) }}><img src={ascImg} className="ascPic" alt='ascimg' /></button>
-                      <button className={descName} onClick={() => { setNameAsc(false); setNameDesc(true) }}><img src={descImg} className="descPic" alt='descimg' /></button>
+                    <div><button className={ascName} onClick={() => { setNameAsc(true); setNameDesc(false); setBreedAsc(false); setBreedDesc(false); setAgeAsc(false);setAgeDesc(false) }}><img src={ascImg} className="ascPic" alt='ascimg' /></button>
+                      <button className={descName} onClick={() => { setNameAsc(false); setNameDesc(true); setBreedAsc(false); setBreedDesc(false); setAgeAsc(false);setAgeDesc(false) }}><img src={descImg} className="descPic" alt='descimg' /></button>
                     </div>
                   )}
 
@@ -739,11 +747,11 @@ function Breeds() {
                     <input
                       type="checkbox"
                       value={age}
-                      onChange={() => setAge(!age)}
+                      onChange={() => {setAge(!age);}}
                     />Age: </label>
-                  {age && (
-                    <div className='ageSort'><button className={ascAge} onClick={() => { setAgeAsc(true); setAgeDesc(false) }}><img src={ascImg} className="ascPic" alt='ascimg' /></button>
-                      <button className={descAge} onClick={() => { setAgeAsc(false); setAgeDesc(true) }}><img src={descImg} className="descPic" alt='descimg' /></button>
+                  {age &&(
+                    <div className='ageSort'><button className={ascAge} onClick={() => { setAgeAsc(true); setAgeDesc(false); setBreedAsc(false); setBreedDesc(false); setNameAsc(false); setNameDesc(false) }}><img src={ascImg} className="ascPic" alt='ascimg' /></button>
+                      <button className={descAge} onClick={() => { setAgeAsc(false); setAgeDesc(true); setBreedAsc(false); setBreedDesc(false);setNameAsc(false);setNameDesc(false) }}><img src={descImg} className="descPic" alt='descimg' /></button>
                     </div>
                   )}
 
