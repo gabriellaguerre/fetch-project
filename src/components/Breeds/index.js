@@ -211,7 +211,7 @@ function Breeds() {
 
       setUpdateButton(false);
       let searchDogResults = await dispatch(searchDog(urlFrontend));
-      console.log(searchDogResults, 'searchDogResults line 205')
+      // console.log(searchDogResults, 'searchDogResults line 205')
 
       if(searchDogResults.meta.requestStatus==="rejected") {
         setLoading(false)
@@ -485,7 +485,7 @@ function Breeds() {
   //When the UPdate Button is clicked, determines if the size should be modified in the array in BreedsResults or Call the Search Funtion with a new size
   const searchAction = (tempSize) => {
    
-    if (Number(size) <= 0) {
+    if (Number(tempSize) <= 0) {
       setError("Enter a Valid Number of Dogs To Display")
       setSize(25);
       return;

@@ -31,7 +31,7 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
   const [to, setTo] = useState(size)
   const [pressedDog, setPressedDog] = useState(null);
 
-
+  console.log(size, 'size line 34')
   let total;
   let nextUrl = searchResult?.next;
   let previousUrl = searchResult?.prev
