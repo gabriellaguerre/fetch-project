@@ -112,7 +112,7 @@ function Breeds() {
   //Search either by BREED or by LOCATION
   const search = async (tempSize) => {
 
-    if(selected.length === 0 && !filters && !otherParameters) {
+    if(selected.length === 0 && !filters && !otherParameters && selectedZipCode.length===0) {
       setLoading(false)
       setError('Please Select a Breed or Search By Location')
       return
@@ -134,10 +134,10 @@ function Breeds() {
     await dispatch(clearAllLocationData())
 
     //SEARCH BY BREED AND FILTERS
-    if (!otherParameters && selected.length === 0) {
-      setError("Please Select a Breed to Search")
-      return
-    }
+    // if (!otherParameters && selected.length === 0) {
+    //   setError("Please Select a Breed to Search")
+    //   return
+    // }
 
     if (!otherParameters) {
       const urlFrontend = new URL(dogSearchUrl);
@@ -181,9 +181,13 @@ function Breeds() {
       // searchParams.from = from;
       urlFrontend.searchParams.append('from', searchParams.from)
 
-      if (location && selectedZipCode.length > 0) {
+
+      if (selectedZipCode.length < 16) {
         searchParams.zipCodes = selectedZipCode;
         searchParams.zipCodes.forEach(zipCode => urlFrontend.searchParams.append('zipCodes', zipCode));
+      } else {
+        setError("A Maximum of 15 Zip Codes is Allowed")
+        return
       }
 
       if (minimumAge && minAge) {
@@ -768,7 +772,7 @@ function Breeds() {
 
         <div className='gridArea3-2'>
 
-          {(allFilterButtons || otherParameters) && (
+          {allFilterButtons && (
             <div className='zipCodeEntry'>
               <div>
                 <input
@@ -781,7 +785,7 @@ function Breeds() {
                   onChange={(e) => { setZipCode(e.target.value); setError("") }}
                 /> </div>
 
-              <div><button className='addZipButton' onClick={() => { addZipCode(zipCode); setZipCode("") }} disabled={(chooseCity || chooseStates)}><img src={plusImg} className="searchPic" alt='plusimg' /></button></div>
+              <div><button className='addZipButton' onClick={() => { addZipCode(zipCode); setZipCode("") }}><img src={plusImg} className="searchPic" alt='plusimg' /></button></div>
             </div>
 
           )}
