@@ -25,7 +25,7 @@ function Breeds() {
 
 
   const dispatch = useDispatch();
-   const ulRef = useRef();
+  const ulRef = useRef();
 
   const user = useSelector(selectUser);
   const doggyBreeds = useSelector(getDogBreed)
@@ -95,35 +95,35 @@ function Breeds() {
 
   let capitalLetterWord = searching?.[0]?.toUpperCase() + searching.substring(1)
 
-   useEffect(() => {
-        if (!menu) return;
+  useEffect(() => {
+    if (!menu) return;
 
-        //closes the menu
-        const closeMenu = (e) => {
-          if (ulRef.current && !ulRef.current.contains(e.target)) {
-            setMenu(false);
-          }
-        };
-        //event listerner to hide the menu
-        document.addEventListener("click", closeMenu);
-        return () => document.removeEventListener("click", closeMenu);
-      }, [menu]);
+    //closes the menu
+    const closeMenu = (e) => {
+      if (ulRef.current && !ulRef.current.contains(e.target)) {
+        setMenu(false);
+      }
+    };
+    //event listerner to hide the menu
+    document.addEventListener("click", closeMenu);
+    return () => document.removeEventListener("click", closeMenu);
+  }, [menu]);
 
   //Search either by BREED or by LOCATION
   const search = async (tempSize) => {
 
-    if(selected.length === 0 && !filters && !otherParameters && selectedZipCode.length===0) {
+    if (selected.length === 0 && !filters && !otherParameters && selectedZipCode.length === 0) {
       setLoading(false)
       setError('Please Select a Breed or Search By Location')
       return
     }
 
-    if(filters && minAge.length===0 && maxAge.length===0) {
+    if (filters && minAge.length === 0 && maxAge.length === 0) {
       setError("Please Enter an Age")
       return
-    } 
+    }
 
-    if((otherParameters && city.length===0 && states.length===0 && geoChoices.length===0)) {
+    if ((otherParameters && city.length === 0 && states.length === 0 && geoChoices.length === 0)) {
       setLoading(false)
       setError("Please Enter a City, a State, or Geo Bounding Data")
       return
@@ -134,11 +134,6 @@ function Breeds() {
     await dispatch(clearAllLocationData())
 
     //SEARCH BY BREED AND FILTERS
-    // if (!otherParameters && selected.length === 0) {
-    //   setError("Please Select a Breed to Search")
-    //   return
-    // }
-
     if (!otherParameters) {
       const urlFrontend = new URL(dogSearchUrl);
 
@@ -154,13 +149,6 @@ function Breeds() {
         size: updateButton ? tempSize : size,
         from: from
       };
-
-
-      if ((breed && name) || (breed && age) || (name && age)) {
-        setError("Choose 1 Sort Method")
-        setLoading(false)
-        return;
-      }
 
       if ((breed && !breedAsc && !breedDesc) || (name && !nameAsc && !nameDesc) || (age && !ageAsc && !ageDesc)) {
         setLoading(false)
@@ -205,19 +193,12 @@ function Breeds() {
         { key: 'age', asc: ageAsc, desc: ageDesc }
       ];
 
-      // console.log(breedAsc,'breedAsc', breedDesc, 'breedDesc')
-      // console.log(nameAsc,'nameAsc', nameDesc, 'nameDesc')
-      // console.log(ageAsc,'ageAsc', ageDesc, 'ageDesc')
-      console.log(minAge, 'minAge', maxAge, 'maxAge', 'line 207')
-
       const sortParam = sortingOptions.find(option => option.asc || option.desc);
-      // console.log(sortParam, 'sortParam line 205')
-      
+
       const sortValue = sortParam ? `${sortParam.key}:${sortParam.asc ? 'asc' : 'desc'}` : 'breed:asc';
 
       searchParams.sort = sortValue;
       urlFrontend.searchParams.append('sort', sortValue);
-      // console.log(sortValue, 'sortValue line 209')
 
       setError("")
 
@@ -225,7 +206,7 @@ function Breeds() {
       let searchDogResults = await dispatch(searchDog(urlFrontend));
       // console.log(searchDogResults, 'searchDogResults line 205')
 
-      if(searchDogResults.meta.requestStatus==="rejected") {
+      if (searchDogResults.meta.requestStatus === "rejected") {
         setLoading(false)
         setError("There is No Data For Your Selected Inputs")
         return
@@ -270,8 +251,8 @@ function Breeds() {
 
 
       let locationSearchData = await dispatch(postSearchLocations(params))
-      
-      if(locationSearchData.meta.requestStatus==="rejected") {
+
+      if (locationSearchData.meta.requestStatus === "rejected") {
         setLoading(false)
         setError("There is No Data For Your Selected Inputs")
         return
@@ -352,7 +333,7 @@ function Breeds() {
 
   }
 
-  if(searching.length > 0) {
+  if (searching.length > 0) {
     results = doggyBreeds.filter((word) => word.includes(capitalLetterWord)) //filtering the Dog Breeds array
   }
 
@@ -496,7 +477,7 @@ function Breeds() {
 
   //When the UPdate Button is clicked, determines if the size should be modified in the array in BreedsResults or Call the Search Funtion with a new size
   const searchAction = (tempSize) => {
-   
+
     if (Number(tempSize) <= 0) {
       setError("Enter a Valid Number of Dogs To Display")
       setSize(25);
@@ -514,7 +495,18 @@ function Breeds() {
       return
     }
   }
-  
+
+  //Avoids selecting multiple sorts
+  const makeSortChoice = () => {
+    if (breed) {
+      setAgeAsc(false); setAgeDesc(false); setNameAsc(false); setNameDesc(false)
+    } else if (name) {
+      setBreedAsc(false); setBreedDesc(false); setAgeAsc(false); setAgeDesc(false)
+    } else if (age) {
+      setBreedAsc(false); setBreedDesc(false); setNameAsc(false); setNameDesc(false)
+    }
+  }
+
   return (
     <>
       <Profile user={user} />
@@ -574,7 +566,7 @@ function Breeds() {
           <div className='gridArea12-r2'>
             {allFilterButtons && (
               <div className='breedFilterChosen'>
-                <button className='filterButton' onClick={() => { clearFilters(); setFilters(!filters); setError(""); setMinAge(""); setMaxAge("")}}>Age Filters</button>
+                <button className='filterButton' onClick={() => { clearFilters(); setFilters(!filters); setError(""); setMinAge(""); setMaxAge("") }}>Age Filters</button>
                 <div><button className='filterButton' onClick={() => { clearSort(); setSort(!sort); setError("") }}><img src={sortImg} className="filterPic" alt='sortimg' />Sort By</button></div>
               </div>
             )}
@@ -618,7 +610,7 @@ function Breeds() {
                   )}
                 </div>
                 <div className='geoBoundingArea'>
-                  <button className='openModalButton' onClick={() => {setChooseGeoBoundingBox(true); setError("")}} disabled={geoChoices.length > 0}><OpenModalButton
+                  <button className='openModalButton' onClick={() => { setChooseGeoBoundingBox(true); setError("") }} disabled={geoChoices.length > 0}><OpenModalButton
                     buttonText={<div className='geoBoundingBox'>Geo-Bounding Box</div>}
                     modalComponent={<GeoBoundingBox />}
                   /></button>
@@ -719,12 +711,13 @@ function Breeds() {
                     <input
                       type="checkbox"
                       value={breed}
-                      onChange={() => { setBreed(!breed);}}
+                      disabled={age || name}
+                      onChange={() => { setBreed(!breed); makeSortChoice() }}
                     />Breed: </label>
                   {breed && (
-                    <div><button className={ascBreed} onClick={() => { setBreedAsc(true); setBreedDesc(false); setAgeAsc(false);setAgeDesc(false);setNameAsc(false); setNameDesc(false); }}>
+                    <div><button className={ascBreed} onClick={() => { setBreedAsc(true); setBreedDesc(false); }}>
                       <img src={ascImg} className="ascPic" alt='ascimg' /></button>
-                      <button className={descBreed} onClick={() => { setBreedAsc(false); setBreedDesc(true); setAgeAsc(false);setAgeDesc(false);setNameAsc(false); setNameDesc(false); }}><img src={descImg} className="descPic" alt='descimg' /></button>
+                      <button className={descBreed} onClick={() => { setBreedAsc(false); setBreedDesc(true); }}><img src={descImg} className="descPic" alt='descimg' /></button>
                     </div>
                   )}
 
@@ -736,11 +729,12 @@ function Breeds() {
                     <input
                       type="checkbox"
                       value={name}
-                      onChange={() => {setName(!name); }}
+                      disabled={age || breed}
+                      onChange={() => { setName(!name); makeSortChoice() }}
                     />Name: </label>
                   {name && (
-                    <div><button className={ascName} onClick={() => { setNameAsc(true); setNameDesc(false); setBreedAsc(false); setBreedDesc(false); setAgeAsc(false);setAgeDesc(false) }}><img src={ascImg} className="ascPic" alt='ascimg' /></button>
-                      <button className={descName} onClick={() => { setNameAsc(false); setNameDesc(true); setBreedAsc(false); setBreedDesc(false); setAgeAsc(false);setAgeDesc(false) }}><img src={descImg} className="descPic" alt='descimg' /></button>
+                    <div><button className={ascName} onClick={() => { setNameAsc(true); setNameDesc(false); }}><img src={ascImg} className="ascPic" alt='ascimg' /></button>
+                      <button className={descName} onClick={() => { setNameAsc(false); setNameDesc(true); }}><img src={descImg} className="descPic" alt='descimg' /></button>
                     </div>
                   )}
 
@@ -751,11 +745,12 @@ function Breeds() {
                     <input
                       type="checkbox"
                       value={age}
-                      onChange={() => {setAge(!age);}}
+                      disabled={name || breed}
+                      onChange={() => { setAge(!age); makeSortChoice() }}
                     />Age: </label>
-                  {age &&(
-                    <div className='ageSort'><button className={ascAge} onClick={() => { setAgeAsc(true); setAgeDesc(false); setBreedAsc(false); setBreedDesc(false); setNameAsc(false); setNameDesc(false) }}><img src={ascImg} className="ascPic" alt='ascimg' /></button>
-                      <button className={descAge} onClick={() => { setAgeAsc(false); setAgeDesc(true); setBreedAsc(false); setBreedDesc(false);setNameAsc(false);setNameDesc(false) }}><img src={descImg} className="descPic" alt='descimg' /></button>
+                  {age && (
+                    <div className='ageSort'><button className={ascAge} onClick={() => { setAgeAsc(true); setAgeDesc(false); }}><img src={ascImg} className="ascPic" alt='ascimg' /></button>
+                      <button className={descAge} onClick={() => { setAgeAsc(false); setAgeDesc(true); }}><img src={descImg} className="descPic" alt='descimg' /></button>
                     </div>
                   )}
 
@@ -798,7 +793,7 @@ function Breeds() {
               onFocus={() => { setUpdateButton(true); setError("") }}
               onChange={(e) => setTempSize(e.target.value)} />
 
-            <button className='updateButton' onClick={() => { searchAction(tempSize)}} disabled={!updateButton}>Update</button></div>
+            <button className='updateButton' onClick={() => { searchAction(tempSize) }} disabled={!updateButton}>Update</button></div>
 
 
         </div>
@@ -818,7 +813,7 @@ function Breeds() {
 
       </div>
 
-      <div className='searchBreed'><button className='searchBreedButton' onClick={() => { search(); setMenu(false); setFrom(0);  }}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg' /></button>
+      <div className='searchBreed'><button className='searchBreedButton' onClick={() => { search(); setMenu(false); setFrom(0); }}>SEARCH<img src={searchImg} className="searchPic" alt='searchimg' /></button>
         <button className='clearAllButton' onClick={clearAll}>Clear All</button></div>
 
       <div className='breedResult'><BreedsResult size={size} sizeChange={sizeChange} totalPage={Math.ceil(Number(searchResult?.total) / Number(size))}

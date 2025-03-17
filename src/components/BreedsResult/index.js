@@ -29,7 +29,7 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
   const [isNextDisabled, setIsNextDisabled] = useState(false)
   const [from, setFrom] = useState(0)
   const [to, setTo] = useState(size)
-  const [pressedDog, setPressedDog] = useState(null);
+  // const [pressedDog, setPressedDog] = useState(null);
 
   // console.log(size, 'size line 34')
   let total;
@@ -197,8 +197,8 @@ function BreedsResult({ size, sizeChange, totalPage: totalPageProp, breedZipCode
       }
       return newSelectedDogs;
     });
-    setPressedDog(dog.id);
-    setTimeout(() => setPressedDog(null), 200);
+    // setPressedDog(dog.id);
+    // setTimeout(() => setPressedDog(null), 200);
   }
 
   //Removes a favorite dog from the favorites list

@@ -164,7 +164,7 @@
   box-shadow: 6px 6px 2px 1px rgba(0, 0, 255, .2);
 }
 
-.dogSet:active, .dogSet.pressed {
+.dogSet:active {
   transform: scale(0.9); /* Slightly shrink */
   background-color: rgba(255, 152, 0, 0.4);
   box-shadow: inset 0px 2px 5px rgba(0, 0, 0, 0.2);
