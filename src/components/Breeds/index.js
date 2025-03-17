@@ -118,6 +118,17 @@ function Breeds() {
       return
     }
 
+    if((allFilterButtons && filters) && ((minAge.length===0) || (maxAge.length===0))) {
+      setError("Please Enter an Age")
+      return
+    } 
+
+    if((otherParameters && city.length===0 && states.length===0 && geoChoices.length===0)) {
+      setLoading(false)
+      setError("Please Enter a City, a State, or Geo Bounding Data")
+      return
+    }
+
     setLoading(true)
     await dispatch(clearDogDetails())
     await dispatch(clearAllLocationData())
@@ -131,7 +142,7 @@ function Breeds() {
     if (!otherParameters) {
       const urlFrontend = new URL(dogSearchUrl);
 
-      if (size <= 0) {
+      if (Number(size) <= 0) {
         setError("Enter a Valid Number of Dogs To Display")
         setSize(25);
         return;
@@ -152,6 +163,7 @@ function Breeds() {
       }
 
       if ((breed && !breedAsc && !breedDesc) || (name && !nameAsc && !nameDesc) || (age && !ageAsc && !ageDesc)) {
+        setLoading(false)
         setError("Choose an Ascending or Descending Type for your Sort")
         return;
       }
@@ -199,7 +211,14 @@ function Breeds() {
 
       setUpdateButton(false);
       let searchDogResults = await dispatch(searchDog(urlFrontend));
-      // console.log(searchDogResults, 'searchDogResults line 205')
+      console.log(searchDogResults, 'searchDogResults line 205')
+
+      if(searchDogResults.meta.requestStatus==="rejected") {
+        setLoading(false)
+        setError("There is No Data For Your Selected Inputs")
+        return
+      }
+
       let searchArray = searchDogResults.payload.resultIds
       // console.log(searchArray, 'searchArray line 206')
       let dogData = await dispatch(postSearchDog2(searchArray))
@@ -239,7 +258,12 @@ function Breeds() {
 
 
       let locationSearchData = await dispatch(postSearchLocations(params))
-
+      
+      if(locationSearchData.meta.requestStatus==="rejected") {
+        setLoading(false)
+        setError("There is No Data For Your Selected Inputs")
+        return
+      }
 
       let justZipCodes = locationSearchData.payload.results.map(location => location.zip_code)
 
@@ -393,6 +417,7 @@ function Breeds() {
 
   //Clearing All Data in State and Redux
   const clearAll = async () => {
+    setError("")
     setSelected([]);
     setSelectedZipCode([])
     setOtherParameters(false)
@@ -459,6 +484,13 @@ function Breeds() {
 
   //When the UPdate Button is clicked, determines if the size should be modified in the array in BreedsResults or Call the Search Funtion with a new size
   const searchAction = (tempSize) => {
+   
+    if (Number(size) <= 0) {
+      setError("Enter a Valid Number of Dogs To Display")
+      setSize(25);
+      return;
+    }
+
     setLoading(false)
     setSize(Number(tempSize))
     setSizeChange(true);
@@ -520,10 +552,10 @@ function Breeds() {
 
         <div className='gridArea1-2'>
           <div className='gridArea12-r1'>
-            <button className={('allFilterButton') + (allFilterButtons ? 'selected' : '')} onClick={() => { setAllFilterButtons(!allFilterButtons); setOtherParameters(false); setFilters(false); setSort(false) }}>
+            <button className={('allFilterButton') + (allFilterButtons ? 'selected' : '')} onClick={() => { setAllFilterButtons(!allFilterButtons); setOtherParameters(false); setFilters(false); setSort(false); setError("") }}>
               <div><img src={filterImg} className="filterPic" alt='filterimg' /></div>
               <div> Filters</div></button>
-            <button className={'searchByLocationButton' + (otherParameters ? 'selected' : '')} onClick={() => { setOtherParameters(!otherParameters); setAllFilterButtons(false); setFilters(false); setSort(false); setChooseStates(false); setChooseCity(false) }}>Search By Location</button>
+            <button className={'searchByLocationButton' + (otherParameters ? 'selected' : '')} onClick={() => { setOtherParameters(!otherParameters); setAllFilterButtons(false); setFilters(false); setSort(false); setChooseStates(false); setChooseCity(false); setError("") }}>Search By Location</button>
 
           </div>
 
@@ -574,7 +606,7 @@ function Breeds() {
                   )}
                 </div>
                 <div className='geoBoundingArea'>
-                  <button className='openModalButton' onClick={() => setChooseGeoBoundingBox(true)} disabled={geoChoices.length > 0}><OpenModalButton
+                  <button className='openModalButton' onClick={() => {setChooseGeoBoundingBox(true); setError("")}} disabled={geoChoices.length > 0}><OpenModalButton
                     buttonText={<div className='geoBoundingBox'>Geo-Bounding Box</div>}
                     modalComponent={<GeoBoundingBox />}
                   /></button>
