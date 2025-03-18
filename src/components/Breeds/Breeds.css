@@ -218,6 +218,7 @@ ul.resultList {
   border-radius: 5px;
   margin-left: 5px;
   border-width: 0.5px;
+  padding-left: 5px;
 }
 
 .filter-option-state {

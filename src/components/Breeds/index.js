@@ -112,13 +112,13 @@ function Breeds() {
   //Search either by BREED or by LOCATION
   const search = async (tempSize) => {
 
-    if (selected.length === 0 && !filters && !otherParameters && selectedZipCode.length === 0) {
+    if (selected.length === 0 && filters && !otherParameters && selectedZipCode.length === 0) {
       setLoading(false)
       setError('Please Select a Breed or Search By Location')
       return
     }
 
-    if (filters && minAge.length === 0 && maxAge.length === 0) {
+    if (filters && ((minimumAge && minAge.length === 0) ||  (maximumAge && maxAge.length === 0))) {
       setError("Please Enter an Age")
       return
     }
